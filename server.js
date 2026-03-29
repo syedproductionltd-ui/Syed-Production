@@ -19,6 +19,23 @@ app.use(express.static(path.join(__dirname)));
 // Serve admin panel
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
+// Combined public data endpoint — single request instead of 6
+app.get('/api/public-data', async (req, res) => {
+  try {
+    const [destinations, reviews, deals, videos, gallery, team] = await Promise.all([
+      require('./backend/models/Destination').find().sort({ id: 1 }),
+      require('./backend/models/Review').find().sort({ createdAt: -1 }),
+      require('./backend/models/Deal').find().sort({ createdAt: -1 }),
+      require('./backend/models/Video').find().sort({ sortOrder: 1 }),
+      require('./backend/models/GalleryImage').find().sort({ sortOrder: 1 }),
+      require('./backend/models/TeamMember').find().sort({ sortOrder: 1 })
+    ]);
+    res.json({ destinations, reviews, deals, videos, gallery, team });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load data' });
+  }
+});
+
 // API Routes
 app.use('/api/auth', require('./backend/routes/auth'));
 app.use('/api/destinations', require('./backend/routes/destinations'));

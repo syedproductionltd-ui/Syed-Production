@@ -1199,20 +1199,13 @@
   -------------------------------------------------------- */
   async function init() {
     try {
-      const [destData, revData, dealData, videoData, galleryData, teamData] = await Promise.all([
-        fetch('/api/destinations').then(r => r.json()),
-        fetch('/api/reviews').then(r => r.json()),
-        fetch('/api/deals').then(r => r.json()),
-        fetch('/api/videos').then(r => r.json()),
-        fetch('/api/gallery').then(r => r.json()),
-        fetch('/api/team').then(r => r.json())
-      ]);
-      destinations = destData;
-      reviews = revData;
-      deals = dealData;
-      videos = videoData;
-      galleryImages = galleryData;
-      teamMembers = teamData;
+      const data = await fetch('/api/public-data').then(r => r.json());
+      destinations = data.destinations || [];
+      reviews = data.reviews || [];
+      deals = data.deals || [];
+      videos = data.videos || [];
+      galleryImages = data.gallery || [];
+      teamMembers = data.team || [];
     } catch (err) {
       console.warn('API not available, site will show empty sections:', err.message);
     }

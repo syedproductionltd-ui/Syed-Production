@@ -1081,41 +1081,141 @@
   /* --------------------------------------------------------
      VIDEO SHOWCASE
   -------------------------------------------------------- */
-  const videoModal = $('#videoModal');
-  const videoModalBody = $('#videoModalBody');
-  const videoModalTitle = $('#videoModalTitle');
-  const videoModalClose = $('#videoModalClose');
 
-  if (videoModal) {
-    function openVideoModal(title) {
-      videoModalTitle.textContent = title;
-      videoModal.hidden = false;
-      requestAnimationFrame(() => videoModal.classList.add('open'));
-      document.body.style.overflow = 'hidden';
-    }
+  // Autoplay muted previews on cards when visible
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const card = entry.target;
+      const vid = card.querySelector('video');
+      const src = card.dataset.video;
+      if (!vid || !src) return;
 
-    function closeVideoModal() {
-      videoModal.classList.remove('open');
-      setTimeout(() => {
-        videoModal.hidden = true;
-        document.body.style.overflow = '';
-      }, 300);
-    }
+      if (entry.isIntersecting) {
+        if (!vid.src || vid.src === '') vid.src = src;
+        vid.play().catch(() => {});
+      } else {
+        vid.pause();
+      }
+    });
+  }, { threshold: 0.3 });
 
-    $$('.video-card').forEach(card => {
-      const title = card.querySelector('.video-card-title')?.textContent || '';
-      card.addEventListener('click', () => openVideoModal(title));
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openVideoModal(title); }
+  $$('.video-card').forEach(card => videoObserver.observe(card));
+
+  /* ── Reels-Style Fullscreen Viewer ── */
+  const reelsViewer = $('#reelsViewer');
+  const reelsTrack = $('#reelsTrack');
+  const reelsClose = $('#reelsClose');
+  const reelsCounter = $('#reelsCounter');
+  let reelsObserver = null;
+
+  const videoCards = $$('.video-card');
+  const videoData = Array.from(videoCards).map(card => ({
+    src: card.dataset.video || '',
+    title: card.querySelector('.video-card-title')?.textContent || '',
+    desc: card.querySelector('.video-card-desc')?.textContent || '',
+    tag: card.querySelector('.video-card-tag')?.textContent || ''
+  }));
+
+  function openReels(startIndex) {
+    if (!reelsViewer || videoData.length === 0) return;
+
+    reelsTrack.innerHTML = '';
+    videoData.forEach((v, i) => {
+      const slide = document.createElement('div');
+      slide.className = 'reel-slide' + (i !== startIndex ? ' paused' : '');
+      slide.dataset.index = i;
+
+      const video = document.createElement('video');
+      video.playsInline = true;
+      video.loop = true;
+      video.preload = 'none';
+      video.src = v.src;
+
+      video.addEventListener('click', () => {
+        if (video.paused) {
+          video.play().catch(() => {});
+          slide.classList.remove('paused');
+        } else {
+          video.pause();
+          slide.classList.add('paused');
+        }
       });
+
+      const playBtn = document.createElement('div');
+      playBtn.className = 'reel-play-btn';
+      playBtn.innerHTML = '<svg viewBox="0 0 48 48" width="48" height="48"><path d="M19 15v18l15-9z" fill="white"/></svg>';
+
+      const info = document.createElement('div');
+      info.className = 'reel-info';
+      info.innerHTML = '<h3>' + v.title + '</h3><p>' + v.desc + '</p>';
+
+      slide.appendChild(video);
+      slide.appendChild(playBtn);
+      slide.appendChild(info);
+      reelsTrack.appendChild(slide);
     });
 
-    videoModalClose.addEventListener('click', closeVideoModal);
-    videoModal.addEventListener('click', (e) => {
-      if (e.target === videoModal) closeVideoModal();
+    reelsViewer.hidden = false;
+    requestAnimationFrame(() => reelsViewer.classList.add('open'));
+    document.body.style.overflow = 'hidden';
+
+    const targetSlide = reelsTrack.children[startIndex];
+    if (targetSlide) targetSlide.scrollIntoView({ behavior: 'instant' });
+
+    updateReelsCounter(startIndex);
+
+    const initialVideo = targetSlide?.querySelector('video');
+    if (initialVideo) {
+      initialVideo.play().catch(() => {});
+      targetSlide.classList.remove('paused');
+    }
+
+    reelsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const slide = entry.target;
+        const vid = slide.querySelector('video');
+        if (!vid) return;
+        if (entry.isIntersecting) {
+          vid.play().catch(() => {});
+          slide.classList.remove('paused');
+          updateReelsCounter(parseInt(slide.dataset.index, 10));
+        } else {
+          vid.pause();
+          slide.classList.add('paused');
+        }
+      });
+    }, { root: reelsTrack, threshold: 0.7 });
+
+    reelsTrack.querySelectorAll('.reel-slide').forEach(s => reelsObserver.observe(s));
+  }
+
+  function updateReelsCounter(index) {
+    if (reelsCounter) reelsCounter.textContent = (index + 1) + ' / ' + videoData.length;
+  }
+
+  function closeReels() {
+    if (!reelsViewer) return;
+    reelsTrack.querySelectorAll('video').forEach(v => { v.pause(); v.src = ''; });
+    if (reelsObserver) { reelsObserver.disconnect(); reelsObserver = null; }
+    reelsViewer.classList.remove('open');
+    setTimeout(() => {
+      reelsViewer.hidden = true;
+      reelsTrack.innerHTML = '';
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  videoCards.forEach((card, index) => {
+    card.addEventListener('click', () => openReels(index));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openReels(index); }
     });
+  });
+
+  if (reelsClose) reelsClose.addEventListener('click', closeReels);
+  if (reelsViewer) {
     document.addEventListener('keydown', (e) => {
-      if (!videoModal.hidden && e.key === 'Escape') closeVideoModal();
+      if (!reelsViewer.hidden && e.key === 'Escape') closeReels();
     });
   }
 

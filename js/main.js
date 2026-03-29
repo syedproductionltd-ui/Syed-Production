@@ -1220,6 +1220,13 @@
     renderVideos();
     renderGallery();
     renderTeam();
+
+    // Hide loading screen
+    const loader = document.getElementById('loadingScreen');
+    if (loader) {
+      loader.classList.add('hidden');
+      setTimeout(() => loader.remove(), 600);
+    }
   }
 
   init();

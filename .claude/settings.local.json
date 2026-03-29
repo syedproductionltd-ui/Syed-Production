@@ -6,7 +6,8 @@
       "Bash(node -e:*)",
       "Bash(npm run seed:*)",
       "Bash(node:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(git add:*)"
     ]
   }
 }

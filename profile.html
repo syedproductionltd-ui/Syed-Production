@@ -142,19 +142,22 @@
       height: 100%;
       object-fit: cover;
     }
-    .avatar-overlay {
+    .avatar-edit-badge {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 30px;
-      background: rgba(0,0,0,0.55);
+      bottom: 2px; right: 2px;
+      width: 28px; height: 28px;
+      background: var(--primary);
+      border: 2px solid var(--card);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      transition: opacity 0.2s;
+      cursor: pointer;
+      transition: background 0.2s;
+      z-index: 2;
     }
-    .profile-avatar:hover .avatar-overlay { opacity: 1; }
-    .avatar-overlay svg { fill: #fff; width: 16px; height: 16px; }
+    .avatar-edit-badge:hover { background: var(--primary-dark); }
+    .avatar-edit-badge svg { fill: #fff; width: 14px; height: 14px; }
 
     /* Avatar dropdown */
     .avatar-menu {
@@ -399,10 +402,9 @@
       <div class="card">
         <div class="profile-header">
           <div class="avatar-wrapper">
-            <div class="profile-avatar" id="profileAvatar">
-              <div class="avatar-overlay">
-                <svg viewBox="0 0 24 24"><path d="M12 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-1.8V8l-2.15-2.4A1 1 0 0015.1 5H8.9a1 1 0 00-.75.35L6 8v2.2A3 3 0 004 13v3a1 1 0 001 1h14a1 1 0 001-1v-3a3 3 0 00-2-2.8zM12 17c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z"/></svg>
-              </div>
+            <div class="profile-avatar" id="profileAvatar"></div>
+            <div class="avatar-edit-badge" id="avatarEditBadge" title="Change profile picture">
+              <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
             </div>
             <div class="avatar-menu" id="avatarMenu">
               <button class="avatar-menu-item" id="avatarChangeBtn">
@@ -579,7 +581,7 @@
     var avatarMenu = document.getElementById('avatarMenu');
     var profileAvatarEl = document.getElementById('profileAvatar');
 
-    profileAvatarEl.addEventListener('click', function(e) {
+    document.getElementById('avatarEditBadge').addEventListener('click', function(e) {
       e.stopPropagation();
       avatarMenu.classList.toggle('open');
     });
@@ -730,11 +732,10 @@
 
         // Avatar
         var avatarInner = document.getElementById('profileAvatar');
-        var overlay = '<div class="avatar-overlay"><svg viewBox="0 0 24 24"><path d="M12 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-1.8V8l-2.15-2.4A1 1 0 0015.1 5H8.9a1 1 0 00-.75.35L6 8v2.2A3 3 0 004 13v3a1 1 0 001 1h14a1 1 0 001-1v-3a3 3 0 00-2-2.8zM12 17c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z"/></svg></div>';
         if (user.avatar) {
-          avatarInner.innerHTML = '<img src="' + user.avatar + '" alt="Avatar">' + overlay;
+          avatarInner.innerHTML = '<img src="' + user.avatar + '" alt="Avatar">';
         } else {
-          avatarInner.innerHTML = '<span style="pointer-events:none;">' + user.name.charAt(0).toUpperCase() + '</span>' + overlay;
+          avatarInner.innerHTML = '<span style="pointer-events:none;">' + user.name.charAt(0).toUpperCase() + '</span>';
         }
 
         // Fill edit form

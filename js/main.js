@@ -1216,7 +1216,7 @@
     if (token && name) {
       var avatar = localStorage.getItem('user_avatar');
       var avatarHtml = avatar
-        ? '<img src="' + avatar + '" alt="" style="width:22px;height:22px;border-radius:50%;object-fit:cover;">'
+        ? '<img src="' + avatar + '" alt="" style="width:22px;height:22px;border-radius:50%;object-fit:cover;" onerror="this.style.display=\'none\'">'
         : '<svg viewBox="0 0 24 24" width="16" height="16" style="fill:currentColor;"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>';
       container.innerHTML =
         '<a href="profile.html" class="nav-link" style="display:inline-flex;align-items:center;gap:0.35rem;">' +

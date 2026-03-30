@@ -441,10 +441,11 @@
         document.getElementById('profileEmail').textContent = user.email;
         document.getElementById('profileLocation').textContent = user.location || '';
 
-        // Avatar
+        // Avatar — shows Google/Gmail profile picture via unavatar
         const avatarEl = document.getElementById('profileAvatar');
         if (user.avatar) {
-          avatarEl.innerHTML = '<img src="' + user.avatar + '" alt="Avatar">';
+          const initial = user.name.charAt(0).toUpperCase();
+          avatarEl.innerHTML = '<img src="' + user.avatar + '" alt="Avatar" onerror="this.style.display=\'none\';this.parentElement.textContent=\'' + initial + '\'">';
         } else {
           avatarEl.textContent = user.name.charAt(0).toUpperCase();
         }

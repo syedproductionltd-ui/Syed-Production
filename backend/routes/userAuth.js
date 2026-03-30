@@ -1,15 +1,13 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
 const User = require('../models/User');
 const Booking = require('../models/Booking');
 const Review = require('../models/Review');
 const userAuth = require('../middleware/userAuth');
 
-// Generate Gravatar URL from email (shows Google/Gmail profile picture)
-function gravatarUrl(email) {
-  const hash = crypto.createHash('md5').update(email.trim().toLowerCase()).digest('hex');
-  return 'https://www.gravatar.com/avatar/' + hash + '?s=200&d=identicon';
+// Generate avatar URL from email — unavatar fetches Google/Gmail profile pictures automatically
+function avatarUrl(email) {
+  return 'https://unavatar.io/' + encodeURIComponent(email.trim().toLowerCase()) + '?fallback=https://ui-avatars.com/api/?name=' + encodeURIComponent(email.split('@')[0]) + '&background=2D6A4F&color=fff&size=200';
 }
 
 // POST /api/users/register
@@ -29,7 +27,7 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Email already registered' });
     }
 
-    const avatar = gravatarUrl(email);
+    const avatar = avatarUrl(email);
     const user = await User.create({ name, email, password, phone: phone || '', avatar });
     const token = jwt.sign(
       { id: user._id, email: user.email, role: 'user' },
@@ -68,7 +66,7 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    const avatar = user.avatar || gravatarUrl(user.email);
+    const avatar = user.avatar || avatarUrl(user.email);
     res.json({ token, name: user.name, email: user.email, avatar });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
@@ -81,7 +79,7 @@ router.get('/me', userAuth, async (req, res) => {
     const user = await User.findById(req.user.id).select('-password');
     if (!user) return res.status(404).json({ message: 'User not found' });
     const userData = user.toObject();
-    if (!userData.avatar) userData.avatar = gravatarUrl(userData.email);
+    if (!userData.avatar) userData.avatar = avatarUrl(userData.email);
     res.json(userData);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });

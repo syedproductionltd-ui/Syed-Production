@@ -1795,7 +1795,8 @@ input, select, textarea {
 }
 
 .review-card {
-  min-width: calc(33.333% - var(--space-6) * 2 / 3);
+  width: 348px;
+  min-width: 348px;
   background: var(--clr-gray-50);
   border-radius: var(--radius-lg);
   padding: var(--space-8);
@@ -3019,7 +3020,8 @@ input, select, textarea {
   }
 
   .review-card {
-    min-width: calc(50% - var(--space-6) / 2);
+    width: 348px;
+    min-width: 348px;
   }
 
   .footer-grid {
@@ -3123,6 +3125,7 @@ input, select, textarea {
   }
 
   .review-card {
+    width: 100%;
     min-width: 100%;
   }
 

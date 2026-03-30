@@ -661,10 +661,16 @@
 
     const reference = 'TJT-2026-' + Math.random().toString(36).substring(2, 7).toUpperCase();
 
+    const headers = { 'Content-Type': 'application/json' };
+    const userToken = localStorage.getItem('user_token');
+    if (userToken) {
+      headers['Authorization'] = 'Bearer ' + userToken;
+    }
+
     try {
       await fetch('/api/bookings', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           reference,
           destination: dest.name,
@@ -1197,6 +1203,43 @@
   /* --------------------------------------------------------
      ASYNC INIT — Fetch data from API, then render
   -------------------------------------------------------- */
+  /* --------------------------------------------------------
+     NAVBAR AUTH — login / user info toggle
+  -------------------------------------------------------- */
+  function updateNavAuth() {
+    const container = document.getElementById('navAuthLinks');
+    if (!container) return;
+
+    const token = localStorage.getItem('user_token');
+    const name = localStorage.getItem('user_name');
+
+    if (token && name) {
+      var avatar = localStorage.getItem('user_avatar');
+      var avatarHtml = avatar
+        ? '<img src="' + avatar + '" alt="" style="width:22px;height:22px;border-radius:50%;object-fit:cover;">'
+        : '<svg viewBox="0 0 24 24" width="16" height="16" style="fill:currentColor;"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>';
+      container.innerHTML =
+        '<a href="profile.html" class="nav-link" style="display:inline-flex;align-items:center;gap:0.35rem;">' +
+          avatarHtml +
+          name +
+        '</a> ' +
+        '<a href="#" class="nav-link" id="navLogoutBtn">Logout</a>';
+      var logoutBtn = document.getElementById('navLogoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          localStorage.removeItem('user_token');
+          localStorage.removeItem('user_name');
+          localStorage.removeItem('user_email');
+          localStorage.removeItem('user_avatar');
+          updateNavAuth();
+        });
+      }
+    } else {
+      container.innerHTML = '<a href="login.html" class="nav-link nav-link--cta">Login</a>';
+    }
+  }
+
   async function init() {
     try {
       const data = await fetch('/api/public-data').then(r => r.json());
@@ -1220,6 +1263,7 @@
     renderVideos();
     renderGallery();
     renderTeam();
+    updateNavAuth();
 
     // Hide loading screen
     const loader = document.getElementById('loadingScreen');

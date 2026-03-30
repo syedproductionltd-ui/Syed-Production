@@ -13,7 +13,8 @@ const bookingSchema = new mongoose.Schema({
   status: { type: String, default: 'pending', enum: ['pending', 'confirmed', 'cancelled', 'completed'] },
   customerName: String,
   customerEmail: String,
-  customerPhone: String
+  customerPhone: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Booking', bookingSchema);

@@ -1,11 +1,16 @@
 const router = require('express').Router();
 const Booking = require('../models/Booking');
 const auth = require('../middleware/auth');
+const optionalUserAuth = require('../middleware/optionalUserAuth');
 
-// POST /api/bookings (public)
-router.post('/', async (req, res) => {
+// POST /api/bookings (public, optionally authenticated)
+router.post('/', optionalUserAuth, async (req, res) => {
   try {
-    const booking = await Booking.create(req.body);
+    const data = { ...req.body };
+    if (req.user) {
+      data.userId = req.user.id;
+    }
+    const booking = await Booking.create(data);
     res.status(201).json(booking);
   } catch (err) {
     res.status(400).json({ message: err.message });

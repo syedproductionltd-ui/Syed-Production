@@ -24,7 +24,7 @@ app.get('/api/public-data', async (req, res) => {
   try {
     const [destinations, reviews, deals, videos, gallery, team] = await Promise.all([
       require('./backend/models/Destination').find().sort({ id: 1 }),
-      require('./backend/models/Review').find().sort({ createdAt: -1 }),
+      require('./backend/models/Review').find({ $or: [{ status: 'approved' }, { status: { $exists: false } }] }).sort({ createdAt: -1 }),
       require('./backend/models/Deal').find().sort({ createdAt: -1 }),
       require('./backend/models/Video').find().sort({ sortOrder: 1 }),
       require('./backend/models/GalleryImage').find().sort({ sortOrder: 1 }),
@@ -37,6 +37,7 @@ app.get('/api/public-data', async (req, res) => {
 });
 
 // API Routes
+app.use('/api/users', require('./backend/routes/userAuth'));
 app.use('/api/auth', require('./backend/routes/auth'));
 app.use('/api/destinations', require('./backend/routes/destinations'));
 app.use('/api/reviews', require('./backend/routes/reviews'));

@@ -44,4 +44,51 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
+// PUT /api/auth/profile — change username and/or password
+router.put('/profile', auth, async (req, res) => {
+  try {
+    const { currentPassword, newUsername, newPassword } = req.body;
+
+    if (!currentPassword) {
+      return res.status(400).json({ message: 'Current password is required' });
+    }
+
+    const admin = await Admin.findById(req.admin.id);
+    if (!admin) return res.status(404).json({ message: 'Admin not found' });
+
+    const isMatch = await admin.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Current password is incorrect' });
+    }
+
+    if (newUsername && newUsername.trim()) {
+      const existing = await Admin.findOne({ username: newUsername.trim(), _id: { $ne: admin._id } });
+      if (existing) {
+        return res.status(400).json({ message: 'Username already taken' });
+      }
+      admin.username = newUsername.trim();
+    }
+
+    if (newPassword) {
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: 'New password must be at least 6 characters' });
+      }
+      admin.password = newPassword;
+    }
+
+    await admin.save();
+
+    // Issue new token with updated username
+    const token = jwt.sign(
+      { id: admin._id, username: admin.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.json({ message: 'Profile updated successfully', token, username: admin.username });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;

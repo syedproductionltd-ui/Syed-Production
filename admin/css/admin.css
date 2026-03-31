@@ -378,6 +378,25 @@ textarea.form-control { resize: vertical; min-height: 80px; }
 .status-warning { background: #fef3c7; color: #92400e; }
 .status-danger { background: #fef2f2; color: #991b1b; }
 
+/* ── Settings Messages ── */
+.settings-msg {
+  padding: 0.75rem;
+  border-radius: var(--admin-radius);
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  display: none;
+}
+
+.settings-success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.settings-error {
+  background: #fef2f2;
+  color: var(--admin-danger);
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .form-row { grid-template-columns: 1fr; }

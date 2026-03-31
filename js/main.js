@@ -1349,7 +1349,9 @@
 
   async function init() {
     try {
-      const data = await fetch('/api/public-data').then(r => r.json());
+      // Reuse pre-fetched data from loading screen script, or fetch fresh
+      const data = (window.__publicDataPromise && await window.__publicDataPromise) || await fetch('/api/public-data').then(r => r.json());
+      delete window.__publicDataPromise;
       destinations = data.destinations || [];
       reviews = data.reviews || [];
       deals = data.deals || [];

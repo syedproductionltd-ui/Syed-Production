@@ -22,6 +22,25 @@
       <p class="loading-text">Preparing your mountain adventure...</p>
     </div>
   </div>
+  <script>
+    // Early fetch: update loading screen + store promise for main.js to reuse
+    window.__publicDataPromise = fetch('/api/public-data').then(function(r){return r.json()}).then(function(d){
+      if(d.settings){
+        var s=d.settings;
+        if(s.loadingScreen){
+          var t=document.querySelector('.loading-title');
+          var p=document.querySelector('.loading-text');
+          if(t&&s.loadingScreen.title)t.textContent=s.loadingScreen.title;
+          if(p&&s.loadingScreen.text)p.textContent=s.loadingScreen.text;
+        }
+        if(s.branding&&s.branding.logoUrl){
+          var logo=document.querySelector('.loading-logo');
+          if(logo)logo.src=s.branding.logoUrl;
+        }
+      }
+      return d;
+    }).catch(function(){ return null; });
+  </script>
 
   <!-- ============ NAVIGATION ============ -->
   <nav class="navbar" id="navbar" aria-label="Main navigation">

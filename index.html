@@ -126,6 +126,69 @@
     </div>
   </section>
 
+  <!-- ============ REVIEWS SECTION ============ -->
+  <section class="reviews section" id="reviews">
+    <div class="container">
+      <div class="section-header reveal-up">
+        <span class="section-tag">Testimonials</span>
+        <h2 class="section-title">What Trekkers Say</h2>
+        <p class="section-description">Real experiences from real adventurers. See why thousands trust The Journey Team for their mountain journeys.</p>
+      </div>
+      <div class="reviews-carousel reveal-up">
+        <button class="carousel-arrow carousel-prev" id="reviewsPrev" aria-label="Previous review">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
+        </button>
+        <div class="reviews-track-wrapper">
+          <div class="reviews-track" id="reviewsTrack">
+            <!-- Review cards injected by JS -->
+          </div>
+        </div>
+        <button class="carousel-arrow carousel-next" id="reviewsNext" aria-label="Next review">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <div class="carousel-dots" id="reviewsDots" role="tablist" aria-label="Review navigation"></div>
+
+      <div style="text-align:center; margin-top:1.5rem;" class="reveal-up">
+        <button class="btn btn-primary" id="writeReviewBtn" style="padding:0.75rem 2rem; font-size:1rem;">Write a Review</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Review Modal -->
+  <div id="reviewModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:12px; padding:2rem; width:420px; max-width:92vw; max-height:90vh; overflow-y:auto; position:relative;">
+      <button id="reviewModalClose" style="position:absolute; top:0.75rem; right:0.75rem; background:none; border:none; font-size:1.5rem; cursor:pointer; color:#64748b; line-height:1;">&times;</button>
+      <h3 style="color:#1B4332; margin-bottom:1rem; font-size:1.25rem;">Write a Review</h3>
+      <div id="rmError" style="display:none; background:#fef2f2; color:#ef4444; padding:0.6rem; border-radius:8px; margin-bottom:0.75rem; font-size:0.85rem;"></div>
+      <div id="rmSuccess" style="display:none; background:#f0fdf4; color:#16a34a; padding:0.6rem; border-radius:8px; margin-bottom:0.75rem; font-size:0.85rem;"></div>
+      <form id="rmForm">
+        <div style="margin-bottom:0.75rem;">
+          <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.25rem;">Destination</label>
+          <select id="rmDest" style="width:100%; padding:0.5rem 0.6rem; border:1px solid #e2e8f0; border-radius:8px; font-family:inherit; font-size:0.9rem;" required>
+            <option value="">Select a destination...</option>
+          </select>
+        </div>
+        <div style="margin-bottom:0.75rem;">
+          <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.25rem;">Rating</label>
+          <div id="rmStars" style="display:flex; gap:4px; cursor:pointer;">
+            <svg class="rm-star" data-v="1" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0; transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            <svg class="rm-star" data-v="2" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0; transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            <svg class="rm-star" data-v="3" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0; transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            <svg class="rm-star" data-v="4" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0; transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            <svg class="rm-star" data-v="5" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0; transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+          </div>
+        </div>
+        <div style="margin-bottom:0.75rem;">
+          <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.25rem;">Your Review</label>
+          <textarea id="rmText" rows="3" style="width:100%; padding:0.5rem 0.6rem; border:1px solid #e2e8f0; border-radius:8px; font-family:inherit; font-size:0.9rem; resize:vertical;" placeholder="Share your experience..." required></textarea>
+        </div>
+        <button type="submit" id="rmSubmit" style="width:100%; padding:0.65rem; background:#2D6A4F; color:#fff; border:none; border-radius:8px; font-family:inherit; font-size:0.95rem; font-weight:600; cursor:pointer;">Submit Review</button>
+      </form>
+    </div>
+  </div>
+
   <!-- ============ TEAM SECTION ============ -->
   <section class="team section" id="team">
     <div class="container">
@@ -136,6 +199,83 @@
       </div>
       <div class="team-grid reveal-up" id="teamGrid">
         <!-- Team cards injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS SECTION ============ -->
+  <section class="testimonials section" id="testimonials">
+    <div class="container">
+      <div class="section-header reveal-up">
+        <span class="section-tag">Trusted by Adventurers</span>
+        <h2 class="section-title">What Our Clients Say</h2>
+        <p class="section-description">Hear from travelers who turned their mountain dreams into unforgettable memories with us.</p>
+      </div>
+      <div class="testimonials-grid reveal-up" id="testimonialsGrid">
+
+        <div class="testimonial-card">
+          <div class="testimonial-quote-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" fill="currentColor"/></svg>
+          </div>
+          <p class="testimonial-text">The trek to K2 base camp was a life-changing experience. The guides were professional, friendly, and deeply knowledgeable about the region. Couldn't have asked for a better team!</p>
+          <div class="testimonial-footer">
+            <div class="testimonial-avatar">AH</div>
+            <div>
+              <div class="testimonial-name">Ahmed Hassan</div>
+              <div class="testimonial-location">Islamabad, Pakistan</div>
+            </div>
+            <div class="testimonial-stars">
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-quote-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" fill="currentColor"/></svg>
+          </div>
+          <p class="testimonial-text">Hunza Valley exceeded every expectation. The team arranged everything perfectly — from accommodation to local food experiences. I'll definitely come back for another adventure!</p>
+          <div class="testimonial-footer">
+            <div class="testimonial-avatar">SK</div>
+            <div>
+              <div class="testimonial-name">Sarah Khan</div>
+              <div class="testimonial-location">Lahore, Pakistan</div>
+            </div>
+            <div class="testimonial-stars">
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-quote-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" fill="currentColor"/></svg>
+          </div>
+          <p class="testimonial-text">As a solo traveler, I was nervous about trekking in the north. But the Gilgit Adventure team made me feel safe and welcomed throughout. The Fairy Meadows trek was absolutely magical!</p>
+          <div class="testimonial-footer">
+            <div class="testimonial-avatar">JM</div>
+            <div>
+              <div class="testimonial-name">James Miller</div>
+              <div class="testimonial-location">London, UK</div>
+            </div>
+            <div class="testimonial-stars">
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -403,69 +543,6 @@
       </div>
     </div>
   </section>
-
-  <!-- ============ REVIEWS SECTION ============ -->
-  <section class="reviews section" id="reviews">
-    <div class="container">
-      <div class="section-header reveal-up">
-        <span class="section-tag">Testimonials</span>
-        <h2 class="section-title">What Trekkers Say</h2>
-        <p class="section-description">Real experiences from real adventurers. See why thousands trust The Journey Team for their mountain journeys.</p>
-      </div>
-      <div class="reviews-carousel reveal-up">
-        <button class="carousel-arrow carousel-prev" id="reviewsPrev" aria-label="Previous review">
-          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
-        </button>
-        <div class="reviews-track-wrapper">
-          <div class="reviews-track" id="reviewsTrack">
-            <!-- Review cards injected by JS -->
-          </div>
-        </div>
-        <button class="carousel-arrow carousel-next" id="reviewsNext" aria-label="Next review">
-          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"/></svg>
-        </button>
-      </div>
-      <div class="carousel-dots" id="reviewsDots" role="tablist" aria-label="Review navigation"></div>
-
-      <div style="text-align:center; margin-top:1.5rem;" class="reveal-up">
-        <button class="btn btn-primary" id="writeReviewBtn" style="padding:0.75rem 2rem; font-size:1rem;">Write a Review</button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Review Modal -->
-  <div id="reviewModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
-    <div style="background:#fff; border-radius:12px; padding:2rem; width:420px; max-width:92vw; max-height:90vh; overflow-y:auto; position:relative;">
-      <button id="reviewModalClose" style="position:absolute; top:0.75rem; right:0.75rem; background:none; border:none; font-size:1.5rem; cursor:pointer; color:#64748b; line-height:1;">&times;</button>
-      <h3 style="color:#1B4332; margin-bottom:1rem; font-size:1.25rem;">Write a Review</h3>
-      <div id="rmError" style="display:none; background:#fef2f2; color:#ef4444; padding:0.6rem; border-radius:8px; margin-bottom:0.75rem; font-size:0.85rem;"></div>
-      <div id="rmSuccess" style="display:none; background:#f0fdf4; color:#16a34a; padding:0.6rem; border-radius:8px; margin-bottom:0.75rem; font-size:0.85rem;"></div>
-      <form id="rmForm">
-        <div style="margin-bottom:0.75rem;">
-          <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.25rem;">Destination</label>
-          <select id="rmDest" style="width:100%; padding:0.5rem 0.6rem; border:1px solid #e2e8f0; border-radius:8px; font-family:inherit; font-size:0.9rem;" required>
-            <option value="">Select a destination...</option>
-          </select>
-        </div>
-        <div style="margin-bottom:0.75rem;">
-          <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.25rem;">Rating</label>
-          <div id="rmStars" style="display:flex; gap:4px; cursor:pointer;">
-            <svg class="rm-star" data-v="1" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0; transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
-            <svg class="rm-star" data-v="2" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0; transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
-            <svg class="rm-star" data-v="3" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0; transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
-            <svg class="rm-star" data-v="4" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0; transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
-            <svg class="rm-star" data-v="5" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0; transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
-          </div>
-        </div>
-        <div style="margin-bottom:0.75rem;">
-          <label style="display:block; font-size:0.85rem; font-weight:600; margin-bottom:0.25rem;">Your Review</label>
-          <textarea id="rmText" rows="3" style="width:100%; padding:0.5rem 0.6rem; border:1px solid #e2e8f0; border-radius:8px; font-family:inherit; font-size:0.9rem; resize:vertical;" placeholder="Share your experience..." required></textarea>
-        </div>
-        <button type="submit" id="rmSubmit" style="width:100%; padding:0.65rem; background:#2D6A4F; color:#fff; border:none; border-radius:8px; font-family:inherit; font-size:0.95rem; font-weight:600; cursor:pointer;">Submit Review</button>
-      </form>
-    </div>
-  </div>
 
   <!-- ============ TRENDING / DEALS SECTION ============ -->
   <section class="deals section" id="deals">

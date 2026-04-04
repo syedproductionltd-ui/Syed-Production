@@ -545,7 +545,8 @@
       if (!resp.ok || !data.reply) throw new Error('AI unavailable');
       removeTypingIndicator();
       addChatMessage(`<p>${data.reply}</p>`);
-    } catch {
+    } catch (err) {
+      console.error('Chat AI error:', err);
       // Fallback to keyword matching
       removeTypingIndicator();
       const fallback = getKeywordResponse(text) || chatResponses.default;

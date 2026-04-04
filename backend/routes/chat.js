@@ -19,6 +19,27 @@ function getChatId(req) {
   return req.ip || 'default';
 }
 
+// Test endpoint to check if Gemini key is working
+router.get('/test', async (req, res) => {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return res.json({ status: 'FAIL', reason: 'GEMINI_API_KEY not set' });
+  try {
+    const resp = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: 'say hi' }] }] })
+      }
+    );
+    const data = await resp.json();
+    if (!resp.ok) return res.json({ status: 'FAIL', reason: 'API rejected key', details: data });
+    res.json({ status: 'OK', reply: data.candidates?.[0]?.content?.parts?.[0]?.text });
+  } catch (err) {
+    res.json({ status: 'FAIL', reason: err.message });
+  }
+});
+
 router.post('/', async (req, res) => {
   const { message } = req.body;
   if (!message || !message.trim()) {

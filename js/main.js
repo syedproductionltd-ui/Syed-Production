@@ -517,30 +517,40 @@
     }, 1800);
   });
 
-  function handleChatSend() {
+  function getKeywordResponse(text) {
+    const lower = text.toLowerCase();
+    for (const [key, val] of Object.entries(chatResponses)) {
+      if (key === 'default') continue;
+      const regex = new RegExp('\\b' + key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+      if (regex.test(lower)) return val;
+    }
+    return null;
+  }
+
+  async function handleChatSend() {
     const text = chatInput.value.trim();
     if (!text) return;
 
     addChatMessage(text, true);
     chatInput.value = '';
-
     showTypingIndicator();
 
-    const lower = text.toLowerCase();
-    let response = chatResponses.default;
-    for (const [key, val] of Object.entries(chatResponses)) {
-      if (key === 'default') continue;
-      const regex = new RegExp('\\b' + key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
-      if (regex.test(lower)) {
-        response = val;
-        break;
-      }
-    }
-
-    setTimeout(() => {
+    try {
+      const resp = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text })
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data.reply) throw new Error('AI unavailable');
       removeTypingIndicator();
-      addChatMessage(`<p>${response}</p>`);
-    }, 1200);
+      addChatMessage(`<p>${data.reply}</p>`);
+    } catch {
+      // Fallback to keyword matching
+      removeTypingIndicator();
+      const fallback = getKeywordResponse(text) || chatResponses.default;
+      addChatMessage(`<p>${fallback}</p>`);
+    }
   }
 
   chatSendBtn.addEventListener('click', handleChatSend);

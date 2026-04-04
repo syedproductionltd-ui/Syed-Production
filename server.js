@@ -53,6 +53,9 @@ app.use('/api/videos', require('./backend/routes/videos'));
 app.use('/api/gallery', require('./backend/routes/gallery'));
 app.use('/api/team', require('./backend/routes/team'));
 
+// Chat AI route
+app.use('/api/chat', require('./backend/routes/chat'));
+
 // Developer routes
 app.use('/api/dev', require('./backend/routes/devAuth'));
 app.use('/api/dev/settings', require('./backend/routes/siteSettings'));

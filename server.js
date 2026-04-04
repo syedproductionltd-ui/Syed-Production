@@ -60,12 +60,10 @@ app.use('/api/dev/admins', require('./backend/routes/devAdmin'));
 
 const PORT = process.env.PORT || 3000;
 
-// Only listen when running locally (not on Vercel)
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
+// Start server (needed for Render and local dev)
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 // Export for Vercel serverless
 module.exports = app;

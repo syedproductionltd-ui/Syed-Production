@@ -19,22 +19,26 @@ function getChatId(req) {
   return req.ip || 'default';
 }
 
-// Test endpoint to check if Gemini key is working
+// Test endpoint
 router.get('/test', async (req, res) => {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return res.json({ status: 'FAIL', reason: 'GEMINI_API_KEY not set' });
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) return res.json({ status: 'FAIL', reason: 'GROQ_API_KEY not set' });
   try {
-    const resp = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: 'say hi' }] }] })
-      }
-    );
+    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [{ role: 'user', content: 'say hi in one sentence' }],
+        max_tokens: 50
+      })
+    });
     const data = await resp.json();
-    if (!resp.ok) return res.json({ status: 'FAIL', reason: 'API rejected key', details: data });
-    res.json({ status: 'OK', reply: data.candidates?.[0]?.content?.parts?.[0]?.text });
+    if (!resp.ok) return res.json({ status: 'FAIL', reason: 'API error', details: data });
+    res.json({ status: 'OK', reply: data.choices?.[0]?.message?.content });
   } catch (err) {
     res.json({ status: 'FAIL', reason: err.message });
   }
@@ -46,7 +50,7 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Message is required' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     return res.status(503).json({ error: 'AI service not configured' });
   }
@@ -58,37 +62,41 @@ router.post('/', async (req, res) => {
     }
     const history = chatHistory.get(chatId);
 
-    history.push({ role: 'user', parts: [{ text: message.trim() }] });
+    history.push({ role: 'user', content: message.trim() });
 
     // Keep only last 10 exchanges to save tokens
     if (history.length > 20) {
       history.splice(0, history.length - 20);
     }
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents: history
-        })
-      }
-    );
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          ...history
+        ],
+        max_tokens: 300
+      })
+    });
 
     if (!response.ok) {
-      throw new Error(`Gemini API error: ${response.status}`);
+      throw new Error(`Groq API error: ${response.status}`);
     }
 
     const data = await response.json();
-    const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    const aiText = data.choices?.[0]?.message?.content;
 
     if (!aiText) {
       throw new Error('No response from AI');
     }
 
-    history.push({ role: 'model', parts: [{ text: aiText }] });
+    history.push({ role: 'assistant', content: aiText });
 
     res.json({ reply: aiText });
   } catch (err) {

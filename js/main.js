@@ -19,7 +19,7 @@
   /* AI chat/planner responses — defaults overridden by site settings */
   let aiResponses = {
     valleys: [
-      'Based on your preferences, I recommend a **Hunza Valley & Passu** combo trip! You\'ll see Rakaposhi, Attabad Lake, and the famous Hussaini Bridge.',
+      'Based on your preferences, I recommend a **Naltar Valley & Passu** combo trip! You\'ll see stunning lakes, Attabad Lake, and the famous Hussaini Bridge.',
       'For a valley experience, **Phander Valley** offers peaceful lakes and untouched natural beauty — perfect for a serene getaway.',
     ],
     trekking: [
@@ -31,7 +31,7 @@
       'The **Phander Lake & Sheosar Lake** combo offers the most peaceful and photogenic lake experience in the north.',
     ],
     culture: [
-      'For cultural immersion, **Baltit & Altit Forts** in Hunza offer 700+ years of history with stunning architecture.',
+      'For cultural immersion, **Baltit & Altit Forts** in Gilgit-Baltistan offer 700+ years of history with stunning architecture.',
       'Experience **Wakhi culture in Passu & Gulmit** — traditional music, local cuisine, and warmth of the mountain people.',
     ],
     camping: [
@@ -51,8 +51,8 @@
     'hello': 'Assalam o Alaikum! Ready to explore Northern Pakistan? Tell me what interests you or click Generate My Trek!',
     'hi': 'Walaikum Assalam! What kind of Northern Pakistan adventure are you looking for?',
     'salam': 'Walaikum Assalam! Welcome to The Journey Team. How can I help plan your trip?',
-    'help': 'I can help you plan a trek in Northern Pakistan! Set your preferences on the left panel, or ask me about Hunza, Skardu, K2, or any destination.',
-    'hunza': 'Hunza Valley is our most popular destination! The best time is April-October. Must-sees include Baltit Fort, Eagle\'s Nest, Attabad Lake, and the stunning Passu Cones.',
+    'help': 'I can help you plan a trek in Northern Pakistan! Set your preferences on the left panel, or ask me about Skardu, K2, Naltar, or any destination.',
+    'gilgit': 'Gilgit is the gateway to Northern Pakistan! The best time is April-October. Must-sees include Naltar Valley, Fairy Meadows, Deosai, and the stunning Passu Cones.',
     'skardu': 'Skardu is the gateway to K2 and the highest peaks! Don\'t miss Shangrila Resort, Upper Kachura Lake, the Cold Desert, and Deosai National Park.',
     'fairy': 'Fairy Meadows offers a front-row view of Nanga Parbat (8,126m)! It\'s a 2-3 hour trek from Tato Village. Camping under the stars here is absolutely magical.',
     'k2': 'The K2 Base Camp trek is the ultimate mountaineering adventure — 14-18 days through Concordia with views of four 8,000m peaks. Best season is June-August.',
@@ -60,8 +60,8 @@
     'budget': 'For budget trips, Fairy Meadows (PKR 35,000) and Khunjerab Pass (PKR 25,000) offer incredible value. We also have group discounts!',
     'weather': 'Peak season is May-October. Summer (June-August) is best for treks. Autumn (September-October) has golden foliage. Winters are harsh but beautiful.',
     'best time': 'The best time to visit Northern Pakistan is May to October. June-August for treks, April-May for cherry blossoms, September-October for autumn colors.',
-    'food': 'Northern Pakistan has amazing local food — Chapshuro (meat-filled bread), Diram Fiti, walnut cake, dried apricots, and the famous Hunza water!',
-    'default': 'That sounds exciting! I\'d suggest setting your preferences and clicking Generate My Trek for a personalized Northern Pakistan itinerary. You can also ask me about specific destinations like Hunza, Skardu, or Fairy Meadows!'
+    'food': 'Northern Pakistan has amazing local food — Chapshuro (meat-filled bread), Diram Fiti, walnut cake, dried apricots, and refreshing mountain spring water!',
+    'default': 'That sounds exciting! I\'d suggest setting your preferences and clicking Generate My Trek for a personalized Northern Pakistan itinerary. You can also ask me about specific destinations like Skardu, Naltar, or Fairy Meadows!'
   };
 
   /* --------------------------------------------------------

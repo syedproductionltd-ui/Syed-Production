@@ -84,7 +84,7 @@ const siteSettingsSchema = new mongoose.Schema({
   }],
 
   footer: {
-    description: { type: String, default: "Pakistan's trusted adventure company since 2018. Specializing in treks, tours, and cultural expeditions across Gilgit-Baltistan, Hunza, Skardu, and the Karakoram." },
+    description: { type: String, default: "Pakistan's trusted adventure company since 2018. Specializing in treks, tours, and cultural expeditions across Gilgit-Baltistan, Skardu, and the Karakoram." },
     socialLinks: [{
       platform: String,
       url: String

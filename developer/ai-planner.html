@@ -158,7 +158,7 @@
     });
 
     document.getElementById('addChat').addEventListener('click', function() {
-      var key = prompt('Enter keyword (e.g. hunza, budget):');
+      var key = prompt('Enter keyword (e.g. skardu, budget):');
       if (key && key.trim() && !chatResponses[key.trim()]) {
         chatResponses[key.trim()] = '';
         renderChatResponses();

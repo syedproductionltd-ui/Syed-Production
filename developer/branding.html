@@ -224,7 +224,7 @@
       }
     }
 
-    // -- Remove white background using canvas --
+    // -- Remove white background from corners only (flood-fill) --
     function removeWhiteBg(urlInputId, updateFn) {
       var url = document.getElementById(urlInputId).value.trim();
       if (!url) { alert('No image selected'); return; }
@@ -232,18 +232,43 @@
       img.crossOrigin = 'anonymous';
       img.onload = function() {
         var c = document.createElement('canvas');
-        c.width = img.naturalWidth;
-        c.height = img.naturalHeight;
+        var w = img.naturalWidth, h = img.naturalHeight;
+        c.width = w; c.height = h;
         var ctx = c.getContext('2d');
         ctx.drawImage(img, 0, 0);
-        var data = ctx.getImageData(0, 0, c.width, c.height);
+        var data = ctx.getImageData(0, 0, w, h);
         var px = data.data;
-        // Threshold: pixels close to white (R,G,B all > 230) become transparent
-        for (var i = 0; i < px.length; i += 4) {
-          if (px[i] > 230 && px[i+1] > 230 && px[i+2] > 230) {
-            px[i+3] = 0; // set alpha to 0
+        var visited = new Uint8Array(w * h);
+
+        function isWhitish(idx) {
+          return px[idx] > 220 && px[idx+1] > 220 && px[idx+2] > 220 && px[idx+3] > 0;
+        }
+
+        // Flood-fill from a starting pixel — only spreads through white-ish connected pixels
+        function floodFill(startX, startY) {
+          var idx = (startY * w + startX) * 4;
+          if (!isWhitish(idx)) return;
+          var stack = [[startX, startY]];
+          while (stack.length > 0) {
+            var p = stack.pop();
+            var x = p[0], y = p[1];
+            var key = y * w + x;
+            if (x < 0 || x >= w || y < 0 || y >= h) continue;
+            if (visited[key]) continue;
+            var i = key * 4;
+            if (!isWhitish(i)) continue;
+            visited[key] = 1;
+            px[i+3] = 0; // make transparent
+            stack.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);
           }
         }
+
+        // Flood-fill from all four corners
+        floodFill(0, 0);
+        floodFill(w-1, 0);
+        floodFill(0, h-1);
+        floodFill(w-1, h-1);
+
         ctx.putImageData(data, 0, 0);
         var result = c.toDataURL('image/png');
         document.getElementById(urlInputId).value = result;

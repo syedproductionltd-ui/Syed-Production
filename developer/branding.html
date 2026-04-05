@@ -123,10 +123,6 @@
                 <input type="range" id="logoBorderRadius" min="0" max="50" value="50">
                 <span class="range-val" id="logoBorderRadiusVal">50%</span>
               </div>
-              <div style="margin-top:0.5rem; display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-                <button type="button" class="btn btn-outline btn-sm" id="removeLogoBgBtn">Remove White Background</button>
-                <span class="form-hint" style="margin:0;">Removes white edges for dark navbar</span>
-              </div>
             </div>
           </div>
 
@@ -161,9 +157,6 @@
                 <label>Border Radius</label>
                 <input type="range" id="faviconBorderRadius" min="0" max="50" value="50">
                 <span class="range-val" id="faviconBorderRadiusVal">50%</span>
-              </div>
-              <div style="margin-top:0.5rem; display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-                <button type="button" class="btn btn-outline btn-sm" id="removeFaviconBgBtn">Remove White Background</button>
               </div>
               <p class="form-hint" style="margin-top:0.25rem;">50% = circular favicon (browser tab icon)</p>
             </div>
@@ -223,67 +216,6 @@
         noImg.style.display = 'block';
       }
     }
-
-    // -- Remove white background from corners only (flood-fill) --
-    function removeWhiteBg(urlInputId, updateFn) {
-      var url = document.getElementById(urlInputId).value.trim();
-      if (!url) { alert('No image selected'); return; }
-      var img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = function() {
-        var c = document.createElement('canvas');
-        var w = img.naturalWidth, h = img.naturalHeight;
-        c.width = w; c.height = h;
-        var ctx = c.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        var data = ctx.getImageData(0, 0, w, h);
-        var px = data.data;
-        var visited = new Uint8Array(w * h);
-
-        function isWhitish(idx) {
-          return px[idx] > 180 && px[idx+1] > 180 && px[idx+2] > 180 && px[idx+3] > 0;
-        }
-
-        // Flood-fill from a starting pixel — only spreads through light-colored connected pixels
-        function floodFill(startX, startY) {
-          var idx = (startY * w + startX) * 4;
-          if (!isWhitish(idx)) return;
-          var stack = [[startX, startY]];
-          while (stack.length > 0) {
-            var p = stack.pop();
-            var x = p[0], y = p[1];
-            var key = y * w + x;
-            if (x < 0 || x >= w || y < 0 || y >= h) continue;
-            if (visited[key]) continue;
-            var i = key * 4;
-            if (!isWhitish(i)) continue;
-            visited[key] = 1;
-            px[i+3] = 0; // make transparent
-            stack.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);
-          }
-        }
-
-        // Flood-fill from all four corners
-        floodFill(0, 0);
-        floodFill(w-1, 0);
-        floodFill(0, h-1);
-        floodFill(w-1, h-1);
-
-        ctx.putImageData(data, 0, 0);
-        var result = c.toDataURL('image/png');
-        document.getElementById(urlInputId).value = result;
-        updateFn();
-      };
-      img.onerror = function() { alert('Could not load image. Upload a file first.'); };
-      img.src = url;
-    }
-
-    document.getElementById('removeLogoBgBtn').addEventListener('click', function() {
-      removeWhiteBg('logoUrl', updateLogoPreview);
-    });
-    document.getElementById('removeFaviconBgBtn').addEventListener('click', function() {
-      removeWhiteBg('faviconUrl', updateFaviconPreview);
-    });
 
     // -- Bind range sliders --
     document.getElementById('logoSize').addEventListener('input', updateLogoPreview);

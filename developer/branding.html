@@ -123,6 +123,10 @@
                 <input type="range" id="logoBorderRadius" min="0" max="50" value="50">
                 <span class="range-val" id="logoBorderRadiusVal">50%</span>
               </div>
+              <div style="margin-top:0.5rem; display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                <button type="button" class="btn btn-outline btn-sm" id="removeLogoBgBtn">Remove White Background</button>
+                <span class="form-hint" style="margin:0;">Removes white edges for dark navbar</span>
+              </div>
             </div>
           </div>
 
@@ -157,6 +161,9 @@
                 <label>Border Radius</label>
                 <input type="range" id="faviconBorderRadius" min="0" max="50" value="50">
                 <span class="range-val" id="faviconBorderRadiusVal">50%</span>
+              </div>
+              <div style="margin-top:0.5rem; display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                <button type="button" class="btn btn-outline btn-sm" id="removeFaviconBgBtn">Remove White Background</button>
               </div>
               <p class="form-hint" style="margin-top:0.25rem;">50% = circular favicon (browser tab icon)</p>
             </div>
@@ -216,6 +223,42 @@
         noImg.style.display = 'block';
       }
     }
+
+    // -- Remove white background using canvas --
+    function removeWhiteBg(urlInputId, updateFn) {
+      var url = document.getElementById(urlInputId).value.trim();
+      if (!url) { alert('No image selected'); return; }
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function() {
+        var c = document.createElement('canvas');
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        var ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        var data = ctx.getImageData(0, 0, c.width, c.height);
+        var px = data.data;
+        // Threshold: pixels close to white (R,G,B all > 230) become transparent
+        for (var i = 0; i < px.length; i += 4) {
+          if (px[i] > 230 && px[i+1] > 230 && px[i+2] > 230) {
+            px[i+3] = 0; // set alpha to 0
+          }
+        }
+        ctx.putImageData(data, 0, 0);
+        var result = c.toDataURL('image/png');
+        document.getElementById(urlInputId).value = result;
+        updateFn();
+      };
+      img.onerror = function() { alert('Could not load image. Upload a file first.'); };
+      img.src = url;
+    }
+
+    document.getElementById('removeLogoBgBtn').addEventListener('click', function() {
+      removeWhiteBg('logoUrl', updateLogoPreview);
+    });
+    document.getElementById('removeFaviconBgBtn').addEventListener('click', function() {
+      removeWhiteBg('faviconUrl', updateFaviconPreview);
+    });
 
     // -- Bind range sliders --
     document.getElementById('logoSize').addEventListener('input', updateLogoPreview);

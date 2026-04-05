@@ -63,6 +63,28 @@ router.get('/me', devAuth, async (req, res) => {
   }
 });
 
+// POST /api/dev/reset-password — reset developer password (only works if exactly 1 dev account exists)
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({ message: 'New password must be at least 6 characters' });
+    }
+
+    const dev = await Developer.findOne();
+    if (!dev) {
+      return res.status(404).json({ message: 'No developer account found' });
+    }
+
+    dev.password = newPassword;
+    await dev.save();
+
+    res.json({ message: 'Password reset successfully', username: dev.username });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // PUT /api/dev/profile — change username and/or password
 router.put('/profile', devAuth, async (req, res) => {
   try {

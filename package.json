@@ -1,7 +1,7 @@
 {
-  "name": "gilgit-adventure-treks",
+  "name": "syed-productions",
   "version": "1.0.0",
-  "description": "Gilgit Adventure Treks - Admin Panel & API",
+  "description": "Syed Productions - Media Production House",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

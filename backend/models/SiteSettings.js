@@ -7,69 +7,69 @@ const siteSettingsSchema = new mongoose.Schema({
     logoUrl: { type: String, default: 'images/logo.png' },
     logoSize: { type: Number, default: 44 },
     logoBorderRadius: { type: Number, default: 50 },
-    companyName: { type: String, default: 'Gilgit Adventure Treks' },
-    companyShortName: { type: String, default: 'The Journey Team' },
+    companyName: { type: String, default: 'Syed Productions' },
+    companyShortName: { type: String, default: 'Syed Productions' },
     faviconUrl: { type: String, default: 'images/logo.png' },
     faviconBorderRadius: { type: Number, default: 50 }
   },
 
   hero: {
     slides: [{ imageUrl: String, alt: String }],
-    subtitle: { type: String, default: "Pakistan's Premier Adventure Company" },
-    title: { type: String, default: 'Explore the Majestic<br>Northern Areas of Pakistan' },
-    description: { type: String, default: "From the magical Fairy Meadows to the mighty K2 Base Camp — experience the world's most spectacular mountain landscapes with expert local guides." }
+    subtitle: { type: String, default: "Professional Film & Media Production" },
+    title: { type: String, default: 'Bringing Your Vision<br>to Life' },
+    description: { type: String, default: "From cinematic wedding films to corporate videos and event coverage — we craft compelling visual stories that captivate audiences and elevate your brand." }
   },
 
   sectionHeaders: {
     gallery: {
-      tag: { type: String, default: 'Captured Moments' },
-      title: { type: String, default: 'Northern Gallery' },
-      description: { type: String, default: 'Stunning shots from trekkers who explored the mountains, valleys, and lakes of Northern Pakistan with us.' }
+      tag: { type: String, default: 'Our Work' },
+      title: { type: String, default: 'Production Portfolio' },
+      description: { type: String, default: 'A showcase of our finest work — from cinematic wedding films to corporate productions and creative campaigns.' }
     },
     videos: {
-      tag: { type: String, default: 'Watch & Explore' },
-      title: { type: String, default: 'Experience Northern Pakistan' },
-      description: { type: String, default: "Watch real adventures from our trekkers and cinematic views of the world's most dramatic mountain landscapes." }
+      tag: { type: String, default: 'Showreel' },
+      title: { type: String, default: 'Our Productions' },
+      description: { type: String, default: 'Watch our latest films, behind-the-scenes footage, and client testimonials showcasing our creative vision.' }
     },
     team: {
-      tag: { type: String, default: 'Meet Us' },
-      title: { type: String, default: 'The Journey Team' },
-      description: { type: String, default: 'Local experts, seasoned mountaineers, and passionate storytellers — the people who make your Northern Pakistan adventure unforgettable.' }
+      tag: { type: String, default: 'Meet the Crew' },
+      title: { type: String, default: 'The Production Team' },
+      description: { type: String, default: 'Creative professionals, technical experts, and passionate storytellers — the crew behind every Syed Productions project.' }
     },
     topDestinations: {
-      tag: { type: String, default: 'Our Top Picks' },
-      title: { type: String, default: 'Top Destinations' },
-      description: { type: String, default: 'Handpicked by our team — the four most breathtaking experiences Northern Pakistan has to offer.' }
+      tag: { type: String, default: 'Spotlight' },
+      title: { type: String, default: 'Featured Services' },
+      description: { type: String, default: 'Our most popular production services — handpicked to showcase what Syed Productions does best.' }
     },
     destinations: {
-      tag: { type: String, default: 'Northern Pakistan' },
-      title: { type: String, default: 'Iconic Destinations' },
-      description: { type: String, default: 'Discover Gilgit-Baltistan, Chitral, and beyond — handpicked valleys, peaks, and treks that define the roof of the world.' }
+      tag: { type: String, default: 'What We Do' },
+      title: { type: String, default: 'Our Services' },
+      description: { type: String, default: 'From wedding films to corporate videos, event coverage to branding — explore the full range of Syed Productions services.' }
     },
     map: {
-      tag: { type: String, default: 'Discover' },
-      title: { type: String, default: 'Explore Northern Pakistan' },
-      description: { type: String, default: 'Click on any destination hotspot to learn more and start planning your adventure.' }
+      tag: { type: String, default: 'Locations' },
+      title: { type: String, default: 'Our Coverage Area' },
+      description: { type: String, default: 'We cover events and productions across Pakistan. Click any service to learn more and book.' }
     },
     tripPlanner: {
       tag: { type: String, default: 'AI-Powered' },
-      title: { type: String, default: 'Smart Trek Planner' },
-      description: { type: String, default: 'Tell us your preferences and our AI will craft the perfect Northern Pakistan itinerary just for you.' }
+      title: { type: String, default: 'Project Planner' },
+      description: { type: String, default: 'Tell us about your project and our AI will help estimate scope, timeline, and recommend the right production package.' }
     },
     booking: {
-      tag: { type: String, default: 'Easy Booking' },
-      title: { type: String, default: 'Book Your Adventure' },
-      description: { type: String, default: 'Simple, transparent booking in just a few steps. No hidden fees — honest pricing from a local company.' }
+      tag: { type: String, default: 'Book a Service' },
+      title: { type: String, default: 'Book Your Production' },
+      description: { type: String, default: 'Simple, transparent booking in just a few steps. No hidden fees — honest pricing from a professional team.' }
     },
     reviews: {
-      tag: { type: String, default: 'Testimonials' },
-      title: { type: String, default: 'What Trekkers Say' },
-      description: { type: String, default: 'Real experiences from real adventurers. See why thousands trust The Journey Team for their mountain journeys.' }
+      tag: { type: String, default: 'Client Stories' },
+      title: { type: String, default: 'What Our Clients Say' },
+      description: { type: String, default: 'Real feedback from real clients. See why hundreds trust Syed Productions for their most important moments.' }
     },
     deals: {
-      tag: { type: String, default: 'Limited Time' },
-      title: { type: String, default: 'Seasonal Trek Deals' },
-      description: { type: String, default: "Grab these exclusive Northern Pakistan tour packages before they're fully booked for the season." }
+      tag: { type: String, default: 'Special Offers' },
+      title: { type: String, default: 'Production Packages' },
+      description: { type: String, default: 'Grab these exclusive production packages at special rates — limited availability, book now to secure your dates.' }
     }
   },
 
@@ -87,7 +87,7 @@ const siteSettingsSchema = new mongoose.Schema({
   }],
 
   footer: {
-    description: { type: String, default: "Pakistan's trusted adventure company since 2018. Specializing in treks, tours, and cultural expeditions across Gilgit-Baltistan, Skardu, and the Karakoram." },
+    description: { type: String, default: "Professional media production house. Specializing in cinematic films, photography, videography, and event coverage across Pakistan." },
     socialLinks: [{
       platform: String,
       url: String
@@ -95,7 +95,7 @@ const siteSettingsSchema = new mongoose.Schema({
     trustBadges: [{
       text: String
     }],
-    copyrightText: { type: String, default: '© 2026 The Journey Team. All rights reserved. Based in Gilgit, Pakistan.' },
+    copyrightText: { type: String, default: '© 2026 Syed Productions. All rights reserved. Based in Pakistan.' },
     linkColumns: [{
       heading: String,
       links: [{ label: String, href: String }]
@@ -103,9 +103,9 @@ const siteSettingsSchema = new mongoose.Schema({
   },
 
   newsletter: {
-    heading: { type: String, default: 'Get Trek Updates & Seasonal Alerts' },
-    description: { type: String, default: 'Subscribe for exclusive Northern Pakistan trek deals, weather updates, and adventure guides delivered to your inbox.' },
-    subscriberNote: { type: String, default: 'No spam, unsubscribe anytime. Join 12,000+ adventure seekers.' }
+    heading: { type: String, default: 'Get Production Updates & Exclusive Offers' },
+    description: { type: String, default: 'Subscribe for exclusive production packages, behind-the-scenes content, and creative insights delivered to your inbox.' },
+    subscriberNote: { type: String, default: 'No spam, unsubscribe anytime. Join 5,000+ creative professionals.' }
   },
 
   contact: {
@@ -123,14 +123,14 @@ const siteSettingsSchema = new mongoose.Schema({
   },
 
   aiTripPlanner: {
-    welcomeMessage: { type: String, default: "Assalam o Alaikum! I'm your AI trek planning assistant for Northern Pakistan. Set your preferences on the left and click <strong>Generate My Trek</strong> to get a personalized itinerary through Gilgit-Baltistan!" },
+    welcomeMessage: { type: String, default: "Welcome! I'm your AI project planning assistant. Set your preferences on the left and click <strong>Plan My Project</strong> to get a personalized production estimate and recommendation!" },
     aiResponses: { type: mongoose.Schema.Types.Mixed, default: {} },
     chatResponses: { type: mongoose.Schema.Types.Mixed, default: {} }
   },
 
   loadingScreen: {
-    title: { type: String, default: 'Gilgit Adventure Treks' },
-    text: { type: String, default: 'Preparing your mountain adventure...' }
+    title: { type: String, default: 'Syed Productions' },
+    text: { type: String, default: 'Setting the stage...' }
   }
 
 }, { timestamps: true });

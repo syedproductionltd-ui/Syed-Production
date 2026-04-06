@@ -1,5 +1,5 @@
 /* ============================================================
-   THE JOURNEY TEAM — MAIN JAVASCRIPT
+   SYED PRODUCTIONS — MAIN JAVASCRIPT
    ============================================================ */
 
 (function () {
@@ -18,50 +18,58 @@
 
   /* AI chat/planner responses — defaults overridden by site settings */
   let aiResponses = {
-    valleys: [
-      'Based on your preferences, I recommend a **Naltar Valley & Passu** combo trip! You\'ll see stunning lakes, Attabad Lake, and the famous Hussaini Bridge.',
-      'For a valley experience, **Phander Valley** offers peaceful lakes and untouched natural beauty — perfect for a serene getaway.',
+    wedding: [
+      'For your wedding, I recommend our **Cinematic Wedding Film** package! Multi-camera coverage, drone shots, and a highlight reel your guests will love.',
+      'Our **Premium Wedding Package** includes full-day coverage, same-day edit, and a beautifully crafted 10-minute cinematic film.',
     ],
-    trekking: [
-      'For trekkers, the **Rakaposhi Base Camp** trek is a perfect day adventure with incredible mountain panoramas!',
-      'If you\'re up for the ultimate challenge, the **K2 Base Camp** trek through Concordia is the adventure of a lifetime!',
+    corporate: [
+      'For corporate needs, our **Corporate Video Production** service delivers professional brand films, training videos, and promotional content.',
+      'We offer **Corporate Event Coverage** with multi-camera setups, live streaming, and quick-turnaround highlight reels.',
     ],
-    lakes: [
-      'For lake lovers, I recommend **Attabad Lake + Naltar Lakes** — turquoise waters surrounded by dramatic peaks!',
-      'The **Phander Lake & Sheosar Lake** combo offers the most peaceful and photogenic lake experience in the north.',
+    music: [
+      'Our **Music Video Production** team brings creative direction, cinematic visuals, and professional color grading to every project.',
+      'From concept to final cut, we create **stunning music videos** with choreography coordination, location scouting, and VFX.',
     ],
-    culture: [
-      'For cultural immersion, **Baltit & Altit Forts** in Gilgit-Baltistan offer 700+ years of history with stunning architecture.',
-      'Experience **Wakhi culture in Passu & Gulmit** — traditional music, local cuisine, and warmth of the mountain people.',
+    event: [
+      'For events, our **Full Coverage Package** includes multi-camera recording, drone footage, and a polished highlight film.',
+      'We specialize in **corporate events, conferences, and galas** — capturing every key moment with professional quality.',
     ],
-    camping: [
-      'For the best camping, **Fairy Meadows** under Nanga Parbat is unbeatable — billions of stars above!',
-      'Try camping at **Deosai National Park** — the highest plateau with wildflowers and wildlife.',
+    documentary: [
+      'Our **Documentary Filmmaking** service tells your story with depth — from research and interviews to narration and post-production.',
+      'We produce **compelling documentaries** for NGOs, brands, and personal projects with cinematic storytelling techniques.',
     ],
     photography: [
-      'For photographers, **Passu Cones + Attabad Lake + Eagle\'s Nest** offer the most iconic shots in Pakistan!',
-      'The **Deosai Plains** at sunrise offer otherworldly landscape photography opportunities!',
+      'Our **Photography Services** cover portraits, products, events, and fashion — with professional lighting and retouching.',
+      'From **product photography** to **fashion shoots**, our team delivers magazine-quality images for every need.',
+    ],
+    commercial: [
+      'Our **Commercial Production** service creates TV ads, social media campaigns, and branded content that converts.',
+      'We produce **high-impact commercials** with creative scripting, professional talent, and broadcast-quality finishing.',
+    ],
+    branding: [
+      'Our **Brand Identity** service includes logo design, style guides, and visual branding across all your media.',
+      'From **logo creation** to full brand packages, we build visual identities that stand out in the market.',
     ],
     default: [
-      'I have some wonderful Northern Pakistan suggestions based on your preferences! Let me create a personalized itinerary.',
+      'I have some great production recommendations based on your project needs! Let me create a personalized estimate.',
     ]
   };
 
   let chatResponses = {
-    'hello': 'Assalam o Alaikum! Ready to explore Northern Pakistan? Tell me what interests you or click Generate My Trek!',
-    'hi': 'Walaikum Assalam! What kind of Northern Pakistan adventure are you looking for?',
-    'salam': 'Walaikum Assalam! Welcome to The Journey Team. How can I help plan your trip?',
-    'help': 'I can help you plan a trek in Northern Pakistan! Set your preferences on the left panel, or ask me about Skardu, K2, Naltar, or any destination.',
-    'gilgit': 'Gilgit is the gateway to Northern Pakistan! The best time is April-October. Must-sees include Naltar Valley, Fairy Meadows, Deosai, and the stunning Passu Cones.',
-    'skardu': 'Skardu is the gateway to K2 and the highest peaks! Don\'t miss Shangrila Resort, Upper Kachura Lake, the Cold Desert, and Deosai National Park.',
-    'fairy': 'Fairy Meadows offers a front-row view of Nanga Parbat (8,126m)! It\'s a 2-3 hour trek from Tato Village. Camping under the stars here is absolutely magical.',
-    'k2': 'The K2 Base Camp trek is the ultimate mountaineering adventure — 14-18 days through Concordia with views of four 8,000m peaks. Best season is June-August.',
-    'naltar': 'Naltar Valley has incredible color-changing lakes surrounded by pine forests. It also has Pakistan\'s only ski resort! Best visited May-September.',
-    'budget': 'For budget trips, Fairy Meadows (PKR 35,000) and Khunjerab Pass (PKR 25,000) offer incredible value. We also have group discounts!',
-    'weather': 'Peak season is May-October. Summer (June-August) is best for treks. Autumn (September-October) has golden foliage. Winters are harsh but beautiful.',
-    'best time': 'The best time to visit Northern Pakistan is May to October. June-August for treks, April-May for cherry blossoms, September-October for autumn colors.',
-    'food': 'Northern Pakistan has amazing local food — Chapshuro (meat-filled bread), Diram Fiti, walnut cake, dried apricots, and refreshing mountain spring water!',
-    'default': 'That sounds exciting! I\'d suggest setting your preferences and clicking Generate My Trek for a personalized Northern Pakistan itinerary. You can also ask me about specific destinations like Skardu, Naltar, or Fairy Meadows!'
+    'hello': 'Assalam o Alaikum! Welcome to Syed Productions. Tell me about your project or click Plan My Project!',
+    'hi': 'Welcome! What kind of production service are you looking for?',
+    'salam': 'Walaikum Assalam! Welcome to Syed Productions. How can I help with your project?',
+    'help': 'I can help you plan your production project! Set your preferences on the left panel, or ask me about our services like wedding films, corporate videos, or photography.',
+    'wedding': 'Our wedding film packages include multi-camera coverage, drone shots, same-day edits, and cinematic highlight reels. We cover events across Pakistan!',
+    'corporate': 'We produce professional corporate videos — brand films, training videos, event coverage, and promotional content with broadcast-quality finishing.',
+    'photography': 'Our photography services cover portraits, products, events, fashion, and real estate — with professional lighting, retouching, and fast delivery.',
+    'music': 'We create stunning music videos from concept to final cut — creative direction, choreography, location scouting, and professional color grading.',
+    'price': 'Our packages start from PKR 25,000 for basic shoots. Wedding films from PKR 150,000, corporate videos from PKR 75,000. Custom quotes available!',
+    'budget': 'We have packages for every budget! Basic event coverage starts at PKR 25,000. Contact us for a custom quote tailored to your needs.',
+    'editing': 'Our post-production services include video editing, color grading, motion graphics, VFX, and sound design — all done in-house.',
+    'branding': 'Our branding services include logo design, visual identity, brand guidelines, and social media assets — everything to establish your brand.',
+    'event': 'We cover all types of events — corporate conferences, product launches, galas, concerts, and private celebrations with multi-camera setups.',
+    'default': 'That sounds like an exciting project! Set your preferences and click Plan My Project for a personalized production estimate. You can also ask me about specific services like wedding films, corporate videos, or photography!'
   };
 
   /* --------------------------------------------------------
@@ -287,7 +295,7 @@
       card.innerHTML = `
         <img src="${dest.image}" alt="${dest.name}" loading="lazy">
         <div class="top-dest-overlay">
-          <span class="top-dest-tag">Top Destination</span>
+          <span class="top-dest-tag">Featured Service</span>
           <h3 class="top-dest-name">${dest.name}</h3>
           <p class="top-dest-region">${dest.country}</p>
           <div class="top-dest-meta">
@@ -456,14 +464,14 @@
     const style = $('#plannerStyle').value;
     const interests = $$('.planner-tag.active').map(t => t.dataset.interest);
 
-    if (interests.length === 0) interests.push('valleys');
+    if (interests.length === 0) interests.push('wedding');
 
     const primaryInterest = interests[0];
     const responsePool = aiResponses[primaryInterest] || aiResponses.default;
     const intro = responsePool[Math.floor(Math.random() * responsePool.length)];
 
     const durationMap = { weekend: '3 Days', week: '7 Days', twoweeks: '14 Days', month: '30 Days' };
-    const budgetMap = { budget: 'PKR 30,000–60,000', mid: 'PKR 60,000–150,000', luxury: 'PKR 150,000+' };
+    const budgetMap = { budget: 'PKR 25,000–75,000', mid: 'PKR 75,000–200,000', luxury: 'PKR 200,000+' };
 
     const relevant = destinations.filter(d =>
       interests.includes(d.category) ||
@@ -476,13 +484,13 @@
 
     const itineraryDays = [];
     const dayActivities = [
-      'Drive on the Karakoram Highway to',
-      'Morning trek and explore',
-      'Visit viewpoints and photograph',
-      'Boat ride and picnic at',
-      'Cultural walk and local food in',
-      'Sunrise hike near',
-      'Free exploration and shopping in'
+      'Pre-production planning and storyboarding for',
+      'Location scouting and setup for',
+      'Principal shooting day for',
+      'B-roll and detail shots for',
+      'Interview and testimonial recording for',
+      'Aerial/drone footage capture for',
+      'Post-production and review for'
     ];
 
     for (let i = 1; i <= Math.min(days, 7); i++) {
@@ -495,10 +503,10 @@
     const itineraryHTML = `
       <p>${intro}</p>
       <div class="itinerary-card">
-        <h4>Your ${durationMap[duration]} ${style === 'solo' ? 'Solo' : style === 'couple' ? 'Couple' : style === 'family' ? 'Family' : 'Group'} Northern Pakistan Itinerary</h4>
+        <h4>Your ${durationMap[duration]} ${style === 'solo' ? 'Solo' : style === 'couple' ? 'Couple' : style === 'family' ? 'Family' : 'Group'} Production Plan</h4>
         <p style="font-size:12px; color:#64748b; margin-bottom:8px;">Budget: ${budgetMap[budget]} | Interests: ${interests.join(', ')}</p>
         ${itineraryDays.join('')}
-        ${days > 7 ? '<div class="itinerary-day"><strong>Days 8–' + days + ':</strong> Extended exploration — Khunjerab Pass, hidden valleys, and off-the-beaten-path villages!</div>' : ''}
+        ${days > 7 ? '<div class="itinerary-day"><strong>Days 8–' + days + ':</strong> Extended post-production — color grading, VFX, sound design, and final delivery!</div>' : ''}
       </div>
       <p style="margin-top:12px; font-size:13px;">Would you like me to adjust anything or start booking? Contact us on WhatsApp for instant confirmation!</p>
     `;
@@ -507,8 +515,8 @@
   }
 
   plannerGenerate.addEventListener('click', () => {
-    const interests = $$('.planner-tag.active').map(t => t.textContent).join(', ') || 'Valleys';
-    addChatMessage(`Generate a trek with interests: ${interests}`, true);
+    const interests = $$('.planner-tag.active').map(t => t.textContent).join(', ') || 'Wedding';
+    addChatMessage(`Plan a project with interests: ${interests}`, true);
 
     showTypingIndicator();
     setTimeout(() => {
@@ -586,7 +594,7 @@
     });
 
     wizardPrev.disabled = wizardStep === 1;
-    wizardNext.textContent = wizardStep === totalSteps - 1 ? 'Confirm Booking' : wizardStep === totalSteps ? 'Book Another Trek' : 'Continue';
+    wizardNext.textContent = wizardStep === totalSteps - 1 ? 'Confirm Booking' : wizardStep === totalSteps ? 'Book Another Service' : 'Continue';
 
     if (wizardStep === 4) renderBookingReview();
 
@@ -620,7 +628,7 @@
     if (ci && co) {
       const days = Math.ceil((new Date(co) - new Date(ci)) / (1000 * 60 * 60 * 24));
       if (days > 0) {
-        $('#dateSummary').textContent = `${days} day${days > 1 ? 's' : ''} / ${days - 1} night${days - 1 > 1 ? 's' : ''} trek`;
+        $('#dateSummary').textContent = `${days} day${days > 1 ? 's' : ''} production schedule`;
         booking.checkIn = ci;
         booking.checkOut = co;
       } else {
@@ -636,7 +644,7 @@
     const review = $('#bookingReview');
     const dest = booking.destination;
     if (!dest) {
-      review.innerHTML = '<p style="text-align:center; color:#94a3b8;">Please select a destination first.</p>';
+      review.innerHTML = '<p style="text-align:center; color:#94a3b8;">Please select a service first.</p>';
       return;
     }
 
@@ -654,7 +662,7 @@
     booking.totalPrice = Math.round(total);
 
     review.innerHTML = `
-      <div class="review-line"><span class="label">Destination</span><span>${dest.name}</span></div>
+      <div class="review-line"><span class="label">Service</span><span>${dest.name}</span></div>
       <div class="review-line"><span class="label">Region</span><span>${dest.country}</span></div>
       <div class="review-line"><span class="label">Dates</span><span>${booking.checkIn || 'Flexible'} → ${booking.checkOut || 'Flexible'}</span></div>
       <div class="review-line"><span class="label">Duration</span><span>${nights} days</span></div>
@@ -671,7 +679,7 @@
     const dest = booking.destination;
     if (!dest) return;
 
-    const reference = 'TJT-2026-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+    const reference = 'SP-2026-' + Math.random().toString(36).substring(2, 7).toUpperCase();
 
     const headers = { 'Content-Type': 'application/json' };
     const userToken = localStorage.getItem('user_token');
@@ -1521,7 +1529,7 @@
       var dest = document.getElementById('rmDest').value;
       var text = document.getElementById('rmText').value.trim();
 
-      if (!dest) { errEl.textContent = 'Please select a destination'; errEl.style.display = 'block'; return; }
+      if (!dest) { errEl.textContent = 'Please select a service'; errEl.style.display = 'block'; return; }
       if (!rmRating) { errEl.textContent = 'Please select a rating'; errEl.style.display = 'block'; return; }
       if (!text) { errEl.textContent = 'Please write your review'; errEl.style.display = 'block'; return; }
 

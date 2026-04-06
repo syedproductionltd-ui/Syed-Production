@@ -4,7 +4,7 @@ const destinationSchema = new mongoose.Schema({
   id: { type: Number, required: true, unique: true },
   name: { type: String, required: true },
   country: { type: String, required: true },
-  category: { type: String, required: true, enum: ['valley', 'trek', 'lake', 'peak', 'heritage'] },
+  category: { type: String, required: true, enum: ['film', 'photography', 'events', 'editing', 'branding'] },
   featured: { type: Boolean, default: false },
   image: { type: String, required: true },
   rating: { type: Number, required: true, min: 0, max: 5 },

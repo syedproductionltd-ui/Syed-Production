@@ -10,99 +10,99 @@ const TeamMember = require('./models/TeamMember');
 
 const destinations = [
   {
-    id: 1, name: 'Hunza Valley', country: 'Gilgit-Baltistan', category: 'valley',
-    image: 'https://images.unsplash.com/photo-1605540436563-5bca919ae766?w=600&q=80',
-    rating: 4.9, reviews: 3400, price: 45000,
-    description: 'The crown jewel of Northern Pakistan. Hunza Valley offers jaw-dropping views of Rakaposhi, ancient Baltit Fort, and the stunning turquoise Attabad Lake. A paradise for photographers and culture lovers alike.',
-    highlights: ['Baltit Fort', "Eagle's Nest Viewpoint", 'Attabad Lake', 'Rakaposhi View', 'Local Cuisine'],
+    id: 1, name: 'Cinematic Wedding Films', country: 'Premium', category: 'film', featured: true,
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',
+    rating: 4.9, reviews: 340, price: 150000,
+    description: 'Capture your special day with cinematic storytelling. Our wedding films blend emotion, artistry, and technical excellence to create timeless memories you will cherish forever.',
+    highlights: ['4K Cinematic', 'Drone Shots', 'Same-Day Edit', 'Full Ceremony', 'Highlight Reel'],
     mapX: 700, mapY: 158
   },
   {
-    id: 2, name: 'Skardu', country: 'Baltistan', category: 'valley',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80',
-    rating: 4.8, reviews: 2800, price: 55000,
-    description: "Gateway to the world's highest peaks. Skardu is home to Shangrila Resort, the mesmerizing Upper & Lower Kachura Lakes, and serves as base camp for K2 and other 8,000m giants.",
-    highlights: ['Shangrila Resort', 'Upper Kachura Lake', 'Skardu Fort', 'Cold Desert', 'Sarfaranga Desert'],
+    id: 2, name: 'Corporate Video Production', country: 'Business', category: 'film',
+    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80',
+    rating: 4.8, reviews: 280, price: 120000,
+    description: 'Professional corporate videos that communicate your brand story, culture, and values. From company profiles to training videos and product launches.',
+    highlights: ['Brand Story', 'Product Launch', 'Training Videos', 'Interviews', 'Motion Graphics'],
     mapX: 725, mapY: 172
   },
   {
-    id: 3, name: 'Fairy Meadows', country: 'Diamer', category: 'trek', featured: true,
-    image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&q=80',
-    rating: 4.9, reviews: 2100, price: 35000,
-    description: 'A lush green alpine meadow offering an unobstructed front-row seat to Nanga Parbat, the 9th highest mountain on Earth. The jeep ride and trek to reach here are adventures in themselves.',
-    highlights: ['Nanga Parbat View', 'Camping', 'Beyal Camp Trek', 'Star Gazing', 'Jeep Track Thrill'],
+    id: 3, name: 'Music Video Production', country: 'Creative', category: 'film', featured: true,
+    image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80',
+    rating: 4.9, reviews: 210, price: 200000,
+    description: 'Bring your music to life with visually stunning music videos. We handle concept development, location scouting, filming, and post-production from start to finish.',
+    highlights: ['Concept Design', 'Multi-Location', 'Color Grading', 'VFX', 'Choreography'],
     mapX: 688, mapY: 178
   },
   {
-    id: 4, name: 'Naltar Valley', country: 'Gilgit', category: 'lake', featured: true,
-    image: 'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=600&q=80',
-    rating: 4.7, reviews: 1600, price: 30000,
-    description: "Famous for its trio of stunning lakes that change color with the seasons — from deep blue to emerald green. Naltar also boasts Pakistan's highest ski resort and pristine pine forests.",
-    highlights: ['Naltar Lakes', 'Ski Resort', 'Pine Forests', 'Camping', 'Photography'],
+    id: 4, name: 'Product Photography', country: 'Commercial', category: 'photography', featured: true,
+    image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600&q=80',
+    rating: 4.7, reviews: 160, price: 50000,
+    description: 'High-quality product photography for e-commerce, catalogues, and advertising. Studio and on-location setups with professional lighting and styling.',
+    highlights: ['Studio Setup', 'Lifestyle Shots', 'White Background', '360° Views', 'Retouching'],
     mapX: 682, mapY: 152
   },
   {
-    id: 5, name: 'K2 Base Camp', country: 'Baltistan', category: 'peak', featured: true,
-    image: 'https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=600&q=80',
-    rating: 4.9, reviews: 890, price: 180000,
-    description: 'The ultimate trek for mountaineers and adventure purists. The K2 Base Camp trek takes you through Concordia — the throne room of the mountain gods — with views of four 8,000m peaks.',
-    highlights: ['Concordia', 'Baltoro Glacier', 'Broad Peak View', 'Gasherbrum Views', 'Mountaineering'],
+    id: 5, name: 'Event Coverage', country: 'Live', category: 'events', featured: true,
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80',
+    rating: 4.9, reviews: 890, price: 80000,
+    description: 'Comprehensive event coverage including conferences, galas, concerts, and ceremonies. Multi-camera setups, live streaming, and rapid turnaround.',
+    highlights: ['Multi-Camera', 'Live Stream', 'Same-Day Highlights', 'Drone Coverage', 'Photo + Video'],
     mapX: 738, mapY: 162
   },
   {
-    id: 6, name: 'Deosai National Park', country: 'Baltistan', category: 'trek', featured: true,
-    image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&q=80',
-    rating: 4.8, reviews: 1350, price: 40000,
-    description: 'The "Land of Giants" — one of the highest plateaus in the world at 4,114m. Home to the Himalayan brown bear, golden marmots, and wildflower-covered plains stretching to the horizon.',
-    highlights: ['Sheosar Lake', 'Brown Bears', 'Wildflower Plains', 'Bara Pani', 'Wildlife Photography'],
+    id: 6, name: 'Documentary Filmmaking', country: 'Storytelling', category: 'film',
+    image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=600&q=80',
+    rating: 4.8, reviews: 135, price: 250000,
+    description: 'Compelling documentary films that tell powerful stories. From concept to distribution, we handle research, interviews, cinematography, and post-production.',
+    highlights: ['Research', 'Interviews', 'Narration', 'Archival Footage', 'Festival Ready'],
     mapX: 722, mapY: 185
   },
   {
-    id: 7, name: 'Passu & Gulmit', country: 'Upper Hunza', category: 'valley',
-    image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&q=80',
-    rating: 4.7, reviews: 1800, price: 38000,
-    description: 'Home to the iconic Passu Cones and the thrilling Hussaini Suspension Bridge. This Upper Hunza gem features the dramatic Passu Glacier, Borith Lake, and timeless Wakhi culture.',
-    highlights: ['Passu Cones', 'Hussaini Bridge', 'Passu Glacier', 'Borith Lake', 'Wakhi Culture'],
+    id: 7, name: 'Portrait & Fashion Photography', country: 'Creative', category: 'photography',
+    image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80',
+    rating: 4.7, reviews: 180, price: 40000,
+    description: 'Professional portrait and fashion photography sessions. From headshots to editorial spreads, we bring out the best in every subject with expert lighting and direction.',
+    highlights: ['Studio Portraits', 'Outdoor Shoots', 'Fashion Editorial', 'Headshots', 'Retouching'],
     mapX: 706, mapY: 142
   },
   {
-    id: 8, name: 'Khunjerab Pass', country: 'Hunza', category: 'peak',
-    image: 'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=600&q=80',
-    rating: 4.6, reviews: 1400, price: 25000,
-    description: 'The highest paved international border crossing in the world at 4,693m on the Pakistan-China border. Drive the legendary Karakoram Highway and spot wild yaks and Marco Polo sheep.',
-    highlights: ['Highest Border Crossing', 'Karakoram Highway', 'Wild Yaks', 'Snow Peaks', 'KKH Drive'],
+    id: 8, name: 'Social Media Content', country: 'Digital', category: 'branding',
+    image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=600&q=80',
+    rating: 4.6, reviews: 140, price: 35000,
+    description: 'Engaging social media content creation — reels, stories, posts, and ad creatives optimized for Instagram, TikTok, YouTube, and Facebook.',
+    highlights: ['Reels', 'Stories', 'Ad Creatives', 'Content Calendar', 'Platform Optimization'],
     mapX: 714, mapY: 132
   },
   {
-    id: 9, name: 'Attabad Lake', country: 'Upper Hunza', category: 'lake',
-    image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&q=80',
-    rating: 4.8, reviews: 2200, price: 28000,
-    description: "A stunning turquoise lake formed by a massive landslide in 2010. Today it's a paradise for boating, jet skiing, and photography with the Karakoram peaks reflected in its vivid waters.",
-    highlights: ['Boat Rides', 'Jet Skiing', 'Photography', 'Turquoise Waters', 'Mountain Backdrop'],
+    id: 9, name: 'Video Editing & Post-Production', country: 'Post', category: 'editing',
+    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80',
+    rating: 4.8, reviews: 220, price: 30000,
+    description: 'Professional video editing, color grading, sound design, and motion graphics. Transform your raw footage into polished, broadcast-ready content.',
+    highlights: ['Color Grading', 'Sound Design', 'Motion Graphics', 'VFX', 'Subtitles'],
     mapX: 695, mapY: 146
   },
   {
-    id: 10, name: 'Phander Valley', country: 'Ghizer', category: 'lake',
-    image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80',
-    rating: 4.7, reviews: 950, price: 32000,
-    description: 'A hidden paradise in Ghizer District with the pristine Phander Lake, lush green meadows, and a serene atmosphere that feels untouched by time. One of the most peaceful spots in the north.',
-    highlights: ['Phander Lake', 'Handrap Lake', 'Trout Fishing', 'Green Meadows', 'Peaceful Retreat'],
+    id: 10, name: 'Real Estate Videography', country: 'Property', category: 'film',
+    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=80',
+    rating: 4.7, reviews: 95, price: 60000,
+    description: 'Showcase properties with stunning aerial and interior videography. Virtual tours, drone footage, and cinematic walkthroughs for real estate marketing.',
+    highlights: ['Drone Footage', 'Virtual Tours', 'Interior Shots', 'Twilight Shoots', '3D Tours'],
     mapX: 672, mapY: 168
   },
   {
-    id: 11, name: 'Baltit & Altit Forts', country: 'Hunza', category: 'heritage',
-    image: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=600&q=80',
-    rating: 4.6, reviews: 1700, price: 20000,
-    description: 'Ancient seats of the Hunza Mirs dating back 700+ years. Baltit Fort sits dramatically above Karimabad while Altit Fort — the older of the two — overlooks the Hunza River gorge.',
-    highlights: ['Baltit Fort', 'Altit Fort', 'Hunza History', 'Museum Tours', 'Karimabad Bazaar'],
+    id: 11, name: 'Brand Identity & Logo Design', country: 'Creative', category: 'branding',
+    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80',
+    rating: 4.6, reviews: 170, price: 45000,
+    description: 'Complete brand identity packages — logo design, color palettes, typography, brand guidelines, and visual assets for a cohesive professional look.',
+    highlights: ['Logo Design', 'Brand Guidelines', 'Color Palette', 'Typography', 'Visual Assets'],
     mapX: 698, mapY: 165
   },
   {
-    id: 12, name: 'Rakaposhi Base Camp', country: 'Nagar', category: 'trek',
-    image: 'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&q=80',
-    rating: 4.8, reviews: 1100, price: 35000,
-    description: 'A rewarding day trek to the base of the mighty Rakaposhi (7,788m). The trail passes through wildflower meadows and glacial streams with stunning panoramic views of the Karakoram.',
-    highlights: ['Rakaposhi Views', 'Minapin Glacier', 'Day Trek', 'Wildflower Meadows', 'Mountain Streams'],
+    id: 12, name: 'Photo & Video Retouching', country: 'Post', category: 'editing',
+    image: 'https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=600&q=80',
+    rating: 4.8, reviews: 110, price: 25000,
+    description: 'Expert photo and video retouching services. Skin retouching, background removal, color correction, and compositing to make every frame perfect.',
+    highlights: ['Skin Retouching', 'Background Removal', 'Color Correction', 'Compositing', 'Batch Processing'],
     mapX: 690, mapY: 170
   }
 ];
@@ -111,111 +111,111 @@ const reviews = [
   {
     name: 'Ahmed Raza', location: 'Lahore, Pakistan',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80',
-    rating: 5, destination: 'Hunza Valley', verified: true,
-    text: "The Journey Team made our Hunza trip absolutely magical! The guide knew every hidden viewpoint. Watching sunrise over Rakaposhi from Eagle's Nest was a life-changing moment. Highly recommended!"
+    rating: 5, destination: 'Cinematic Wedding Films', verified: true,
+    text: "Syed Productions made our wedding absolutely magical! The cinematography was breathtaking and every emotion was perfectly captured. The same-day edit had our guests in tears. Highly recommended!"
   },
   {
-    name: 'Sarah Thompson', location: 'London, UK',
+    name: 'Sarah Khan', location: 'Islamabad, Pakistan',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80',
-    rating: 5, destination: 'K2 Base Camp', verified: true,
-    text: 'The K2 Base Camp trek was the adventure of a lifetime! The team was professional, porters were incredible, and seeing Concordia for the first time literally brought tears to my eyes. World-class operation.'
+    rating: 5, destination: 'Corporate Video Production', verified: true,
+    text: 'The corporate video for our company launch was outstanding! Professional crew, amazing equipment, and the final edit exceeded all expectations. Our brand story has never looked better.'
   },
   {
-    name: 'Fatima Khan', location: 'Islamabad, Pakistan',
+    name: 'Fatima Ali', location: 'Karachi, Pakistan',
     avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80',
-    rating: 5, destination: 'Fairy Meadows', verified: true,
-    text: "Fairy Meadows was pure magic! Camping under billions of stars with Nanga Parbat towering above us. The food cooked by the local team was delicious. Best family trip we've ever taken."
+    rating: 5, destination: 'Event Coverage', verified: true,
+    text: "They covered our annual gala and the results were stunning. Multi-camera setup, beautiful lighting, and the highlight reel was delivered the very next day. Absolutely professional team."
   },
   {
-    name: 'Marco Rossi', location: 'Milan, Italy',
+    name: 'Omar Sheikh', location: 'Rawalpindi, Pakistan',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80',
-    rating: 5, destination: 'Skardu', verified: true,
-    text: 'Skardu exceeded every expectation. The drive on the Karakoram Highway, the turquoise lakes, the cold desert — it felt like another planet. The Journey Team arranged everything perfectly. Grazie mille!'
+    rating: 5, destination: 'Music Video Production', verified: true,
+    text: 'Working with Syed Productions on my music video was incredible. They understood my vision perfectly, the locations were stunning, and the color grading gave it a true cinematic feel.'
   },
   {
-    name: 'Aisha Malik', location: 'Karachi, Pakistan',
+    name: 'Aisha Malik', location: 'Faisalabad, Pakistan',
     avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80',
-    rating: 5, destination: 'Naltar Valley', verified: true,
-    text: "Naltar's color-changing lakes are unreal — the photos don't do justice! The pine forests smelled incredible. Our guide from The Journey Team was so knowledgeable and friendly. Already planning our next trip!"
+    rating: 5, destination: 'Product Photography', verified: true,
+    text: "The product shots for our online store were phenomenal. Clean, professional, and perfectly lit. Our conversion rate increased by 40% after updating with their photos. Amazing work!"
   },
   {
-    name: 'David Chen', location: 'Toronto, Canada',
+    name: 'Hassan Ali', location: 'Multan, Pakistan',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80',
-    rating: 5, destination: 'Deosai National Park', verified: true,
-    text: 'Deosai is like nowhere else on Earth. We saw Himalayan brown bears, golden marmots, and the vast wildflower plains were breathtaking. The camping setup was comfortable and the guides were true professionals.'
+    rating: 5, destination: 'Documentary Filmmaking', verified: true,
+    text: 'Syed Productions brought our documentary vision to life. From research to final edit, every step was handled with care. The storytelling was powerful and the cinematography was world-class.'
   }
 ];
 
 const now = Date.now();
 const deals = [
   {
-    name: 'Hunza Valley Explorer', destination: 'Hunza Valley',
-    image: 'https://images.unsplash.com/photo-1605540436563-5bca919ae766?w=600&q=80',
-    oldPrice: 65000, newPrice: 45000, badge: 'Hot Deal',
-    description: "5 days/4 nights — Karimabad, Attabad Lake, Eagle's Nest, Baltit Fort, all meals & transport.",
+    name: 'Wedding Film Package', destination: 'Cinematic Wedding Films',
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',
+    oldPrice: 200000, newPrice: 150000, badge: 'Hot Deal',
+    description: 'Complete wedding coverage — 2 cinematographers, drone, same-day edit, 10-min highlight film, full ceremony edit.',
     expiresAt: new Date(now + 47 * 3600000)
   },
   {
-    name: 'Skardu Lakes & Desert', destination: 'Skardu, Baltistan',
-    image: 'https://images.unsplash.com/photo-1510797215324-95aa89f43c33?w=600&q=80',
-    oldPrice: 78000, newPrice: 55000, badge: 'Trending',
-    description: '6 days/5 nights — Shangrila, Upper Kachura, Deosai Plains, Cold Desert, Skardu Fort.',
+    name: 'Corporate Starter Package', destination: 'Corporate Video Production',
+    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80',
+    oldPrice: 150000, newPrice: 99000, badge: 'Trending',
+    description: 'Brand story video + 3 social media cuts. Includes scripting, filming, editing, and motion graphics.',
     expiresAt: new Date(now + 23 * 3600000)
   },
   {
-    name: 'Fairy Meadows & Nanga Parbat', destination: 'Fairy Meadows',
-    image: 'https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=600&q=80',
-    oldPrice: 50000, newPrice: 35000, badge: 'Best Seller',
-    description: '4 days/3 nights — Jeep ride, trek to meadows, camping, Beyal Camp, Nanga Parbat views.',
+    name: 'Event Coverage Bundle', destination: 'Event Coverage',
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80',
+    oldPrice: 120000, newPrice: 80000, badge: 'Best Seller',
+    description: 'Full event photo + video coverage, live streaming, same-day highlight reel, and social media package.',
     expiresAt: new Date(now + 71 * 3600000)
   },
   {
-    name: 'Grand Northern Pakistan', destination: 'Hunza + Skardu + Fairy Meadows',
-    image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&q=80',
-    oldPrice: 150000, newPrice: 99000, badge: 'Save 34%',
-    description: '12 days/11 nights — Complete Northern Areas experience with all highlights, meals & expert guides.',
+    name: 'Complete Branding Suite', destination: 'Brand Identity & Logo Design',
+    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80',
+    oldPrice: 180000, newPrice: 120000, badge: 'Save 33%',
+    description: 'Logo + brand guidelines + social media templates + product photography + promotional video.',
     expiresAt: new Date(now + 35 * 3600000)
   }
 ];
 
 const videos = [
-  { title: 'Gilgit Adventure Treks', description: 'Discover the breathtaking landscapes of Northern Pakistan', tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-1.mp4', sortOrder: 1 },
-  { title: 'Mountain Adventures', description: 'Real trekking experiences through the Karakoram', tag: 'Client Story', videoUrl: 'videos/Gilgit Adventure Treks-2.mp4', sortOrder: 2 },
-  { title: 'Valleys & Lakes', description: 'Stunning views of Hunza, Skardu, and beyond', tag: 'Destination', videoUrl: 'videos/Gilgit Adventure Treks-3.mp4', sortOrder: 3 },
-  { title: 'The Karakoram Highway', description: "Pakistan's most scenic drive through the mountains", tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-4.mp4', sortOrder: 4 },
-  { title: 'Fairy Meadows Camping', description: 'Camping under the stars beneath Nanga Parbat', tag: 'Client Story', videoUrl: 'videos/Gilgit Adventure Treks-5.mp4', sortOrder: 5 },
-  { title: 'Naltar Valley', description: 'Drone footage of the stunning tri-colored lakes', tag: 'Destination', videoUrl: 'videos/Gilgit Adventure Treks-6.mp4', sortOrder: 6 },
-  { title: 'K2 Base Camp Trek', description: 'The ultimate journey to Concordia and beyond', tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-7.mp4', sortOrder: 7 },
-  { title: 'Hunza Valley Explorer', description: "A family's unforgettable journey through Hunza", tag: 'Client Story', videoUrl: 'videos/Gilgit Adventure Treks-8.mp4', sortOrder: 8 },
-  { title: 'Deosai National Park', description: 'The Land of Giants — wildflowers and wildlife', tag: 'Destination', videoUrl: 'videos/Gilgit Adventure Treks-9.mp4', sortOrder: 9 },
-  { title: 'Skardu & Beyond', description: 'Shangrila, cold deserts, and turquoise lakes', tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-10.mp4', sortOrder: 10 }
+  { title: 'Syed Productions Showreel', description: 'A showcase of our best cinematic work across all categories', tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-1.mp4', sortOrder: 1 },
+  { title: 'Wedding Highlights', description: 'Beautiful wedding films that capture every emotion', tag: 'Client Story', videoUrl: 'videos/Gilgit Adventure Treks-2.mp4', sortOrder: 2 },
+  { title: 'Corporate Reel', description: 'Professional corporate videos for leading brands', tag: 'Corporate', videoUrl: 'videos/Gilgit Adventure Treks-3.mp4', sortOrder: 3 },
+  { title: 'Behind the Scenes', description: 'See how we bring creative visions to life on set', tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-4.mp4', sortOrder: 4 },
+  { title: 'Event Coverage Reel', description: 'Conferences, galas, and live events captured beautifully', tag: 'Client Story', videoUrl: 'videos/Gilgit Adventure Treks-5.mp4', sortOrder: 5 },
+  { title: 'Music Video Showcase', description: 'Creative music videos with stunning visuals', tag: 'Creative', videoUrl: 'videos/Gilgit Adventure Treks-6.mp4', sortOrder: 6 },
+  { title: 'Documentary Preview', description: 'Powerful stories told through compelling documentary films', tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-7.mp4', sortOrder: 7 },
+  { title: 'Client Testimonials', description: 'Hear what our clients have to say about working with us', tag: 'Client Story', videoUrl: 'videos/Gilgit Adventure Treks-8.mp4', sortOrder: 8 },
+  { title: 'Product Showcase', description: 'Product photography and videography highlights', tag: 'Commercial', videoUrl: 'videos/Gilgit Adventure Treks-9.mp4', sortOrder: 9 },
+  { title: 'Aerial Cinematography', description: 'Stunning drone footage from our productions', tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-10.mp4', sortOrder: 10 }
 ];
 
 const galleryImages = [
-  { imageUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=80', altText: 'Mountain peaks', hidden: false, sortOrder: 1 },
-  { imageUrl: 'https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=400&q=80', altText: 'Valley view', hidden: false, sortOrder: 2 },
-  { imageUrl: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80', altText: 'Skardu landscape', hidden: false, sortOrder: 3 },
-  { imageUrl: 'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=400&q=80', altText: 'Mountain road', hidden: false, sortOrder: 4 },
-  { imageUrl: 'https://images.unsplash.com/photo-1542224566-6e85f2e6772f?w=400&q=80', altText: 'Northern scenery', hidden: false, sortOrder: 5 },
-  { imageUrl: 'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?w=400&q=80', altText: 'Naltar Valley', hidden: false, sortOrder: 6 },
-  { imageUrl: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400&q=80', altText: 'Deosai Plains', hidden: false, sortOrder: 7 },
-  { imageUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&q=80', altText: 'Starry mountains', hidden: false, sortOrder: 8 },
-  { imageUrl: 'https://images.unsplash.com/photo-1605540436563-5bca919ae766?w=400&q=80', altText: 'Hunza Valley', hidden: false, sortOrder: 9 },
-  { imageUrl: 'https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=400&q=80', altText: 'K2 region', hidden: false, sortOrder: 10 },
-  { imageUrl: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=400&q=80', altText: 'Attabad Lake', hidden: false, sortOrder: 11 },
-  { imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&q=80', altText: 'Phander Valley', hidden: true, sortOrder: 12 },
-  { imageUrl: 'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=400&q=80', altText: 'Rakaposhi', hidden: true, sortOrder: 13 },
-  { imageUrl: 'https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=400&q=80', altText: 'Trek path', hidden: true, sortOrder: 14 },
-  { imageUrl: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=400&q=80', altText: 'Snow peaks', hidden: true, sortOrder: 15 },
-  { imageUrl: 'https://images.unsplash.com/photo-1510797215324-95aa89f43c33?w=400&q=80', altText: 'Mountain sunset', hidden: true, sortOrder: 16 },
-  { imageUrl: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=400&q=80', altText: 'Northern lights', hidden: true, sortOrder: 17 }
+  { imageUrl: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=80', altText: 'Wedding cinematography', hidden: false, sortOrder: 1 },
+  { imageUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=80', altText: 'Music video production', hidden: false, sortOrder: 2 },
+  { imageUrl: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=400&q=80', altText: 'Corporate shoot', hidden: false, sortOrder: 3 },
+  { imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=80', altText: 'Event coverage', hidden: false, sortOrder: 4 },
+  { imageUrl: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=400&q=80', altText: 'Product photography', hidden: false, sortOrder: 5 },
+  { imageUrl: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80', altText: 'Documentary filming', hidden: false, sortOrder: 6 },
+  { imageUrl: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80', altText: 'Fashion photography', hidden: false, sortOrder: 7 },
+  { imageUrl: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&q=80', altText: 'Real estate shoot', hidden: false, sortOrder: 8 },
+  { imageUrl: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&q=80', altText: 'Social media content', hidden: false, sortOrder: 9 },
+  { imageUrl: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80', altText: 'Branding project', hidden: false, sortOrder: 10 },
+  { imageUrl: 'https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=400&q=80', altText: 'Photo retouching', hidden: false, sortOrder: 11 },
+  { imageUrl: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&q=80', altText: 'Conference coverage', hidden: true, sortOrder: 12 },
+  { imageUrl: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=400&q=80', altText: 'On-set filming', hidden: true, sortOrder: 13 },
+  { imageUrl: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80', altText: 'Camera setup', hidden: true, sortOrder: 14 },
+  { imageUrl: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80', altText: 'Film production', hidden: true, sortOrder: 15 },
+  { imageUrl: 'https://images.unsplash.com/photo-1524712245354-2c4e5e7121c0?w=400&q=80', altText: 'Studio session', hidden: true, sortOrder: 16 },
+  { imageUrl: 'https://images.unsplash.com/photo-1533488765986-dfa2a9939acd?w=400&q=80', altText: 'Editing suite', hidden: true, sortOrder: 17 }
 ];
 
 const teamMembers = [
-  { name: 'Karim Shah', role: 'Founder & Lead Guide', bio: 'Born and raised in Gilgit. 15+ years leading treks across Karakoram, K2 Base Camp, and every valley in between.', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 1 },
-  { name: 'Ayesha Mir', role: 'Operations & Travel Planner', bio: 'Masters in Tourism Management. Designs every itinerary with precision to ensure seamless, hassle-free adventures.', image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 2 },
-  { name: 'Hussain Ali', role: 'Senior Trek Guide', bio: 'Hunza native with summit experience on multiple 7,000m+ peaks. Certified mountaineer and wilderness first-aid specialist.', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 3 },
-  { name: 'Zara Batool', role: 'Community & Marketing Lead', bio: 'Skardu local passionate about responsible tourism. Connects travelers with authentic cultural experiences across Baltistan.', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 4 }
+  { name: 'Syed Ahmed', role: 'Director & Founder', bio: 'Visionary filmmaker with 10+ years of experience in cinematic storytelling. Leads every production with passion and precision.', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 1 },
+  { name: 'Maria Khan', role: 'Lead Cinematographer', bio: 'Expert in visual composition and camera work. Specializes in wedding films, music videos, and commercial productions.', image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 2 },
+  { name: 'Ali Hassan', role: 'Senior Editor & Colorist', bio: 'Master of post-production with expertise in color grading, VFX, and motion graphics. Brings raw footage to cinematic life.', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 3 },
+  { name: 'Zara Batool', role: 'Producer & Client Relations', bio: 'Manages projects from concept to delivery. Ensures every client vision is executed flawlessly and on schedule.', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 4 }
 ];
 
 async function seed() {
@@ -237,7 +237,7 @@ async function seed() {
 
     // Seed data
     await Destination.insertMany(destinations);
-    console.log(`Seeded ${destinations.length} destinations`);
+    console.log(`Seeded ${destinations.length} services`);
 
     await Review.insertMany(reviews);
     console.log(`Seeded ${reviews.length} reviews`);

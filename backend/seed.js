@@ -179,16 +179,16 @@ const deals = [
 ];
 
 const videos = [
-  { title: 'Syed Productions Showreel', description: 'A showcase of our best cinematic work across all categories', tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-1.mp4', sortOrder: 1 },
-  { title: 'Wedding Highlights', description: 'Beautiful wedding films that capture every emotion', tag: 'Client Story', videoUrl: 'videos/Gilgit Adventure Treks-2.mp4', sortOrder: 2 },
-  { title: 'Corporate Reel', description: 'Professional corporate videos for leading brands', tag: 'Corporate', videoUrl: 'videos/Gilgit Adventure Treks-3.mp4', sortOrder: 3 },
-  { title: 'Behind the Scenes', description: 'See how we bring creative visions to life on set', tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-4.mp4', sortOrder: 4 },
-  { title: 'Event Coverage Reel', description: 'Conferences, galas, and live events captured beautifully', tag: 'Client Story', videoUrl: 'videos/Gilgit Adventure Treks-5.mp4', sortOrder: 5 },
-  { title: 'Music Video Showcase', description: 'Creative music videos with stunning visuals', tag: 'Creative', videoUrl: 'videos/Gilgit Adventure Treks-6.mp4', sortOrder: 6 },
-  { title: 'Documentary Preview', description: 'Powerful stories told through compelling documentary films', tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-7.mp4', sortOrder: 7 },
-  { title: 'Client Testimonials', description: 'Hear what our clients have to say about working with us', tag: 'Client Story', videoUrl: 'videos/Gilgit Adventure Treks-8.mp4', sortOrder: 8 },
-  { title: 'Product Showcase', description: 'Product photography and videography highlights', tag: 'Commercial', videoUrl: 'videos/Gilgit Adventure Treks-9.mp4', sortOrder: 9 },
-  { title: 'Aerial Cinematography', description: 'Stunning drone footage from our productions', tag: 'Cinematic', videoUrl: 'videos/Gilgit Adventure Treks-10.mp4', sortOrder: 10 }
+  { title: 'Syed Productions Showreel', description: 'A showcase of our best cinematic work across all categories', tag: 'Cinematic', videoUrl: 'videos/Syed Productions-1.mp4', sortOrder: 1 },
+  { title: 'Wedding Highlights', description: 'Beautiful wedding films that capture every emotion', tag: 'Client Story', videoUrl: 'videos/Syed Productions-2.mp4', sortOrder: 2 },
+  { title: 'Corporate Reel', description: 'Professional corporate videos for leading brands', tag: 'Corporate', videoUrl: 'videos/Syed Productions-3.mp4', sortOrder: 3 },
+  { title: 'Behind the Scenes', description: 'See how we bring creative visions to life on set', tag: 'Cinematic', videoUrl: 'videos/Syed Productions-4.mp4', sortOrder: 4 },
+  { title: 'Event Coverage Reel', description: 'Conferences, galas, and live events captured beautifully', tag: 'Client Story', videoUrl: 'videos/Syed Productions-5.mp4', sortOrder: 5 },
+  { title: 'Music Video Showcase', description: 'Creative music videos with stunning visuals', tag: 'Creative', videoUrl: 'videos/Syed Productions-6.mp4', sortOrder: 6 },
+  { title: 'Documentary Preview', description: 'Powerful stories told through compelling documentary films', tag: 'Cinematic', videoUrl: 'videos/Syed Productions-7.mp4', sortOrder: 7 },
+  { title: 'Client Testimonials', description: 'Hear what our clients have to say about working with us', tag: 'Client Story', videoUrl: 'videos/Syed Productions-8.mp4', sortOrder: 8 },
+  { title: 'Product Showcase', description: 'Product photography and videography highlights', tag: 'Commercial', videoUrl: 'videos/Syed Productions-9.mp4', sortOrder: 9 },
+  { title: 'Aerial Cinematography', description: 'Stunning drone footage from our productions', tag: 'Cinematic', videoUrl: 'videos/Syed Productions-10.mp4', sortOrder: 10 }
 ];
 
 const galleryImages = [

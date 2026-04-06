@@ -306,6 +306,9 @@ input, select, textarea {
   right: 0;
   min-height: var(--nav-height);
   z-index: 1000;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   transition: background var(--transition-base), box-shadow var(--transition-base);
 }
 

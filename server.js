@@ -6,12 +6,19 @@ const connectDB = require('./backend/config/db');
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
-
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '5mb' }));
+
+// Ensure MongoDB is connected before any API request
+app.use('/api', async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ message: 'Database connection failed' });
+  }
+});
 
 // Serve static files — public site
 app.use(express.static(path.join(__dirname)));

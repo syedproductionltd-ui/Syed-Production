@@ -1094,7 +1094,7 @@
       video.playsInline = true;
       video.loop = true;
       video.preload = 'none';
-      video.src = v.videoUrl;
+      video.src = encodeURI(v.videoUrl);
 
       video.addEventListener('click', () => {
         if (video.paused) {
@@ -1188,7 +1188,7 @@
         className: 'video-card',
         role: 'button',
         tabindex: '0',
-        'data-video': v.videoUrl
+        'data-video': encodeURI(v.videoUrl)
       });
       card.innerHTML = `
         <video muted loop playsinline preload="none"></video>

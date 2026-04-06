@@ -2,20 +2,51 @@
   "version": 2,
   "builds": [
     {
+      "src": "images/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "videos/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "css/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "js/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "login.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "register.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "profile.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "admin/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "developer/**",
+      "use": "@vercel/static"
+    },
+    {
       "src": "server.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "index.html",
-          "login.html",
-          "register.html",
-          "profile.html",
-          "css/**",
-          "js/**",
-          "images/**",
-          "admin/**",
-          "developer/**",
-          "videos/**"
+          "backend/**"
         ]
       }
     }
@@ -26,16 +57,44 @@
       "dest": "server.js"
     },
     {
+      "src": "/images/(.*)",
+      "dest": "/images/$1"
+    },
+    {
+      "src": "/videos/(.*)",
+      "dest": "/videos/$1"
+    },
+    {
+      "src": "/css/(.*)",
+      "dest": "/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/js/$1"
+    },
+    {
       "src": "/admin/(.*)",
-      "dest": "server.js"
+      "dest": "/admin/$1"
     },
     {
       "src": "/developer/(.*)",
-      "dest": "server.js"
+      "dest": "/developer/$1"
+    },
+    {
+      "src": "/login.html",
+      "dest": "/login.html"
+    },
+    {
+      "src": "/register.html",
+      "dest": "/register.html"
+    },
+    {
+      "src": "/profile.html",
+      "dest": "/profile.html"
     },
     {
       "src": "/(.*)",
-      "dest": "server.js"
+      "dest": "/index.html"
     }
   ]
 }

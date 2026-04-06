@@ -2,52 +2,23 @@
   "version": 2,
   "builds": [
     {
-      "src": "images/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "videos/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "css/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "js/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "login.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "register.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "profile.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "admin/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "developer/**",
-      "use": "@vercel/static"
-    },
-    {
       "src": "server.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "backend/**"
-        ]
+          "index.html",
+          "login.html",
+          "register.html",
+          "profile.html",
+          "css/**",
+          "js/**",
+          "images/**",
+          "admin/**",
+          "developer/**",
+          "backend/**",
+          "videos/**"
+        ],
+        "maxLambdaSize": "100mb"
       }
     }
   ],
@@ -57,44 +28,16 @@
       "dest": "server.js"
     },
     {
-      "src": "/images/(.*)",
-      "dest": "/images/$1"
-    },
-    {
-      "src": "/videos/(.*)",
-      "dest": "/videos/$1"
-    },
-    {
-      "src": "/css/(.*)",
-      "dest": "/css/$1"
-    },
-    {
-      "src": "/js/(.*)",
-      "dest": "/js/$1"
-    },
-    {
       "src": "/admin/(.*)",
-      "dest": "/admin/$1"
+      "dest": "server.js"
     },
     {
       "src": "/developer/(.*)",
-      "dest": "/developer/$1"
-    },
-    {
-      "src": "/login.html",
-      "dest": "/login.html"
-    },
-    {
-      "src": "/register.html",
-      "dest": "/register.html"
-    },
-    {
-      "src": "/profile.html",
-      "dest": "/profile.html"
+      "dest": "server.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "server.js"
     }
   ]
 }

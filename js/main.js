@@ -1182,12 +1182,19 @@
     });
   }
 
+  var activeVideoFilter = 'all';
+
   function renderVideos() {
     const videoGrid = $('#videoGrid');
     if (!videoGrid) return;
     videoGrid.innerHTML = '';
 
-    videos.forEach((v, index) => {
+    const filtered = activeVideoFilter === 'all'
+      ? videos
+      : videos.filter(v => (v.category || '').toLowerCase() === activeVideoFilter);
+
+    filtered.forEach((v) => {
+      const origIndex = videos.indexOf(v);
       const tagClass = v.tag === 'Client Story' ? 'video-card-tag video-card-tag--client' : 'video-card-tag';
       const card = createEl('div', {
         className: 'video-card',
@@ -1203,16 +1210,34 @@
           <p class="video-card-desc">${v.description}</p>
         </div>
       `;
-      card.addEventListener('click', () => openReels(index));
+      card.addEventListener('click', () => openReels(origIndex));
       card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openReels(index); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openReels(origIndex); }
       });
       videoGrid.appendChild(card);
     });
 
+    if (filtered.length === 0) {
+      videoGrid.innerHTML = '<p style="text-align:center;color:var(--clr-gray-500);padding:2rem;">No videos in this category yet.</p>';
+    }
+
     // Re-observe video cards for autoplay
     $$('.video-card', videoGrid).forEach(card => videoObserver.observe(card));
   }
+
+  // Video filter tabs
+  (function() {
+    var tabs = $$('[data-vfilter]');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        tabs.forEach(function(t) { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        activeVideoFilter = tab.dataset.vfilter;
+        renderVideos();
+      });
+    });
+  })();
 
   /* --------------------------------------------------------
      INITIAL SETUP — Date pickers
@@ -1274,8 +1299,17 @@
         });
       }
       if (b.companyName) {
-        const logoSpan = $('.nav-logo span');
-        if (logoSpan) logoSpan.textContent = b.companyName;
+        // Split company name into two parts for brand swap animation
+        var parts = b.companyName.split(' ');
+        var brandSyed = document.getElementById('brandSyed');
+        var brandProd = document.getElementById('brandProd');
+        if (brandSyed && brandProd && parts.length >= 2) {
+          brandSyed.textContent = parts[0];
+          brandProd.textContent = parts.slice(1).join(' ');
+        } else {
+          var logoSpan = $('.nav-logo span');
+          if (logoSpan) logoSpan.textContent = b.companyName;
+        }
         document.title = b.companyName;
       }
       if (b.faviconUrl) {

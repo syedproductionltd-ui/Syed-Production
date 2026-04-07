@@ -14,13 +14,14 @@ async function loadVideos() {
 function renderTable() {
   const tbody = document.getElementById('videoBody');
   if (allVideos.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#94a3b8;">No videos</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#94a3b8;">No videos</td></tr>';
     return;
   }
   tbody.innerHTML = allVideos.map(v => `
     <tr>
       <td>${v.sortOrder}</td>
       <td><strong>${escapeHtml(v.title)}</strong><br><small style="color:#94a3b8;">${escapeHtml(v.description)}</small></td>
+      <td><span class="badge">${escapeHtml(v.category || 'all')}</span></td>
       <td><span class="badge">${escapeHtml(v.tag)}</span></td>
       <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(v.videoUrl)}</td>
       <td>
@@ -45,6 +46,7 @@ function editVideo(id) {
   document.getElementById('editId').value = v._id;
   document.getElementById('vTitle').value = v.title;
   document.getElementById('vDesc').value = v.description || '';
+  document.getElementById('vCategory').value = v.category || 'all';
   document.getElementById('vTag').value = v.tag || 'Cinematic';
   document.getElementById('vOrder').value = v.sortOrder || 0;
   document.getElementById('vUrl').value = v.videoUrl;
@@ -56,6 +58,7 @@ async function saveVideo() {
   const body = {
     title: document.getElementById('vTitle').value.trim(),
     description: document.getElementById('vDesc').value.trim(),
+    category: document.getElementById('vCategory').value,
     tag: document.getElementById('vTag').value,
     sortOrder: parseInt(document.getElementById('vOrder').value) || 0,
     videoUrl: document.getElementById('vUrl').value.trim()

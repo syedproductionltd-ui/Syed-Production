@@ -535,7 +535,7 @@
     return null;
   }
 
-  async function handleChatSend() {
+  function handleChatSend() {
     const text = chatInput.value.trim();
     if (!text) return;
 
@@ -543,23 +543,11 @@
     chatInput.value = '';
     showTypingIndicator();
 
-    try {
-      const resp = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text })
-      });
-      const data = await resp.json();
-      if (!resp.ok || !data.reply) throw new Error('AI unavailable');
+    setTimeout(() => {
       removeTypingIndicator();
-      addChatMessage(`<p>${data.reply}</p>`);
-    } catch (err) {
-      console.error('Chat AI error:', err);
-      // Fallback to keyword matching
-      removeTypingIndicator();
-      const fallback = getKeywordResponse(text) || chatResponses.default;
-      addChatMessage(`<p>${fallback}</p>`);
-    }
+      const reply = getKeywordResponse(text) || chatResponses.default;
+      addChatMessage(`<p>${reply}</p>`);
+    }, 800);
   }
 
   chatSendBtn.addEventListener('click', handleChatSend);

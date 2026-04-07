@@ -483,6 +483,30 @@
     <!-- Reviews Tab -->
     <div class="tab-content" id="tab-reviews">
       <div class="card">
+        <h2>Write a Review</h2>
+        <div class="alert alert-error" id="reviewError"></div>
+        <div class="alert alert-success" id="reviewSuccess"></div>
+        <form id="reviewForm">
+          <div class="form-group">
+            <label>Rating</label>
+            <div class="star-rating" id="starRating">
+              <svg class="star" data-value="1" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg class="star" data-value="2" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg class="star" data-value="3" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg class="star" data-value="4" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+              <svg class="star" data-value="5" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            </div>
+            <input type="hidden" id="reviewRating" value="0">
+          </div>
+          <div class="form-group">
+            <label for="reviewText">Your Review</label>
+            <textarea id="reviewText" class="form-control" placeholder="Share your experience with us..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" id="reviewSubmitBtn">Submit Review</button>
+        </form>
+      </div>
+
+      <div class="card" style="margin-top:1rem;">
         <h2>My Reviews</h2>
         <div id="reviewsList" class="loading-text">Loading reviews...</div>
       </div>
@@ -499,6 +523,8 @@
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + TOKEN
     };
+
+    let selectedRating = 0;
 
     // --- Tabs ---
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -518,6 +544,30 @@
       localStorage.removeItem('user_avatar');
       window.location.href = 'login.html';
     });
+
+    // --- Star rating ---
+    document.querySelectorAll('#starRating .star').forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = parseInt(star.dataset.value);
+        document.getElementById('reviewRating').value = selectedRating;
+        updateStars();
+      });
+      star.addEventListener('mouseenter', () => {
+        highlightStars(parseInt(star.dataset.value));
+      });
+    });
+    document.getElementById('starRating').addEventListener('mouseleave', () => {
+      updateStars();
+    });
+
+    function highlightStars(n) {
+      document.querySelectorAll('#starRating .star').forEach(s => {
+        s.classList.toggle('active', parseInt(s.dataset.value) <= n);
+      });
+    }
+    function updateStars() {
+      highlightStars(selectedRating);
+    }
 
     // ===== AVATAR CLICK MENU =====
     var avatarMenu = document.getElementById('avatarMenu');
@@ -795,6 +845,55 @@
         container.innerHTML = '<div class="empty-state">Failed to load reviews</div>';
       }
     }
+
+    // --- Submit review ---
+    document.getElementById('reviewForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errorEl = document.getElementById('reviewError');
+      const successEl = document.getElementById('reviewSuccess');
+      const submitBtn = document.getElementById('reviewSubmitBtn');
+      errorEl.style.display = 'none';
+      successEl.style.display = 'none';
+
+      const rating = parseInt(document.getElementById('reviewRating').value);
+      const text = document.getElementById('reviewText').value.trim();
+
+      if (!rating || rating < 1) {
+        errorEl.textContent = 'Please select a star rating';
+        errorEl.style.display = 'block';
+        return;
+      }
+      if (!text) {
+        errorEl.textContent = 'Please write your review';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      try {
+        const res = await fetch('/api/reviews/user', {
+          method: 'POST',
+          headers: API_HEADERS,
+          body: JSON.stringify({ rating, text })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          errorEl.textContent = data.message || 'Failed to submit';
+          errorEl.style.display = 'block';
+        } else {
+          successEl.textContent = 'Review submitted! It will appear after admin approval.';
+          successEl.style.display = 'block';
+          document.getElementById('reviewForm').reset();
+          selectedRating = 0;
+          updateStars();
+          loadReviews();
+        }
+      } catch (err) {
+        errorEl.textContent = 'Network error';
+        errorEl.style.display = 'block';
+      }
+      submitBtn.disabled = false;
+    });
 
     // --- Init ---
     loadProfile();

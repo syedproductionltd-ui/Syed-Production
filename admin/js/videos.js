@@ -140,6 +140,13 @@ async function uploadVideoFile() {
 }
 
 async function saveVideo() {
+  var title = document.getElementById('vTitle').value.trim();
+  if (!title) {
+    alert('Please enter a video title');
+    document.getElementById('vTitle').focus();
+    return;
+  }
+
   try {
     var videoUrl = '';
 
@@ -159,7 +166,7 @@ async function saveVideo() {
 
     const editId = document.getElementById('editId').value;
     const body = {
-      title: document.getElementById('vTitle').value.trim(),
+      title: title,
       description: document.getElementById('vDesc').value.trim(),
       category: document.getElementById('vCategory').value,
       tag: document.getElementById('vTag').value,

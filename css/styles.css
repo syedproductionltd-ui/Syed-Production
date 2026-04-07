@@ -2291,6 +2291,14 @@ input, select, textarea {
   max-width: 500px;
 }
 
+/* Hide info overlay and play button on iframe slides — only show the video */
+.reel-slide[data-embed-type="instagram"] .reel-info,
+.reel-slide[data-embed-type="facebook"] .reel-info,
+.reel-slide[data-embed-type="instagram"] .reel-play-btn,
+.reel-slide[data-embed-type="facebook"] .reel-play-btn {
+  display: none;
+}
+
 .reel-play-btn {
   position: absolute;
   top: 50%;
@@ -2325,7 +2333,21 @@ input, select, textarea {
   border-radius: 50px;
 }
 
-/* ── Video card thumbnails & play overlay (YouTube / IG / FB) ── */
+/* Scale up Instagram/Facebook iframes to crop out platform UI (header, likes, comments) */
+.reel-slide[data-embed-type="instagram"] iframe,
+.reel-slide[data-embed-type="facebook"] iframe {
+  height: calc((100vh - 46px) * 1.35);
+  width: calc((100vh - 46px) * 1.35 * 9 / 16);
+  border-radius: 0;
+}
+
+/* Clip the overflow so only the video portion is visible */
+.reel-slide[data-embed-type="instagram"],
+.reel-slide[data-embed-type="facebook"] {
+  overflow: hidden;
+}
+
+/* ── Video card thumbnails & play overlay ── */
 .video-card-thumb {
   width: 100%;
   height: 100%;
@@ -2337,20 +2359,17 @@ input, select, textarea {
   transform: scale(1.1);
 }
 
-/* Instagram placeholder */
-.video-card-thumb--ig {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
+/* Cinematic dark placeholder for external videos — looks like a video playing */
+.video-card-thumb--external {
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0a0a0f 100%);
+  background-size: 400% 400%;
+  animation: videoShimmer 3s ease infinite;
 }
 
-/* Facebook placeholder */
-.video-card-thumb--fb {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #1877f2 0%, #42a5f5 100%);
+@keyframes videoShimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .video-card-play {
@@ -2376,7 +2395,7 @@ input, select, textarea {
   background: rgba(0, 0, 0, 0.6);
 }
 
-/* ── Iframe in video cards (not used in grid, but safety) ── */
+/* ── Iframe in video cards (safety) ── */
 .video-card iframe {
   width: 100%;
   height: 100%;
@@ -2407,6 +2426,11 @@ input, select, textarea {
     width: 100vw;
     height: 100vh;
     border-radius: 0;
+  }
+  .reel-slide[data-embed-type="instagram"] iframe,
+  .reel-slide[data-embed-type="facebook"] iframe {
+    width: 130vw;
+    height: 130vh;
   }
   .reel-info {
     padding: 60px 16px 24px;

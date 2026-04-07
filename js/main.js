@@ -888,16 +888,21 @@
     const email = $('#newsletterEmail').value;
     if (email) {
       try {
-        await fetch('/api/subscribers', {
+        const res = await fetch('/api/subscribers', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email })
         });
+        const data = await res.json();
+        newsletterForm.style.display = 'none';
+        newsletterSuccess.hidden = false;
+        if (data.message === 'Already subscribed') {
+          newsletterSuccess.querySelector('p').textContent = "You're already subscribed! Stay tuned for updates.";
+        }
       } catch (err) {
-        // Silently fail — UI still shows success
+        newsletterForm.style.display = 'none';
+        newsletterSuccess.hidden = false;
       }
-      newsletterForm.style.display = 'none';
-      newsletterSuccess.hidden = false;
     }
   });
 

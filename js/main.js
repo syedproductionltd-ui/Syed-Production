@@ -1285,7 +1285,7 @@
       var mediaHTML = '';
       if (embed.type === 'youtube') {
         // YouTube: show thumbnail with play overlay
-        mediaHTML = '<img class="video-card-thumb" src="https://img.youtube.com/vi/' + embed.videoId + '/hqdefault.jpg" alt="' + v.title + '" loading="lazy">' +
+        mediaHTML = '<img class="video-card-thumb" src="https://img.youtube.com/vi/' + embed.videoId + '/hqdefault.jpg" alt="' + v.title + '" loading="eager">' +
           '<div class="video-card-play"><svg viewBox="0 0 48 48" width="48" height="48"><path d="M19 15v18l15-9z" fill="white"/></svg></div>';
       } else if (embed.type === 'instagram') {
         // Instagram: branded placeholder with play overlay
@@ -1296,8 +1296,8 @@
         mediaHTML = '<div class="video-card-thumb video-card-thumb--fb"><svg viewBox="0 0 24 24" width="48" height="48" fill="white" opacity="0.7"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div>' +
           '<div class="video-card-play"><svg viewBox="0 0 48 48" width="48" height="48"><path d="M19 15v18l15-9z" fill="white"/></svg></div>';
       } else {
-        // Direct .mp4: keep original <video> autoplay behavior
-        mediaHTML = '<video muted loop playsinline preload="none"></video>';
+        // Direct .mp4: preload metadata so first frame/poster is ready
+        mediaHTML = '<video muted loop playsinline preload="metadata" src="' + encodeURI(v.videoUrl) + '"></video>';
       }
 
       card.innerHTML = mediaHTML + `
@@ -1548,6 +1548,15 @@
       videos = data.videos || [];
       galleryImages = data.gallery || [];
       teamMembers = data.team || [];
+
+      // Preload video thumbnails so they're ready before user scrolls
+      videos.forEach(function(v) {
+        var embed = getVideoEmbed(v.videoUrl);
+        if (embed.type === 'youtube') {
+          var img = new Image();
+          img.src = 'https://img.youtube.com/vi/' + embed.videoId + '/hqdefault.jpg';
+        }
+      });
 
       // Apply site settings before rendering
       if (data.settings) {

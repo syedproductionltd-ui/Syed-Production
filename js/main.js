@@ -1321,11 +1321,14 @@
 
       var mediaHTML = '';
       if (embed.type === 'youtube') {
-        // YouTube: show thumbnail (looks like a video frame)
-        mediaHTML = '<img class="video-card-thumb" src="https://img.youtube.com/vi/' + embed.videoId + '/hqdefault.jpg" alt="' + v.title + '" loading="eager">';
-      } else if (embed.type === 'instagram' || embed.type === 'facebook') {
-        // External video: cinematic animated shimmer (looks like video playing)
-        mediaHTML = '<div class="video-card-thumb video-card-thumb--external"></div>';
+        // YouTube: muted autoplay iframe preview
+        mediaHTML = '<iframe src="https://www.youtube.com/embed/' + embed.videoId + '?autoplay=1&mute=1&loop=1&playlist=' + embed.videoId + '&controls=0&showinfo=0&modestbranding=1" frameborder="0" allow="autoplay; encrypted-media" loading="lazy"></iframe>';
+      } else if (embed.type === 'instagram') {
+        // Instagram: autoplay embed preview
+        mediaHTML = '<iframe src="' + embed.embedUrl + '" frameborder="0" allow="autoplay; encrypted-media" loading="lazy"></iframe>';
+      } else if (embed.type === 'facebook') {
+        // Facebook: autoplay embed preview (muted by default)
+        mediaHTML = '<iframe src="' + embed.embedUrl + '&mute=1" frameborder="0" allow="autoplay; encrypted-media" loading="lazy"></iframe>';
       } else {
         // Direct .mp4: autoplay muted preview
         mediaHTML = '<video muted loop playsinline preload="metadata" src="' + encodeURI(v.videoUrl) + '"></video>';

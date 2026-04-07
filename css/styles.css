@@ -306,27 +306,34 @@ input, select, textarea {
   right: 0;
   min-height: var(--nav-height);
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: background var(--transition-base), box-shadow var(--transition-base);
+  background: transparent;
+  transition: none;
 }
 
 .navbar.scrolled {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: var(--shadow-md);
+  background: transparent;
 }
 
 .nav-container {
   max-width: var(--container-max);
-  margin: 0 auto;
+  margin: 10px auto 0;
   padding: 6px var(--space-6);
   min-height: var(--nav-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  transition: background var(--transition-base), box-shadow var(--transition-base);
+}
+
+.navbar.scrolled .nav-container {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-md);
 }
 
 .nav-logo {

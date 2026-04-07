@@ -1,6 +1,7 @@
 initAdminLayout();
 
 let allVideos = [];
+var videoMode = 'upload'; // 'upload' or 'url'
 
 async function loadVideos() {
   try {
@@ -32,10 +33,42 @@ function renderTable() {
   `).join('');
 }
 
+function setVideoMode(mode) {
+  videoMode = mode;
+  var uploadArea = document.getElementById('videoUploadArea');
+  var urlArea = document.getElementById('videoUrlArea');
+  var btnUpload = document.getElementById('btnUploadMode');
+  var btnUrl = document.getElementById('btnUrlMode');
+
+  if (mode === 'upload') {
+    uploadArea.style.display = 'block';
+    urlArea.style.display = 'none';
+    btnUpload.style.fontWeight = '600';
+    btnUpload.style.background = '#2D6A4F';
+    btnUpload.style.color = '#fff';
+    btnUrl.style.fontWeight = '400';
+    btnUrl.style.background = '';
+    btnUrl.style.color = '';
+  } else {
+    uploadArea.style.display = 'none';
+    urlArea.style.display = 'block';
+    btnUrl.style.fontWeight = '600';
+    btnUrl.style.background = '#2D6A4F';
+    btnUrl.style.color = '#fff';
+    btnUpload.style.fontWeight = '400';
+    btnUpload.style.background = '';
+    btnUpload.style.color = '';
+  }
+}
+
 function showAddModal() {
   document.getElementById('modalTitle').textContent = 'Add Video';
   document.getElementById('videoForm').reset();
   document.getElementById('editId').value = '';
+  document.getElementById('vFinalUrl').value = '';
+  document.getElementById('vFile').value = '';
+  document.getElementById('uploadProgress').style.display = 'none';
+  setVideoMode('upload');
   openModal('videoModal');
 }
 
@@ -50,21 +83,90 @@ function editVideo(id) {
   document.getElementById('vTag').value = v.tag || 'Cinematic';
   document.getElementById('vOrder').value = v.sortOrder || 0;
   document.getElementById('vUrl').value = v.videoUrl;
+  document.getElementById('vFinalUrl').value = v.videoUrl;
+  document.getElementById('vFile').value = '';
+  document.getElementById('uploadProgress').style.display = 'none';
+  setVideoMode('url');
   openModal('videoModal');
 }
 
-async function saveVideo() {
-  const editId = document.getElementById('editId').value;
-  const body = {
-    title: document.getElementById('vTitle').value.trim(),
-    description: document.getElementById('vDesc').value.trim(),
-    category: document.getElementById('vCategory').value,
-    tag: document.getElementById('vTag').value,
-    sortOrder: parseInt(document.getElementById('vOrder').value) || 0,
-    videoUrl: document.getElementById('vUrl').value.trim()
-  };
+async function uploadVideoFile() {
+  var fileInput = document.getElementById('vFile');
+  if (!fileInput.files[0]) return null;
 
+  var formData = new FormData();
+  formData.append('video', fileInput.files[0]);
+
+  var progressDiv = document.getElementById('uploadProgress');
+  var bar = document.getElementById('uploadBar');
+  var status = document.getElementById('uploadStatus');
+  progressDiv.style.display = 'block';
+  bar.style.width = '0%';
+  status.textContent = 'Uploading...';
+
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/videos/upload');
+    xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('admin_token'));
+
+    xhr.upload.onprogress = function(e) {
+      if (e.lengthComputable) {
+        var pct = Math.round((e.loaded / e.total) * 100);
+        bar.style.width = pct + '%';
+        status.textContent = pct + '% uploaded...';
+      }
+    };
+
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        var data = JSON.parse(xhr.responseText);
+        bar.style.width = '100%';
+        status.textContent = 'Upload complete!';
+        resolve(data.videoUrl);
+      } else {
+        var err = JSON.parse(xhr.responseText);
+        status.textContent = 'Upload failed: ' + (err.message || 'Unknown error');
+        reject(new Error(err.message || 'Upload failed'));
+      }
+    };
+
+    xhr.onerror = function() {
+      status.textContent = 'Network error';
+      reject(new Error('Network error'));
+    };
+
+    xhr.send(formData);
+  });
+}
+
+async function saveVideo() {
   try {
+    var videoUrl = '';
+
+    if (videoMode === 'upload' && document.getElementById('vFile').files[0]) {
+      videoUrl = await uploadVideoFile();
+    } else if (videoMode === 'url') {
+      videoUrl = document.getElementById('vUrl').value.trim();
+    } else {
+      // Editing without changing the video — keep existing URL
+      videoUrl = document.getElementById('vFinalUrl').value;
+    }
+
+    if (!videoUrl) {
+      alert('Please upload a video or paste a URL');
+      return;
+    }
+
+    const editId = document.getElementById('editId').value;
+    const body = {
+      title: document.getElementById('vTitle').value.trim(),
+      description: document.getElementById('vDesc').value.trim(),
+      category: document.getElementById('vCategory').value,
+      tag: document.getElementById('vTag').value,
+      sortOrder: parseInt(document.getElementById('vOrder').value) || 0,
+      videoUrl: videoUrl
+    };
+
     if (editId) {
       await apiCall('/videos/' + editId, { method: 'PUT', body: JSON.stringify(body) });
     } else {

@@ -1450,6 +1450,62 @@
   init();
 
   /* --------------------------------------------------------
+     DARK MODE
+  -------------------------------------------------------- */
+  function setDarkMode(enabled) {
+    var root = document.documentElement;
+    // Add transition class for smooth color shift
+    root.classList.add('dark-mode-transition');
+    if (enabled) {
+      root.classList.add('dark-mode');
+    } else {
+      root.classList.remove('dark-mode');
+    }
+    localStorage.setItem('dark_mode', String(enabled));
+    // Update ARIA on toggle button
+    var btn = document.getElementById('darkModeToggle');
+    if (btn) {
+      btn.setAttribute('aria-pressed', String(enabled));
+    }
+    // Remove transition class after animation completes
+    setTimeout(function() {
+      root.classList.remove('dark-mode-transition');
+    }, 500);
+  }
+
+  function initDarkMode() {
+    var stored = localStorage.getItem('dark_mode');
+    var enabled;
+    if (stored !== null) {
+      enabled = stored === 'true';
+    } else {
+      enabled = window.matchMedia('(prefers-color-scheme:dark)').matches;
+    }
+    // Apply without transition on initial load (class already set by inline script in <head>)
+    if (enabled) {
+      document.documentElement.classList.add('dark-mode');
+    }
+    var btn = document.getElementById('darkModeToggle');
+    if (btn) {
+      btn.setAttribute('aria-pressed', String(enabled));
+      btn.addEventListener('click', function() {
+        var isDark = document.documentElement.classList.contains('dark-mode');
+        setDarkMode(!isDark);
+      });
+    }
+    // Listen for system preference changes
+    window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change', function(e) {
+      // Only follow system if user hasn't explicitly set a preference
+      if (localStorage.getItem('dark_mode') === null) {
+        setDarkMode(e.matches);
+      }
+    });
+  }
+
+  // Initialize dark mode immediately (not inside async init)
+  initDarkMode();
+
+  /* --------------------------------------------------------
      HOMEPAGE REVIEW MODAL
   -------------------------------------------------------- */
   var rmModal = document.getElementById('reviewModal');

@@ -3267,6 +3267,310 @@ select:focus-visible {
   outline-offset: 2px;
 }
 
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+
+/* --- Toggle Button --- */
+.dark-mode-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.dark-mode-toggle:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--clr-white);
+}
+
+.navbar.scrolled .dark-mode-toggle {
+  background: var(--clr-gray-100);
+  border-color: var(--clr-gray-200);
+  color: var(--clr-gray-600);
+}
+
+.navbar.scrolled .dark-mode-toggle:hover {
+  background: var(--clr-gray-200);
+  color: var(--clr-gray-800);
+}
+
+/* Icon visibility: moon shown by default, sun hidden */
+.dm-icon--sun { display: none; }
+.dm-icon--moon { display: block; }
+
+/* In dark mode: sun shown, moon hidden */
+.dark-mode .dm-icon--sun { display: block; }
+.dark-mode .dm-icon--moon { display: none; }
+
+/* --- Smooth Transition Class (applied temporarily during toggle) --- */
+.dark-mode-transition,
+.dark-mode-transition *,
+.dark-mode-transition *::before,
+.dark-mode-transition *::after {
+  transition: background-color 0.4s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, fill 0.3s ease, stroke 0.3s ease !important;
+}
+
+/* --- Dark Mode Variable Overrides --- */
+.dark-mode {
+  --clr-white: #121820;
+  --clr-gray-50: #1a2332;
+  --clr-gray-100: #1e293b;
+  --clr-gray-200: #2a3a4e;
+  --clr-gray-300: #3b4f68;
+  --clr-gray-400: #7a8ea3;
+  --clr-gray-500: #94a3b8;
+  --clr-gray-600: #b0bec9;
+  --clr-gray-700: #c8d4df;
+  --clr-gray-800: #dde5ed;
+  --clr-gray-900: #eef2f6;
+  --clr-sand: #1a2332;
+
+  --clr-ocean: #40b88a;
+  --clr-ocean-dark: #2d9d72;
+  --clr-ocean-light: #5cd4a4;
+  --clr-sunset: #e5b84c;
+  --clr-sunset-light: #f0cc6a;
+  --clr-navy: #a3d4bd;
+  --clr-navy-deep: #c0e6d4;
+
+  --clr-success: #34d399;
+  --clr-error: #f87171;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.35);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.4);
+  --shadow-xl: 0 12px 48px rgba(0,0,0,0.45);
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.25);
+}
+
+/* --- Navigation Overrides --- */
+.dark-mode .nav-container {
+  background: rgba(18, 24, 32, 0.4);
+}
+
+.dark-mode .navbar.scrolled .nav-container {
+  background: rgba(18, 24, 32, 0.85);
+}
+
+.dark-mode .dark-mode-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.dark-mode .dark-mode-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.dark-mode .navbar.scrolled .dark-mode-toggle {
+  background: var(--clr-gray-100);
+  border-color: var(--clr-gray-200);
+  color: var(--clr-gray-500);
+}
+
+.dark-mode .navbar.scrolled .dark-mode-toggle:hover {
+  background: var(--clr-gray-200);
+  color: var(--clr-gray-800);
+}
+
+/* --- Section-Specific Overrides --- */
+
+/* Section tag bg */
+.dark-mode .section-tag {
+  background: rgba(64, 184, 138, 0.15);
+}
+
+/* Destination card badge */
+.dark-mode .dest-card-badge {
+  background: rgba(26, 35, 50, 0.9);
+}
+
+/* Review destination tag */
+.dark-mode .review-destination {
+  background: rgba(64, 184, 138, 0.15);
+}
+
+/* Booking selected card */
+.dark-mode .booking-dest-card.selected {
+  background: rgba(64, 184, 138, 0.1);
+  box-shadow: 0 0 0 3px rgba(64, 184, 138, 0.2);
+}
+
+/* Map section background */
+.dark-mode .map-section {
+  background: linear-gradient(180deg, var(--clr-gray-50) 0%, #15202d 50%, var(--clr-gray-50) 100%);
+}
+
+/* Map wrapper border */
+.dark-mode .map-wrapper {
+  border-color: rgba(64, 184, 138, 0.2);
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.2),
+    0 12px 30px rgba(0,0,0,0.3),
+    0 25px 60px rgba(0,0,0,0.2);
+}
+
+/* Google Maps iframe — invert for dark approximation */
+.dark-mode .google-map-container iframe {
+  filter: invert(0.9) hue-rotate(180deg);
+}
+
+/* Map dest item hover */
+.dark-mode .map-dest-item:hover {
+  background: rgba(64, 184, 138, 0.08);
+}
+
+/* AI Planner chat bubble */
+.dark-mode .chat-bubble .itinerary-card {
+  background: var(--clr-gray-50);
+  border-color: var(--clr-gray-200);
+}
+
+/* Button primary shadow tweak */
+.dark-mode .btn-primary {
+  box-shadow: 0 4px 16px rgba(64, 184, 138, 0.3);
+}
+
+.dark-mode .btn-primary:hover {
+  box-shadow: 0 6px 24px rgba(64, 184, 138, 0.4);
+}
+
+/* Hero search bar */
+.dark-mode .hero-search {
+  background: rgba(18, 24, 32, 0.85);
+}
+
+/* Review modal (inline styles need !important) */
+.dark-mode #reviewModal > div {
+  background: var(--clr-gray-50) !important;
+}
+
+.dark-mode #reviewModal h3 {
+  color: var(--clr-gray-800) !important;
+}
+
+.dark-mode #reviewModal label {
+  color: var(--clr-gray-700) !important;
+}
+
+.dark-mode #reviewModal select,
+.dark-mode #reviewModal textarea {
+  background: var(--clr-gray-100) !important;
+  border-color: var(--clr-gray-200) !important;
+  color: var(--clr-gray-800) !important;
+}
+
+.dark-mode #reviewModal #rmSubmit {
+  background: var(--clr-ocean) !important;
+}
+
+.dark-mode #reviewModal #rmError {
+  background: rgba(248, 113, 113, 0.1) !important;
+  color: var(--clr-error) !important;
+}
+
+.dark-mode #reviewModal #rmSuccess {
+  background: rgba(52, 211, 153, 0.1) !important;
+  color: var(--clr-success) !important;
+}
+
+.dark-mode #reviewModalClose {
+  color: var(--clr-gray-500) !important;
+}
+
+/* Deal book btn shadow */
+.dark-mode .deal-book-btn {
+  box-shadow: 0 4px 12px rgba(64, 184, 138, 0.2);
+}
+
+.dark-mode .deal-book-btn:hover {
+  box-shadow: 0 6px 20px rgba(64, 184, 138, 0.35);
+}
+
+/* Gallery hover overlay */
+.dark-mode .gallery-item:hover::after {
+  background: rgba(64, 184, 138, 0.3);
+}
+
+/* Top destinations gradient */
+.dark-mode .top-destinations {
+  background: linear-gradient(180deg, var(--clr-gray-50) 0%, var(--clr-white) 100%);
+}
+
+/* Deals section gradient */
+.dark-mode .deals {
+  background: linear-gradient(180deg, var(--clr-gray-50) 0%, var(--clr-white) 100%);
+}
+
+/* Trip planner gradient */
+.dark-mode .trip-planner {
+  background: linear-gradient(180deg, var(--clr-white) 0%, var(--clr-gray-50) 100%);
+}
+
+/* --- Footer & Newsletter: keep dark — restore original light-mode values --- */
+.dark-mode .newsletter {
+  --clr-white: #FFFFFF;
+  --clr-gray-50: #f8fafc;
+  --clr-gray-100: #f1f5f9;
+  --clr-gray-200: #e2e8f0;
+  --clr-ocean: #2D6A4F;
+  --clr-ocean-light: #40916C;
+  --clr-sunset: #D4A03C;
+}
+
+.dark-mode .footer {
+  --clr-white: #FFFFFF;
+  --clr-gray-50: #f8fafc;
+  --clr-gray-100: #f1f5f9;
+  --clr-gray-200: #e2e8f0;
+  --clr-gray-300: #cbd5e1;
+  --clr-gray-400: #94a3b8;
+  --clr-gray-500: #64748b;
+  --clr-gray-800: #1e293b;
+  --clr-gray-900: #0f172a;
+  --clr-ocean: #2D6A4F;
+  --clr-ocean-light: #40916C;
+}
+
+/* --- Mobile Nav Drawer --- */
+@media (max-width: 768px) {
+  .dark-mode .nav-links {
+    background: var(--clr-gray-50);
+  }
+
+  .dark-mode .nav-links .nav-link {
+    color: var(--clr-gray-700);
+  }
+
+  .dark-mode .nav-links .nav-link:hover {
+    background: var(--clr-gray-100);
+    color: var(--clr-ocean);
+  }
+
+  .dark-mode .nav-links .nav-link--cta {
+    background: var(--clr-ocean);
+    color: #fff;
+  }
+
+  .dark-mode .hamburger-line {
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  .dark-mode .navbar.scrolled .hamburger-line {
+    background: var(--clr-gray-700);
+  }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

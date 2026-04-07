@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Subscriber = require('../models/Subscriber');
 const auth = require('../middleware/auth');
+const { sendWelcomeEmail, sendAdminNotification } = require('../utils/emailService');
 
 // POST /api/subscribers (public)
 router.post('/', async (req, res) => {
@@ -12,6 +13,11 @@ router.post('/', async (req, res) => {
     if (existing) return res.json({ message: 'Already subscribed' });
 
     const subscriber = await Subscriber.create({ email });
+
+    // Fire-and-forget: send emails without blocking the response
+    sendWelcomeEmail(email).catch(err => console.error('Welcome email failed:', err.message));
+    sendAdminNotification(email).catch(err => console.error('Admin notification failed:', err.message));
+
     res.status(201).json(subscriber);
   } catch (err) {
     res.status(400).json({ message: err.message });

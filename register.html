@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register — Syed Productions</title>
-  <link rel="icon" type="image/jpeg" href="images/logo.jpeg">
+  <link rel="icon" type="image/png" href="images/Syed-production.png">
   <style>
     :root {
       --primary: #2D6A4F;
@@ -151,7 +151,7 @@
   <div class="login-wrapper">
     <div class="login-card">
       <div class="logo-area">
-        <img src="images/logo.jpeg" alt="Syed Productions">
+        <img src="images/Syed-production.png" alt="Syed Productions">
       </div>
       <h1>Syed Productions</h1>
       <p class="subtitle">Create your account</p>
@@ -303,7 +303,7 @@
         var b = d.settings.branding;
         if (b.logoUrl) {
           var logoImg = document.querySelector('.logo-area img');
-          logoImg.onerror = function() { this.onerror = null; this.src = 'images/logo.jpeg'; };
+          logoImg.onerror = function() { this.onerror = null; this.src = 'images/Syed-production.png'; };
           logoImg.src = b.logoUrl;
         }
         if (b.companyName) {

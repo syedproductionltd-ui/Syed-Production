@@ -4,12 +4,12 @@ const siteSettingsSchema = new mongoose.Schema({
   _singleton: { type: String, default: 'site-settings', unique: true },
 
   branding: {
-    logoUrl: { type: String, default: 'images/logo.jpeg' },
+    logoUrl: { type: String, default: 'images/Syed-production.png' },
     logoSize: { type: Number, default: 44 },
     logoBorderRadius: { type: Number, default: 50 },
     companyName: { type: String, default: 'Syed Productions' },
     companyShortName: { type: String, default: 'Syed Productions' },
-    faviconUrl: { type: String, default: 'images/logo.jpeg' },
+    faviconUrl: { type: String, default: 'images/Syed-production.png' },
     faviconBorderRadius: { type: Number, default: 50 }
   },
 

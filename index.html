@@ -10,9 +10,8 @@
   <script>
     (function(){
       var s=localStorage.getItem('dark_mode');
-      if(s==='true'||(s===null&&window.matchMedia('(prefers-color-scheme:dark)').matches)){
-        document.documentElement.classList.add('dark-mode');
-      }
+      if(s==='false'){return;}
+      document.documentElement.classList.add('dark-mode');
     })();
   </script>
   <link rel="stylesheet" href="css/styles.css">
@@ -61,8 +60,8 @@
   <nav class="navbar" id="navbar" aria-label="Main navigation">
     <div class="nav-container">
       <a href="#hero" class="nav-logo" aria-label="Syed Productions Home">
-        <img src="images/Syed-production.png" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.png';">
-        <span>Syed Productions</span>
+        <img src="images/Gemini_Generated_Image_ukpyqqukpyqqukpy-removebg-preview.png" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.png';">
+        <span id="brandSyed" class="brand-swap-a">Syed</span><span id="brandProd" class="brand-swap-b">Productions</span>
       </a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
         <span class="hamburger-line"></span>
@@ -71,7 +70,6 @@
       </button>
       <ul class="nav-links" id="navLinks" role="list">
         <li><a href="#gallery" class="nav-link">Portfolio</a></li>
-        <li><a href="#destinations" class="nav-link">Services</a></li>
         <li><a href="#videos" class="nav-link">Showreel</a></li>
         <li><a href="#booking" class="nav-link">Book Now</a></li>
         <li><a href="#reviews" class="nav-link">Reviews</a></li>

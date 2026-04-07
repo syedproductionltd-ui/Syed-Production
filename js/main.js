@@ -1480,12 +1480,8 @@
 
   function initDarkMode() {
     var stored = localStorage.getItem('dark_mode');
-    var enabled;
-    if (stored !== null) {
-      enabled = stored === 'true';
-    } else {
-      enabled = window.matchMedia('(prefers-color-scheme:dark)').matches;
-    }
+    // Dark mode is default unless user explicitly set it to false
+    var enabled = stored !== 'false';
     // Apply without transition on initial load (class already set by inline script in <head>)
     if (enabled) {
       document.documentElement.classList.add('dark-mode');
@@ -1509,6 +1505,20 @@
 
   // Initialize dark mode immediately (not inside async init)
   initDarkMode();
+
+  /* --------------------------------------------------------
+     BRAND FONT SWAP (every 1 second)
+  -------------------------------------------------------- */
+  (function() {
+    var syed = document.getElementById('brandSyed');
+    var prod = document.getElementById('brandProd');
+    if (syed && prod) {
+      setInterval(function() {
+        syed.classList.toggle('swapped');
+        prod.classList.toggle('swapped');
+      }, 1000);
+    }
+  })();
 
   /* --------------------------------------------------------
      HOMEPAGE REVIEW MODAL

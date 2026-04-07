@@ -348,10 +348,45 @@ input, select, textarea {
   z-index: 1001;
 }
 
+/* Brand font swap animation */
+.brand-swap-a, .brand-swap-b {
+  transition: font-family 0.3s ease, color 0.3s ease;
+}
+.brand-swap-a {
+  font-family: cursive;
+  color: #fff;
+}
+.brand-swap-b {
+  font-family: 'Times New Roman', Times, serif;
+  color: #000;
+}
+.brand-swap-a.swapped {
+  font-family: 'Times New Roman', Times, serif;
+  color: #000;
+}
+.brand-swap-b.swapped {
+  font-family: cursive;
+  color: #fff;
+}
+
+/* Dark mode brand colors */
+.dark-mode .brand-swap-a {
+  color: #fff;
+}
+.dark-mode .brand-swap-b {
+  color: #000;
+}
+.dark-mode .brand-swap-a.swapped {
+  color: #000;
+}
+.dark-mode .brand-swap-b.swapped {
+  color: #fff;
+}
+
 .logo-img {
-  width: 44px;
-  height: 44px;
-  max-height: calc(var(--nav-height) - 12px);
+  width: 64px;
+  height: 64px;
+  max-height: calc(var(--nav-height) - 4px);
   border-radius: 50%;
   object-fit: cover;
 }

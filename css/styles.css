@@ -472,6 +472,10 @@ input, select, textarea {
   background: var(--clr-gray-800);
 }
 
+.nav-toggle.active {
+  background-color: #000;
+}
+
 .nav-toggle.active .hamburger-line:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
 }

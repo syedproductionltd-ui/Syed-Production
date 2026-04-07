@@ -1321,15 +1321,13 @@
 
       var mediaHTML = '';
       if (embed.type === 'youtube') {
-        // YouTube: show thumbnail with play overlay
-        mediaHTML = '<img class="video-card-thumb" src="https://img.youtube.com/vi/' + embed.videoId + '/hqdefault.jpg" alt="' + v.title + '" loading="eager">' +
-          '<div class="video-card-play"><svg viewBox="0 0 48 48" width="48" height="48"><path d="M19 15v18l15-9z" fill="white"/></svg></div>';
+        // YouTube: show thumbnail (looks like a video frame)
+        mediaHTML = '<img class="video-card-thumb" src="https://img.youtube.com/vi/' + embed.videoId + '/hqdefault.jpg" alt="' + v.title + '" loading="eager">';
       } else if (embed.type === 'instagram' || embed.type === 'facebook') {
-        // External video: cinematic dark placeholder with shimmer + play overlay
-        mediaHTML = '<div class="video-card-thumb video-card-thumb--external"></div>' +
-          '<div class="video-card-play"><svg viewBox="0 0 48 48" width="48" height="48"><path d="M19 15v18l15-9z" fill="white"/></svg></div>';
+        // External video: cinematic animated shimmer (looks like video playing)
+        mediaHTML = '<div class="video-card-thumb video-card-thumb--external"></div>';
       } else {
-        // Direct .mp4: preload metadata so first frame/poster is ready
+        // Direct .mp4: autoplay muted preview
         mediaHTML = '<video muted loop playsinline preload="metadata" src="' + encodeURI(v.videoUrl) + '"></video>';
       }
 

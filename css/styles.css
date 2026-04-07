@@ -2407,29 +2407,6 @@ input, select, textarea {
   100% { background-position: 0% 50%; }
 }
 
-.video-card-play {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-  pointer-events: none;
-  transition: transform 0.25s ease, background 0.25s ease;
-}
-
-.video-card:hover .video-card-play {
-  transform: translate(-50%, -50%) scale(1.1);
-  background: rgba(0, 0, 0, 0.6);
-}
-
 /* ── Iframe in video cards (safety) ── */
 .video-card iframe {
   width: 100%;

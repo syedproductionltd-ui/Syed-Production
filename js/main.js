@@ -1261,6 +1261,7 @@
       const b = s.branding;
       if (b.logoUrl) {
         $$('.logo-img').forEach(img => {
+          img.onerror = function() { this.onerror = null; this.src = 'images/logo.jpeg'; };
           img.src = b.logoUrl;
           img.alt = b.companyName || '';
           if (b.logoSize) { img.style.width = b.logoSize + 'px'; img.style.height = b.logoSize + 'px'; }

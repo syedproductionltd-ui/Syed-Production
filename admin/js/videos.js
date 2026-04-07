@@ -118,21 +118,35 @@ async function uploadVideoFile() {
     };
 
     xhr.onload = function() {
-      if (xhr.status === 200) {
+      try {
         var data = JSON.parse(xhr.responseText);
-        bar.style.width = '100%';
-        status.textContent = 'Upload complete!';
-        resolve(data.videoUrl);
-      } else {
-        var err = JSON.parse(xhr.responseText);
-        status.textContent = 'Upload failed: ' + (err.message || 'Unknown error');
-        reject(new Error(err.message || 'Upload failed'));
+        if (xhr.status === 200) {
+          bar.style.width = '100%';
+          status.textContent = 'Upload complete!';
+          status.style.color = '#16a34a';
+          resolve(data.videoUrl);
+        } else {
+          status.textContent = 'Upload failed: ' + (data.message || 'Unknown error');
+          status.style.color = '#ef4444';
+          reject(new Error(data.message || 'Upload failed'));
+        }
+      } catch (e) {
+        status.textContent = 'Upload failed: Server error';
+        status.style.color = '#ef4444';
+        reject(new Error('Server error'));
       }
     };
 
     xhr.onerror = function() {
-      status.textContent = 'Network error';
+      status.textContent = 'Network error — check your connection';
+      status.style.color = '#ef4444';
       reject(new Error('Network error'));
+    };
+
+    xhr.ontimeout = function() {
+      status.textContent = 'Upload timed out — file may be too large';
+      status.style.color = '#ef4444';
+      reject(new Error('Upload timed out'));
     };
 
     xhr.send(formData);

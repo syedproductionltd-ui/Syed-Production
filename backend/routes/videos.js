@@ -33,10 +33,20 @@ const upload = multer({
 });
 
 // POST /api/videos/upload (auth) — upload video file
-router.post('/upload', auth, upload.single('video'), (req, res) => {
-  if (!req.file) return res.status(400).json({ message: 'No video file uploaded' });
-  const videoUrl = 'uploads/videos/' + req.file.filename;
-  res.json({ videoUrl });
+router.post('/upload', auth, (req, res) => {
+  upload.single('video')(req, res, (err) => {
+    if (err) {
+      console.error('Upload error:', err.message);
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ message: 'File too large. Maximum 100MB allowed.' });
+      }
+      return res.status(400).json({ message: err.message || 'Upload failed' });
+    }
+    if (!req.file) return res.status(400).json({ message: 'No video file uploaded' });
+    console.log('Video uploaded:', req.file.filename, '(' + (req.file.size / 1024 / 1024).toFixed(1) + 'MB)');
+    const videoUrl = 'uploads/videos/' + req.file.filename;
+    res.json({ videoUrl });
+  });
 });
 
 // GET /api/videos (public)

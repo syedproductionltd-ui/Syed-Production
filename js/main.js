@@ -1075,7 +1075,7 @@
       return {
         type: 'youtube',
         videoId: ytMatch[1],
-        embedUrl: 'https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=1&mute=1&loop=1&playlist=' + ytMatch[1]
+        embedUrl: 'https://www.youtube.com/embed/' + ytMatch[1] + '?autoplay=1&loop=1&playlist=' + ytMatch[1]
       };
     }
 
@@ -1127,6 +1127,28 @@
   const reelsCounter = $('#reelsCounter');
   let reelsObserver = null;
 
+  var reelsMuted = false; // start unmuted — user clicked to watch
+
+  function updateMuteBtn() {
+    var btn = $('#reelsMuteBtn');
+    if (!btn) return;
+    btn.classList.toggle('muted', reelsMuted);
+    btn.setAttribute('aria-label', reelsMuted ? 'Unmute' : 'Mute');
+  }
+
+  function applyMuteState() {
+    reelsTrack.querySelectorAll('video').forEach(function(v) { v.muted = reelsMuted; });
+    updateMuteBtn();
+  }
+
+  var reelsMuteBtn = $('#reelsMuteBtn');
+  if (reelsMuteBtn) {
+    reelsMuteBtn.addEventListener('click', function() {
+      reelsMuted = !reelsMuted;
+      applyMuteState();
+    });
+  }
+
   function openReels(startIndex) {
     if (!reelsViewer || videos.length === 0) return;
 
@@ -1140,11 +1162,12 @@
       slide.dataset.embedType = embed.type;
 
       if (embed.type === 'direct') {
-        // Direct .mp4 — use <video> element
+        // Direct .mp4 — use <video> element with sound
         const video = document.createElement('video');
         video.playsInline = true;
         video.loop = true;
         video.preload = 'none';
+        video.muted = reelsMuted;
         video.src = encodeURI(v.videoUrl);
 
         video.addEventListener('click', () => {
@@ -1186,17 +1209,27 @@
     reelsViewer.hidden = false;
     requestAnimationFrame(() => reelsViewer.classList.add('open'));
     document.body.style.overflow = 'hidden';
+    updateMuteBtn();
 
     const targetSlide = reelsTrack.children[startIndex];
     if (targetSlide) targetSlide.scrollIntoView({ behavior: 'instant' });
 
     updateReelsCounter(startIndex);
 
-    // Auto-play the first direct video
+    // Auto-play the first direct video with sound
     const initialVideo = targetSlide?.querySelector('video');
     if (initialVideo) {
-      initialVideo.play().catch(() => {});
-      targetSlide.classList.remove('paused');
+      initialVideo.muted = reelsMuted;
+      initialVideo.play().then(() => {
+        targetSlide.classList.remove('paused');
+      }).catch(() => {
+        // Browser blocked unmuted autoplay — fallback to muted
+        initialVideo.muted = true;
+        reelsMuted = true;
+        updateMuteBtn();
+        initialVideo.play().catch(() => {});
+        targetSlide.classList.remove('paused');
+      });
     }
 
     reelsObserver = new IntersectionObserver((entries) => {
@@ -1208,7 +1241,12 @@
         if (entry.isIntersecting) {
           updateReelsCounter(parseInt(slide.dataset.index, 10));
           if (vid) {
-            vid.play().catch(() => {});
+            vid.muted = reelsMuted;
+            vid.play().catch(() => {
+              // Fallback to muted if unmuted play blocked
+              vid.muted = true;
+              vid.play().catch(() => {});
+            });
             slide.classList.remove('paused');
           }
           // Restore iframe src when scrolling back into view
@@ -1229,7 +1267,6 @@
       });
     }, { root: reelsTrack, threshold: 0.7 });
 
-    // Restore iframe src when slide comes back into view
     reelsTrack.querySelectorAll('.reel-slide').forEach(s => {
       reelsObserver.observe(s);
     });

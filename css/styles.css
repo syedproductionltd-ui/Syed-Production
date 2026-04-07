@@ -2215,6 +2215,41 @@ input, select, textarea {
   background: rgba(255, 255, 255, 0.3);
 }
 
+.reels-mute-btn {
+  position: fixed;
+  top: 16px;
+  right: 72px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3010;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s;
+}
+
+.reels-mute-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.reels-mute-btn .icon-muted {
+  display: none;
+}
+
+.reels-mute-btn.muted .icon-unmuted {
+  display: none;
+}
+
+.reels-mute-btn.muted .icon-muted {
+  display: block;
+}
+
 .reels-counter {
   position: fixed;
   top: 20px;

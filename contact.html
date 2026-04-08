@@ -52,7 +52,11 @@
   <!-- ============ CONTACT CONTENT ============ -->
   <main class="section">
     <div class="container">
-      <div class="contact-grid">
+      <div class="page-loading" id="pageLoading">
+        <div class="page-spinner"></div>
+        <span class="page-loading-text">Loading contact info...</span>
+      </div>
+      <div class="contact-grid" id="contactContent" style="display:none;">
         <!-- Contact Info -->
         <div class="contact-info-card">
           <h2>Get In Touch</h2>
@@ -208,6 +212,8 @@
         var data=await fetch('/api/public-data').then(function(r){return r.json();});
         if(data.settings) applySiteBranding(data.settings);
       }catch(e){console.warn('API not available:',e.message);}
+      var loader=$('#pageLoading'); if(loader) loader.style.display='none';
+      var content=$('#contactContent'); if(content) content.style.display='';
       updateNavAuth();
     }
     init();

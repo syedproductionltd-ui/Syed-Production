@@ -58,6 +58,10 @@
   <!-- ============ PORTFOLIO GALLERY ============ -->
   <main class="section">
     <div class="container">
+      <div class="page-loading" id="pageLoading">
+        <div class="page-spinner"></div>
+        <span class="page-loading-text">Loading portfolio...</span>
+      </div>
       <div class="gallery-grid" id="galleryGrid">
         <!-- Gallery items injected by JS -->
       </div>
@@ -293,6 +297,7 @@
         galleryImages = data.gallery || [];
         if(data.settings) applySiteBranding(data.settings);
       }catch(e){ console.warn('API not available:', e.message); }
+      var loader=$('#pageLoading'); if(loader) loader.style.display='none';
       renderGallery();
       updateNavAuth();
     }

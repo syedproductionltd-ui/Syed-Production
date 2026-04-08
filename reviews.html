@@ -52,11 +52,17 @@
   <!-- ============ REVIEWS GRID ============ -->
   <main class="section">
     <div class="container">
-      <div style="text-align:center;margin-bottom:2rem;">
-        <button class="btn btn-primary" id="writeReviewBtn" style="padding:0.75rem 2rem;font-size:1rem;">Write a Review</button>
+      <div class="page-loading" id="pageLoading">
+        <div class="page-spinner"></div>
+        <span class="page-loading-text">Loading reviews...</span>
       </div>
-      <div class="reviews-grid-page" id="reviewsGrid">
-        <!-- Review cards injected by JS -->
+      <div id="reviewsContent" style="display:none;">
+        <div style="text-align:center;margin-bottom:2rem;">
+          <button class="btn btn-primary" id="writeReviewBtn" style="padding:0.75rem 2rem;font-size:1rem;">Write a Review</button>
+        </div>
+        <div class="reviews-grid-page" id="reviewsGrid">
+          <!-- Review cards injected by JS -->
+        </div>
       </div>
     </div>
   </main>
@@ -200,6 +206,8 @@
         destinations=data.destinations||[];
         if(data.settings) applySiteBranding(data.settings);
       }catch(e){console.warn('API not available:',e.message);}
+      var loader=$('#pageLoading'); if(loader) loader.style.display='none';
+      var content=$('#reviewsContent'); if(content) content.style.display='';
       renderReviews();
       updateNavAuth();
     }

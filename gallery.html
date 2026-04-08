@@ -58,7 +58,11 @@
   <!-- ============ GALLERY TABS ============ -->
   <main class="section">
     <div class="container">
-      <div class="gallery-tabs" id="galleryTabs">
+      <div class="page-loading" id="pageLoading">
+        <div class="page-spinner"></div>
+        <span class="page-loading-text">Loading gallery...</span>
+      </div>
+      <div class="gallery-tabs" id="galleryTabs" style="display:none;">
         <button class="gallery-tab active" data-tab="photos">Photos</button>
         <button class="gallery-tab" data-tab="videos">Videos</button>
       </div>
@@ -448,6 +452,8 @@
         videos=data.videos||[];
         if(data.settings) applySiteBranding(data.settings);
       }catch(e){console.warn('API not available:',e.message);}
+      var loader=$('#pageLoading'); if(loader) loader.style.display='none';
+      var tabs=$('#galleryTabs'); if(tabs) tabs.style.display='';
       renderGallery();
       buildVideoFilterTabs();
       renderVideos();

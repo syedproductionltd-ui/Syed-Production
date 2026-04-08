@@ -52,7 +52,11 @@
   <!-- ============ BOOKING WIZARD ============ -->
   <main class="section">
     <div class="container">
-      <div class="booking-wizard">
+      <div class="page-loading" id="pageLoading">
+        <div class="page-spinner"></div>
+        <span class="page-loading-text">Loading services...</span>
+      </div>
+      <div class="booking-wizard" style="display:none;" id="bookingWizardWrap">
         <div class="wizard-steps" role="tablist" aria-label="Booking steps">
           <div class="wizard-step active" data-step="1" role="tab" aria-selected="true"><span class="step-number">1</span><span class="step-label">Service</span></div>
           <div class="wizard-connector active"></div>
@@ -251,6 +255,8 @@
         destinations=data.destinations||[];
         if(data.settings) applySiteBranding(data.settings);
       }catch(e){console.warn('API not available:',e.message);}
+      var loader=$('#pageLoading'); if(loader) loader.style.display='none';
+      var wiz=$('#bookingWizardWrap'); if(wiz) wiz.style.display='';
       renderBookingDestinations();
       updateNavAuth();
     }

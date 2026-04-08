@@ -52,6 +52,10 @@
   <!-- ============ PACKAGES GRID ============ -->
   <main class="section">
     <div class="container">
+      <div class="page-loading" id="pageLoading">
+        <div class="page-spinner"></div>
+        <span class="page-loading-text">Loading packages...</span>
+      </div>
       <div class="deals-grid" id="dealsGrid">
         <!-- Deal cards injected by JS -->
       </div>
@@ -149,6 +153,7 @@
         deals=data.deals||[];
         if(data.settings) applySiteBranding(data.settings);
       }catch(e){console.warn('API not available:',e.message);}
+      var loader=$('#pageLoading'); if(loader) loader.style.display='none';
       renderDeals();
       updateNavAuth();
     }

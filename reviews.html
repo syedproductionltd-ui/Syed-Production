@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reviews — Syed Productions</title>
+  <meta name="description" content="Read client reviews and testimonials for Syed Productions — real feedback from real clients.">
+  <link rel="icon" type="image/png" href="images/Syed-production.png">
+  <script>
+    (function(){var s=localStorage.getItem('dark_mode');if(s==='false')return;document.documentElement.classList.add('dark-mode');})();
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ============ NAVIGATION ============ -->
+  <nav class="navbar scrolled" id="navbar" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo" aria-label="Syed Productions Home">
+        <img src="images/Gemini_Generated_Image_ukpyqqukpyqqukpy-removebg-preview.png" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.png';">
+        <span id="brandSyed" class="brand-swap-a">Syed</span><span id="brandProd" class="brand-swap-b">Productions</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger-line"></span><span class="hamburger-line"></span><span class="hamburger-line"></span>
+      </button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="portfolio.html" class="nav-link">Portfolio</a></li>
+        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+        <li><a href="booking.html" class="nav-link">Book Now</a></li>
+        <li><a href="reviews.html" class="nav-link">Reviews</a></li>
+        <li><a href="packages.html" class="nav-link">Packages</a></li>
+        <li><a href="contact.html" class="nav-link nav-link--cta">Contact Us</a></li>
+        <li>
+          <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg class="dm-icon dm-icon--moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+            <svg class="dm-icon dm-icon--sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+        </li>
+        <li id="navAuthLinks"></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============ PAGE HERO ============ -->
+  <section class="page-hero">
+    <div class="container">
+      <h1 class="page-hero-title">Client Reviews</h1>
+      <p class="page-hero-subtitle">Real feedback from real clients</p>
+    </div>
+  </section>
+
+  <!-- ============ REVIEWS GRID ============ -->
+  <main class="section">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:2rem;">
+        <button class="btn btn-primary" id="writeReviewBtn" style="padding:0.75rem 2rem;font-size:1rem;">Write a Review</button>
+      </div>
+      <div class="reviews-grid-page" id="reviewsGrid">
+        <!-- Review cards injected by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Review Modal -->
+  <div id="reviewModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:12px;padding:2rem;width:420px;max-width:92vw;max-height:90vh;overflow-y:auto;position:relative;">
+      <button id="reviewModalClose" style="position:absolute;top:0.75rem;right:0.75rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:#64748b;line-height:1;">&times;</button>
+      <h3 style="color:#1B4332;margin-bottom:1rem;font-size:1.25rem;">Write a Review</h3>
+      <div id="rmError" style="display:none;background:#fef2f2;color:#ef4444;padding:0.6rem;border-radius:8px;margin-bottom:0.75rem;font-size:0.85rem;"></div>
+      <div id="rmSuccess" style="display:none;background:#f0fdf4;color:#16a34a;padding:0.6rem;border-radius:8px;margin-bottom:0.75rem;font-size:0.85rem;"></div>
+      <form id="rmForm">
+        <div style="margin-bottom:0.75rem;"><label style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:0.25rem;">Service</label><select id="rmDest" style="width:100%;padding:0.5rem 0.6rem;border:1px solid #e2e8f0;border-radius:8px;font-family:inherit;font-size:0.9rem;" required><option value="">Select a service...</option></select></div>
+        <div style="margin-bottom:0.75rem;"><label style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:0.25rem;">Rating</label>
+          <div id="rmStars" style="display:flex;gap:4px;cursor:pointer;">
+            <svg class="rm-star" data-v="1" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0;transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            <svg class="rm-star" data-v="2" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0;transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            <svg class="rm-star" data-v="3" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0;transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            <svg class="rm-star" data-v="4" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0;transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+            <svg class="rm-star" data-v="5" viewBox="0 0 24 24" width="28" height="28" style="color:#e2e8f0;transition:color 0.15s;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+          </div>
+        </div>
+        <div style="margin-bottom:0.75rem;"><label style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:0.25rem;">Your Review</label><textarea id="rmText" rows="3" style="width:100%;padding:0.5rem 0.6rem;border:1px solid #e2e8f0;border-radius:8px;font-family:inherit;font-size:0.9rem;resize:vertical;" placeholder="Share your experience..." required></textarea></div>
+        <button type="submit" id="rmSubmit" style="width:100%;padding:0.65rem;background:#2D6A4F;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:0.95rem;font-weight:600;cursor:pointer;">Submit Review</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo"><img src="images/Syed-production.png" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.png';"><span>Syed Productions</span></a>
+          <p>Professional media production house. Specializing in cinematic films, photography, videography, and event coverage across Pakistan.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook" class="social-link"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="currentColor"/></svg></a>
+            <a href="#" aria-label="Instagram" class="social-link"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" fill="currentColor"/></svg></a>
+            <a href="#" aria-label="WhatsApp" class="social-link"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" fill="currentColor"/></svg></a>
+            <a href="#" aria-label="YouTube" class="social-link"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="currentColor"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-links"><h4>Services</h4><ul><li><a href="index.html#top-destinations">Wedding Films</a></li><li><a href="index.html#top-destinations">Corporate Videos</a></li><li><a href="index.html#top-destinations">Event Coverage</a></li><li><a href="index.html#top-destinations">Photography</a></li><li><a href="index.html#destinations">All Services</a></li></ul></div>
+        <div class="footer-links"><h4>Company</h4><ul><li><a href="index.html">About Us</a></li><li><a href="index.html#team">Our Team</a></li><li><a href="portfolio.html">Portfolio</a></li><li><a href="contact.html">Contact</a></li><li><a href="packages.html">Packages</a></li></ul></div>
+        <div class="footer-links"><h4>Support</h4><ul><li><a href="contact.html">Help Center</a></li><li><a href="booking.html">Reschedule Booking</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">FAQ</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>&copy; 2026 Syed Productions. All rights reserved. Based in Pakistan.</p></div>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    'use strict';
+    function $(sel,ctx){return(ctx||document).querySelector(sel);}
+    function $$(sel,ctx){return[].slice.call((ctx||document).querySelectorAll(sel));}
+
+    /* Nav toggle */
+    var navToggle=$('#navToggle'),navLinks=$('#navLinks');
+    if(navToggle) navToggle.addEventListener('click',function(){var o=navLinks.classList.toggle('open');navToggle.classList.toggle('active',o);navToggle.setAttribute('aria-expanded',o);});
+
+    /* Dark mode */
+    function setDarkMode(on){document.documentElement.classList.add('dark-mode-transition');if(on)document.documentElement.classList.add('dark-mode');else document.documentElement.classList.remove('dark-mode');localStorage.setItem('dark_mode',String(on));var b=$('#darkModeToggle');if(b)b.setAttribute('aria-pressed',String(on));setTimeout(function(){document.documentElement.classList.remove('dark-mode-transition');},500);}
+    var dmBtn=$('#darkModeToggle');
+    if(dmBtn){dmBtn.setAttribute('aria-pressed',String(localStorage.getItem('dark_mode')!=='false'));dmBtn.addEventListener('click',function(){setDarkMode(!document.documentElement.classList.contains('dark-mode'));});}
+
+    /* Brand swap */
+    var syed=$('#brandSyed'),prod=$('#brandProd');
+    if(syed&&prod) setInterval(function(){syed.classList.toggle('swapped');prod.classList.toggle('swapped');},1000);
+
+    /* Data */
+    var reviews=[], destinations=[];
+
+    function generateStars(r){var f=Math.floor(r),h=r%1>=0.5?1:0,e=5-f-h,html='';for(var i=0;i<f;i++)html+='<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>';if(h)html+='<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor" opacity="0.4"/></svg>';for(var j=0;j<e;j++)html+='<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor" opacity="0.15"/></svg>';return html;}
+
+    /* Render all reviews in grid */
+    function renderReviews(){
+      var grid=$('#reviewsGrid');if(!grid)return;grid.innerHTML='';
+      reviews.forEach(function(rev){
+        var card=document.createElement('div');card.className='review-card';
+        card.innerHTML='<div class="review-card-header"><img class="review-avatar" src="'+rev.avatar+'" alt="'+rev.name+'" loading="lazy"><div><div class="review-author">'+rev.name+'</div><div class="review-meta">'+rev.location+(rev.verified?' <span class="verified-badge"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/></svg> Verified</span>':'')+'</div></div></div><div class="review-stars">'+generateStars(rev.rating)+'</div><p class="review-text">"'+rev.text+'"</p><span class="review-destination">'+rev.destination+'</span>';
+        grid.appendChild(card);
+      });
+    }
+
+    /* Review modal */
+    var rmModal=document.getElementById('reviewModal'), rmRating=0;
+    var writeBtn=document.getElementById('writeReviewBtn');
+    if(writeBtn) writeBtn.addEventListener('click',function(){
+      if(!localStorage.getItem('user_token')){window.location.href='login.html';return;}
+      var sel=document.getElementById('rmDest');
+      if(sel.options.length<=1) destinations.forEach(function(d){var opt=document.createElement('option');opt.value=d.name;opt.textContent=d.name;sel.appendChild(opt);});
+      rmRating=0;rmUpdateStars();document.getElementById('rmForm').reset();
+      document.getElementById('rmError').style.display='none';document.getElementById('rmSuccess').style.display='none';
+      rmModal.style.display='flex';
+    });
+    var rmClose=document.getElementById('reviewModalClose');
+    if(rmClose) rmClose.addEventListener('click',function(){rmModal.style.display='none';});
+    if(rmModal) rmModal.addEventListener('click',function(e){if(e.target===rmModal)rmModal.style.display='none';});
+
+    function rmUpdateStars(){document.querySelectorAll('.rm-star').forEach(function(s){s.style.color=parseInt(s.getAttribute('data-v'))<=rmRating?'#D4A03C':'#e2e8f0';});}
+    document.querySelectorAll('.rm-star').forEach(function(star){
+      star.addEventListener('click',function(){rmRating=parseInt(this.getAttribute('data-v'));rmUpdateStars();});
+      star.addEventListener('mouseenter',function(){var v=parseInt(this.getAttribute('data-v'));document.querySelectorAll('.rm-star').forEach(function(s){s.style.color=parseInt(s.getAttribute('data-v'))<=v?'#D4A03C':'#e2e8f0';});});
+    });
+    var rmStarsWrap=document.getElementById('rmStars');
+    if(rmStarsWrap) rmStarsWrap.addEventListener('mouseleave',rmUpdateStars);
+
+    var rmForm=document.getElementById('rmForm');
+    if(rmForm) rmForm.addEventListener('submit',async function(e){
+      e.preventDefault();
+      var errEl=document.getElementById('rmError'),sucEl=document.getElementById('rmSuccess'),btn=document.getElementById('rmSubmit');
+      errEl.style.display='none';sucEl.style.display='none';
+      var dest=document.getElementById('rmDest').value,text=document.getElementById('rmText').value.trim();
+      if(!dest){errEl.textContent='Please select a service';errEl.style.display='block';return;}
+      if(!rmRating){errEl.textContent='Please select a rating';errEl.style.display='block';return;}
+      if(!text){errEl.textContent='Please write your review';errEl.style.display='block';return;}
+      btn.disabled=true;btn.textContent='Submitting...';
+      try{
+        var res=await fetch('/api/reviews/user',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+localStorage.getItem('user_token')},body:JSON.stringify({destination:dest,rating:rmRating,text:text})});
+        var data=await res.json();
+        if(!res.ok){errEl.textContent=data.message||'Failed to submit';errEl.style.display='block';}
+        else{sucEl.textContent='Review submitted! It will appear after admin approval.';sucEl.style.display='block';rmForm.reset();rmRating=0;rmUpdateStars();}
+      }catch(err){errEl.textContent='Network error. Please try again.';errEl.style.display='block';}
+      btn.disabled=false;btn.textContent='Submit Review';
+    });
+
+    /* Branding */
+    function applySiteBranding(s){
+      if(!s)return;
+      if(s.branding){var b=s.branding;if(b.logoUrl)$$('.logo-img').forEach(function(img){img.onerror=function(){this.onerror=null;this.src='images/Syed-production.png';};img.src=b.logoUrl;if(b.logoSize){img.style.width=b.logoSize+'px';img.style.height=b.logoSize+'px';}if(b.logoBorderRadius!=null)img.style.borderRadius=b.logoBorderRadius+'%';});if(b.companyName){var p=b.companyName.split(' ');if(syed&&prod&&p.length>=2){syed.textContent=p[0];prod.textContent=p.slice(1).join(' ');}document.title=b.companyName+' — Reviews';}if(b.faviconUrl){var fav=$('link[rel="icon"]');if(fav)fav.href=b.faviconUrl;}if(b.companyShortName){var fs=$('.footer-brand .nav-logo span');if(fs)fs.textContent=b.companyShortName;}}
+      if(s.footer){var fd=$('.footer-brand > p');if(fd&&s.footer.description)fd.textContent=s.footer.description;var fc=$('.footer-bottom p');if(fc&&s.footer.copyrightText)fc.innerHTML=s.footer.copyrightText;}
+      if(s.socialLinks){var sl=s.socialLinks,lk=$$('.social-link');if(sl.facebook&&lk[0])lk[0].href=sl.facebook;if(sl.instagram&&lk[1])lk[1].href=sl.instagram;if(sl.whatsapp&&lk[2])lk[2].href=sl.whatsapp;if(sl.youtube&&lk[3])lk[3].href=sl.youtube;}
+    }
+
+    function updateNavAuth(){var c=document.getElementById('navAuthLinks');if(!c)return;var token=localStorage.getItem('user_token'),name=localStorage.getItem('user_name');if(token&&name){var av=localStorage.getItem('user_avatar')||'';c.innerHTML='<a href="profile.html" class="nav-link" style="display:inline-flex;align-items:center;padding:0.25rem;" title="'+name+'">'+(av?'<img src="'+av+'" alt="'+name+'" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.4);">':'<svg viewBox="0 0 24 24" width="24" height="24" style="fill:currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>')+'</a>';}else{c.innerHTML='<a href="login.html" class="nav-link" style="display:inline-flex;align-items:center;padding:0.25rem;" title="Login"><svg viewBox="0 0 24 24" width="24" height="24" style="fill:currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></a>';}}
+
+    async function init(){
+      try{
+        var data=await fetch('/api/public-data').then(function(r){return r.json();});
+        reviews=data.reviews||[];
+        destinations=data.destinations||[];
+        if(data.settings) applySiteBranding(data.settings);
+      }catch(e){console.warn('API not available:',e.message);}
+      renderReviews();
+      updateNavAuth();
+    }
+    init();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery — Syed Productions</title>
+  <meta name="description" content="Explore Syed Productions gallery — photos and videos from our productions, weddings, events, and creative projects.">
+  <link rel="icon" type="image/png" href="images/Syed-production.png">
+  <script>
+    (function(){
+      var s=localStorage.getItem('dark_mode');
+      if(s==='false'){return;}
+      document.documentElement.classList.add('dark-mode');
+    })();
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ============ NAVIGATION ============ -->
+  <nav class="navbar scrolled" id="navbar" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo" aria-label="Syed Productions Home">
+        <img src="images/Gemini_Generated_Image_ukpyqqukpyqqukpy-removebg-preview.png" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.png';">
+        <span id="brandSyed" class="brand-swap-a">Syed</span><span id="brandProd" class="brand-swap-b">Productions</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="portfolio.html" class="nav-link">Portfolio</a></li>
+        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+        <li><a href="booking.html" class="nav-link">Book Now</a></li>
+        <li><a href="reviews.html" class="nav-link">Reviews</a></li>
+        <li><a href="packages.html" class="nav-link">Packages</a></li>
+        <li><a href="contact.html" class="nav-link nav-link--cta">Contact Us</a></li>
+        <li>
+          <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg class="dm-icon dm-icon--moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+            <svg class="dm-icon dm-icon--sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+        </li>
+        <li id="navAuthLinks"></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============ PAGE HERO ============ -->
+  <section class="page-hero">
+    <div class="container">
+      <h1 class="page-hero-title">Gallery</h1>
+      <p class="page-hero-subtitle">Browse our photos and watch our productions</p>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY TABS ============ -->
+  <main class="section">
+    <div class="container">
+      <div class="gallery-tabs" id="galleryTabs">
+        <button class="gallery-tab active" data-tab="photos">Photos</button>
+        <button class="gallery-tab" data-tab="videos">Videos</button>
+      </div>
+
+      <!-- Photos Tab -->
+      <div class="gallery-tab-content active" id="tabPhotos">
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- Gallery items injected by JS -->
+        </div>
+      </div>
+
+      <!-- Videos Tab -->
+      <div class="gallery-tab-content" id="tabVideos">
+        <div class="filter-tabs" id="videoFilterTabs" role="tablist" aria-label="Video categories">
+          <button class="filter-tab active" data-vfilter="all" role="tab" aria-selected="true">All Videos</button>
+        </div>
+        <div class="video-grid" id="videoGrid">
+          <!-- Video cards injected by JS -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Gallery Lightbox -->
+  <div class="lightbox" id="galleryLightbox" hidden>
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+    <button class="lightbox-arrow lightbox-prev" id="lightboxPrev" aria-label="Previous photo">
+      <svg viewBox="0 0 24 24" width="28" height="28"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="Gallery photo">
+    <button class="lightbox-arrow lightbox-next" id="lightboxNext" aria-label="Next photo">
+      <svg viewBox="0 0 24 24" width="28" height="28"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"/></svg>
+    </button>
+    <div class="lightbox-counter" id="lightboxCounter"></div>
+  </div>
+
+  <!-- Reels-Style Video Viewer -->
+  <div class="reels-viewer" id="reelsViewer" hidden>
+    <button class="reels-close" id="reelsClose" aria-label="Close viewer">&times;</button>
+    <div class="reels-counter" id="reelsCounter"></div>
+    <button class="reels-mute-btn" id="reelsMuteBtn" aria-label="Toggle sound">
+      <svg class="icon-unmuted" viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+      <svg class="icon-muted" viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+    </button>
+    <div class="reels-track" id="reelsTrack"></div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">
+            <img src="images/Syed-production.png" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.png';">
+            <span>Syed Productions</span>
+          </a>
+          <p>Professional media production house. Specializing in cinematic films, photography, videography, and event coverage across Pakistan.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook" class="social-link"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="currentColor"/></svg></a>
+            <a href="#" aria-label="Instagram" class="social-link"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" fill="currentColor"/></svg></a>
+            <a href="#" aria-label="WhatsApp" class="social-link"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" fill="currentColor"/></svg></a>
+            <a href="#" aria-label="YouTube" class="social-link"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="currentColor"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="index.html#top-destinations">Wedding Films</a></li>
+            <li><a href="index.html#top-destinations">Corporate Videos</a></li>
+            <li><a href="index.html#top-destinations">Event Coverage</a></li>
+            <li><a href="index.html#top-destinations">Photography</a></li>
+            <li><a href="index.html#destinations">All Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="index.html">About Us</a></li>
+            <li><a href="index.html#team">Our Team</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="packages.html">Packages</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="contact.html">Help Center</a></li>
+            <li><a href="booking.html">Reschedule Booking</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Syed Productions. All rights reserved. Based in Pakistan.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    'use strict';
+
+    function $(sel,ctx){return(ctx||document).querySelector(sel);}
+    function $$(sel,ctx){return[].slice.call((ctx||document).querySelectorAll(sel));}
+
+    /* --- Nav toggle --- */
+    var navToggle=$('#navToggle'), navLinks=$('#navLinks');
+    if(navToggle) navToggle.addEventListener('click',function(){
+      var o=navLinks.classList.toggle('open');
+      navToggle.classList.toggle('active',o);
+      navToggle.setAttribute('aria-expanded',o);
+    });
+
+    /* --- Dark mode --- */
+    function setDarkMode(on){
+      document.documentElement.classList.add('dark-mode-transition');
+      if(on) document.documentElement.classList.add('dark-mode');
+      else document.documentElement.classList.remove('dark-mode');
+      localStorage.setItem('dark_mode',String(on));
+      var b=$('#darkModeToggle');if(b) b.setAttribute('aria-pressed',String(on));
+      setTimeout(function(){document.documentElement.classList.remove('dark-mode-transition');},500);
+    }
+    var dmBtn=$('#darkModeToggle');
+    if(dmBtn){
+      dmBtn.setAttribute('aria-pressed',String(localStorage.getItem('dark_mode')!=='false'));
+      dmBtn.addEventListener('click',function(){ setDarkMode(!document.documentElement.classList.contains('dark-mode')); });
+    }
+
+    /* --- Brand swap --- */
+    var syed=$('#brandSyed'),prod=$('#brandProd');
+    if(syed&&prod) setInterval(function(){syed.classList.toggle('swapped');prod.classList.toggle('swapped');},1000);
+
+    /* --- Data --- */
+    var galleryImages=[], videos=[];
+    var galleryGrid=$('#galleryGrid'), videoGrid=$('#videoGrid');
+    var activeVideoFilter='all';
+
+    /* --- Gallery Lightbox --- */
+    var lightbox=$('#galleryLightbox'), lightboxImg=$('#lightboxImg'), lightboxCounter=$('#lightboxCounter');
+    var galleryItems=[], lightboxIndex=0;
+
+    function getGalleryImageUrl(el){
+      return el.style.backgroundImage.replace(/url\(['"]?/,'').replace(/['"]?\)/,'').replace('w=400','w=1200');
+    }
+    function openLightbox(i){
+      lightboxIndex=i; lightboxImg.src=getGalleryImageUrl(galleryItems[i]);
+      lightboxCounter.textContent=(i+1)+' / '+galleryItems.length;
+      lightbox.hidden=false; requestAnimationFrame(function(){lightbox.classList.add('open');});
+      document.body.style.overflow='hidden';
+    }
+    function closeLightbox(){
+      lightbox.classList.remove('open');
+      setTimeout(function(){lightbox.hidden=true;lightboxImg.src='';document.body.style.overflow='';},300);
+    }
+    function lightboxNav(d){
+      lightboxIndex=(lightboxIndex+d+galleryItems.length)%galleryItems.length;
+      lightboxImg.src=getGalleryImageUrl(galleryItems[lightboxIndex]);
+      lightboxCounter.textContent=(lightboxIndex+1)+' / '+galleryItems.length;
+    }
+    $('#lightboxClose').addEventListener('click',closeLightbox);
+    $('#lightboxPrev').addEventListener('click',function(){lightboxNav(-1);});
+    $('#lightboxNext').addEventListener('click',function(){lightboxNav(1);});
+    lightbox.addEventListener('click',function(e){if(e.target===lightbox)closeLightbox();});
+    document.addEventListener('keydown',function(e){
+      if(lightbox.hidden)return;
+      if(e.key==='Escape')closeLightbox();
+      if(e.key==='ArrowLeft')lightboxNav(-1);
+      if(e.key==='ArrowRight')lightboxNav(1);
+    });
+
+    function renderGallery(){
+      if(!galleryGrid) return;
+      galleryGrid.innerHTML='';
+      galleryImages.forEach(function(img){
+        var item=document.createElement('div');
+        item.className='gallery-item';
+        item.style.backgroundImage="url('"+img.imageUrl+"')";
+        galleryGrid.appendChild(item);
+      });
+      galleryItems=$$('.gallery-item',galleryGrid);
+      galleryItems.forEach(function(item,i){
+        item.setAttribute('role','button');item.setAttribute('tabindex','0');
+        item.addEventListener('click',function(){openLightbox(i);});
+        item.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openLightbox(i);}});
+      });
+    }
+
+    /* --- Video Embed --- */
+    function getVideoEmbed(url){
+      if(!url) return {type:'direct',embedUrl:url};
+      var yt=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{11})/);
+      if(yt) return {type:'youtube',videoId:yt[1],embedUrl:'https://www.youtube.com/embed/'+yt[1]+'?autoplay=1&loop=1&playlist='+yt[1]};
+      var ig=url.match(/instagram\.com\/(?:reel|p)\/([\w-]+)/);
+      if(ig) return {type:'instagram',videoId:ig[1],embedUrl:'https://www.instagram.com/reel/'+ig[1]+'/embed/'};
+      if(/facebook\.com\/.*video|fb\.watch\//.test(url)) return {type:'facebook',embedUrl:'https://www.facebook.com/plugins/video.php?href='+encodeURIComponent(url)+'&show_text=false&autoplay=true'};
+      return {type:'direct',embedUrl:url};
+    }
+
+    /* --- Video autoplay observer --- */
+    var videoObserver=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var card=entry.target;
+        if(card.dataset.videoType&&card.dataset.videoType!=='direct') return;
+        var vid=card.querySelector('video'), src=card.dataset.video;
+        if(!vid||!src) return;
+        if(entry.isIntersecting){if(!vid.src||vid.src==='')vid.src=src;vid.play().catch(function(){});}
+        else vid.pause();
+      });
+    },{threshold:0.3});
+
+    /* --- Reels Viewer --- */
+    var reelsViewer=$('#reelsViewer'), reelsTrack=$('#reelsTrack'), reelsClose=$('#reelsClose'), reelsCounter=$('#reelsCounter');
+    var reelsMuted=false, reelsObserver=null;
+
+    function updateMuteBtn(){
+      var btn=$('#reelsMuteBtn');if(!btn) return;
+      btn.classList.toggle('muted',reelsMuted);
+      btn.setAttribute('aria-label',reelsMuted?'Unmute':'Mute');
+    }
+    function applyMuteState(){
+      reelsTrack.querySelectorAll('video').forEach(function(v){v.muted=reelsMuted;});
+      updateMuteBtn();
+    }
+    var muteBtn=$('#reelsMuteBtn');
+    if(muteBtn) muteBtn.addEventListener('click',function(){reelsMuted=!reelsMuted;applyMuteState();});
+
+    function openReels(startIndex){
+      if(!reelsViewer||videos.length===0) return;
+      reelsTrack.innerHTML='';
+      videos.forEach(function(v,i){
+        var slide=document.createElement('div');
+        slide.className='reel-slide'+(i!==startIndex?' paused':'');
+        slide.dataset.index=i;
+        var embed=getVideoEmbed(v.videoUrl);
+        slide.dataset.embedType=embed.type;
+        if(embed.type==='direct'){
+          var vid=document.createElement('video');
+          vid.playsInline=true;vid.loop=true;vid.preload='none';vid.muted=reelsMuted;
+          vid.src=encodeURI(v.videoUrl);
+          vid.addEventListener('click',function(){if(vid.paused){vid.play().catch(function(){});slide.classList.remove('paused');}else{vid.pause();slide.classList.add('paused');}});
+          slide.appendChild(vid);
+        } else {
+          var iframe=document.createElement('iframe');
+          iframe.src=embed.embedUrl;iframe.setAttribute('frameborder','0');
+          iframe.setAttribute('allowfullscreen','true');
+          iframe.setAttribute('allow','autoplay; encrypted-media; gyroscope; picture-in-picture');
+          iframe.loading='lazy';slide.appendChild(iframe);slide.classList.remove('paused');
+        }
+        var playBtn=document.createElement('div');playBtn.className='reel-play-btn';
+        playBtn.innerHTML='<svg viewBox="0 0 48 48" width="48" height="48"><path d="M19 15v18l15-9z" fill="white"/></svg>';
+        var info=document.createElement('div');info.className='reel-info';
+        info.innerHTML='<h3>'+v.title+'</h3><p>'+v.description+'</p>';
+        slide.appendChild(playBtn);slide.appendChild(info);reelsTrack.appendChild(slide);
+      });
+      reelsViewer.hidden=false;
+      requestAnimationFrame(function(){reelsViewer.classList.add('open');});
+      document.body.style.overflow='hidden';updateMuteBtn();
+      var target=reelsTrack.children[startIndex];
+      if(target) target.scrollIntoView({behavior:'instant'});
+      updateReelsCounter(startIndex);
+      var initVid=target&&target.querySelector('video');
+      if(initVid){
+        initVid.muted=reelsMuted;
+        initVid.play().then(function(){target.classList.remove('paused');}).catch(function(){
+          initVid.muted=true;reelsMuted=true;updateMuteBtn();initVid.play().catch(function(){});target.classList.remove('paused');
+        });
+      }
+      reelsObserver=new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          var s=entry.target,vid=s.querySelector('video'),iframe=s.querySelector('iframe');
+          if(entry.isIntersecting){
+            updateReelsCounter(parseInt(s.dataset.index,10));
+            if(vid){vid.muted=reelsMuted;vid.play().catch(function(){vid.muted=true;vid.play().catch(function(){});});s.classList.remove('paused');}
+            if(iframe&&!iframe.src&&iframe.dataset.src)iframe.src=iframe.dataset.src;
+          } else {
+            if(vid){vid.pause();s.classList.add('paused');}
+            if(iframe&&iframe.src){iframe.dataset.src=iframe.src;iframe.src='';}
+          }
+        });
+      },{root:reelsTrack,threshold:0.7});
+      reelsTrack.querySelectorAll('.reel-slide').forEach(function(s){reelsObserver.observe(s);});
+    }
+    function updateReelsCounter(i){if(reelsCounter)reelsCounter.textContent=(i+1)+' / '+videos.length;}
+    function closeReels(){
+      if(!reelsViewer) return;
+      reelsTrack.querySelectorAll('video').forEach(function(v){v.pause();v.src='';});
+      reelsTrack.querySelectorAll('iframe').forEach(function(f){f.src='';});
+      if(reelsObserver){reelsObserver.disconnect();reelsObserver=null;}
+      reelsViewer.classList.remove('open');
+      setTimeout(function(){reelsViewer.hidden=true;reelsTrack.innerHTML='';document.body.style.overflow='';},300);
+    }
+    if(reelsClose) reelsClose.addEventListener('click',closeReels);
+    document.addEventListener('keydown',function(e){if(reelsViewer&&!reelsViewer.hidden&&e.key==='Escape')closeReels();});
+
+    /* --- Render Videos --- */
+    function renderVideos(){
+      if(!videoGrid) return;
+      videoGrid.innerHTML='';
+      var filtered=activeVideoFilter==='all'?videos:videos.filter(function(v){return(v.category||'').toLowerCase()===activeVideoFilter;});
+      filtered.forEach(function(v){
+        var origIndex=videos.indexOf(v);
+        var embed=getVideoEmbed(v.videoUrl);
+        var tagClass=v.tag==='Client Story'?'video-card-tag video-card-tag--client':'video-card-tag';
+        var card=document.createElement('div');
+        card.className='video-card';card.setAttribute('role','button');card.setAttribute('tabindex','0');
+        card.dataset.video=encodeURI(v.videoUrl);card.dataset.videoType=embed.type;
+        var mediaHTML='';
+        if(embed.type==='youtube') mediaHTML='<iframe src="https://www.youtube.com/embed/'+embed.videoId+'?autoplay=1&mute=1&loop=1&playlist='+embed.videoId+'&controls=0&showinfo=0&modestbranding=1" frameborder="0" allow="autoplay; encrypted-media" loading="lazy"></iframe>';
+        else if(embed.type==='instagram') mediaHTML='<iframe src="'+embed.embedUrl+'" frameborder="0" allow="autoplay; encrypted-media" loading="lazy"></iframe>';
+        else if(embed.type==='facebook') mediaHTML='<iframe src="'+embed.embedUrl+'&mute=1" frameborder="0" allow="autoplay; encrypted-media" loading="lazy"></iframe>';
+        else mediaHTML='<video muted loop playsinline preload="metadata" src="'+encodeURI(v.videoUrl)+'"></video>';
+        card.innerHTML=mediaHTML+'<div class="video-card-overlay"><span class="'+tagClass+'">'+v.tag+'</span><h3 class="video-card-title">'+v.title+'</h3><p class="video-card-desc">'+v.description+'</p></div>';
+        card.addEventListener('click',function(){openReels(origIndex);});
+        card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openReels(origIndex);}});
+        videoGrid.appendChild(card);
+      });
+      if(filtered.length===0) videoGrid.innerHTML='<p style="text-align:center;color:var(--clr-gray-500);padding:2rem;">No videos in this category yet.</p>';
+      $$('.video-card',videoGrid).forEach(function(c){videoObserver.observe(c);});
+    }
+
+    /* --- Tab switching --- */
+    $$('.gallery-tab').forEach(function(tab){
+      tab.addEventListener('click',function(){
+        $$('.gallery-tab').forEach(function(t){t.classList.remove('active');});
+        tab.classList.add('active');
+        var tabName=tab.dataset.tab;
+        document.getElementById('tabPhotos').classList.toggle('active',tabName==='photos');
+        document.getElementById('tabVideos').classList.toggle('active',tabName==='videos');
+      });
+    });
+
+    /* --- Dynamic video filter tabs --- */
+    function buildVideoFilterTabs(){
+      var tabsContainer=$('#videoFilterTabs');
+      if(!tabsContainer) return;
+      var categories=['all'];
+      videos.forEach(function(v){
+        var cat=(v.category||'').toLowerCase();
+        if(cat&&categories.indexOf(cat)===-1) categories.push(cat);
+      });
+      tabsContainer.innerHTML='';
+      categories.forEach(function(cat){
+        var btn=document.createElement('button');
+        btn.className='filter-tab'+(cat==='all'?' active':'');
+        btn.dataset.vfilter=cat;
+        btn.setAttribute('role','tab');
+        btn.setAttribute('aria-selected',cat==='all'?'true':'false');
+        btn.textContent=cat==='all'?'All Videos':cat.charAt(0).toUpperCase()+cat.slice(1).replace(/-/g,' ');
+        btn.addEventListener('click',function(){
+          $$('[data-vfilter]',tabsContainer).forEach(function(t){t.classList.remove('active');t.setAttribute('aria-selected','false');});
+          btn.classList.add('active');btn.setAttribute('aria-selected','true');
+          activeVideoFilter=btn.dataset.vfilter;
+          renderVideos();
+        });
+        tabsContainer.appendChild(btn);
+      });
+    }
+
+    /* --- Branding --- */
+    function applySiteBranding(s){
+      if(!s) return;
+      if(s.branding){
+        var b=s.branding;
+        if(b.logoUrl) $$('.logo-img').forEach(function(img){img.onerror=function(){this.onerror=null;this.src='images/Syed-production.png';};img.src=b.logoUrl;if(b.logoSize){img.style.width=b.logoSize+'px';img.style.height=b.logoSize+'px';}if(b.logoBorderRadius!=null)img.style.borderRadius=b.logoBorderRadius+'%';});
+        if(b.companyName){var p=b.companyName.split(' ');if(syed&&prod&&p.length>=2){syed.textContent=p[0];prod.textContent=p.slice(1).join(' ');}document.title=b.companyName+' — Gallery';}
+        if(b.faviconUrl){var fav=$('link[rel="icon"]');if(fav)fav.href=b.faviconUrl;}
+        if(b.companyShortName){var fs=$('.footer-brand .nav-logo span');if(fs)fs.textContent=b.companyShortName;}
+      }
+      if(s.footer){var fd=$('.footer-brand > p');if(fd&&s.footer.description)fd.textContent=s.footer.description;var fc=$('.footer-bottom p');if(fc&&s.footer.copyrightText)fc.innerHTML=s.footer.copyrightText;}
+      if(s.socialLinks){var sl=s.socialLinks;var lk=$$('.social-link');if(sl.facebook&&lk[0])lk[0].href=sl.facebook;if(sl.instagram&&lk[1])lk[1].href=sl.instagram;if(sl.whatsapp&&lk[2])lk[2].href=sl.whatsapp;if(sl.youtube&&lk[3])lk[3].href=sl.youtube;}
+    }
+
+    function updateNavAuth(){
+      var c=document.getElementById('navAuthLinks');if(!c)return;
+      var token=localStorage.getItem('user_token'),name=localStorage.getItem('user_name');
+      if(token&&name){var av=localStorage.getItem('user_avatar')||'';c.innerHTML='<a href="profile.html" class="nav-link" style="display:inline-flex;align-items:center;padding:0.25rem;" title="'+name+'">'+(av?'<img src="'+av+'" alt="'+name+'" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.4);">':'<svg viewBox="0 0 24 24" width="24" height="24" style="fill:currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>')+'</a>';}
+      else{c.innerHTML='<a href="login.html" class="nav-link" style="display:inline-flex;align-items:center;padding:0.25rem;" title="Login"><svg viewBox="0 0 24 24" width="24" height="24" style="fill:currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></a>';}
+    }
+
+    async function init(){
+      try{
+        var data=await fetch('/api/public-data').then(function(r){return r.json();});
+        galleryImages=data.gallery||[];
+        videos=data.videos||[];
+        if(data.settings) applySiteBranding(data.settings);
+      }catch(e){console.warn('API not available:',e.message);}
+      renderGallery();
+      buildVideoFilterTabs();
+      renderVideos();
+      updateNavAuth();
+    }
+    init();
+  })();
+  </script>
+</body>
+</html>

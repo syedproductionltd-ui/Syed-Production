@@ -13,6 +13,38 @@
 </head>
 <body>
 
+  <!-- ============ LOADING SCREEN ============ -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-content">
+      <img src="images/Syed-production.png" alt="Syed Productions" class="loading-logo" style="opacity:0;transition:opacity 0.3s" onerror="this.onerror=null;this.src='images/Syed-production.png';">
+      <h2 class="loading-title">Syed Productions</h2>
+      <div class="loading-spinner"><div class="spinner-ring"></div></div>
+      <p class="loading-text">Loading services...</p>
+    </div>
+  </div>
+  <script>
+    window.__publicDataPromise = fetch('/api/public-data').then(function(r){return r.json()}).then(function(d){
+      if(d.settings&&d.settings.branding){
+        var b=d.settings.branding, logo=document.querySelector('.loading-logo');
+        if(logo){
+          if(b.logoBorderRadius!=null)logo.style.borderRadius=b.logoBorderRadius+'%';
+          var src=b.logoUrl||'images/Syed-production.png';
+          logo.onerror=function(){logo.onerror=null;logo.src='images/Syed-production.png';logo.style.opacity='1';};
+          logo.onload=function(){logo.style.opacity='1';};
+          if(src!==logo.src)logo.src=src; else logo.style.opacity='1';
+        }
+        if(b.companyName){var t=document.querySelector('.loading-title');if(t)t.textContent=b.companyName;}
+      }
+      if(d.settings&&d.settings.loadingScreen){
+        var ls=d.settings.loadingScreen;
+        var t=document.querySelector('.loading-title'),p=document.querySelector('.loading-text');
+        if(t&&ls.title)t.textContent=ls.title;
+        if(p&&ls.text)p.textContent=ls.text;
+      }
+      return d;
+    }).catch(function(){return null;});
+  </script>
+
   <!-- ============ NAVIGATION ============ -->
   <nav class="navbar scrolled" id="navbar" aria-label="Main navigation">
     <div class="nav-container">
@@ -52,11 +84,7 @@
   <!-- ============ BOOKING WIZARD ============ -->
   <main class="section">
     <div class="container">
-      <div class="page-loading" id="pageLoading">
-        <div class="page-spinner"></div>
-        <span class="page-loading-text">Loading services...</span>
-      </div>
-      <div class="booking-wizard" style="display:none;" id="bookingWizardWrap">
+      <div class="booking-wizard">
         <div class="wizard-steps" role="tablist" aria-label="Booking steps">
           <div class="wizard-step active" data-step="1" role="tab" aria-selected="true"><span class="step-number">1</span><span class="step-label">Service</span></div>
           <div class="wizard-connector active"></div>
@@ -251,14 +279,16 @@
 
     async function init(){
       try{
-        var data=await fetch('/api/public-data').then(function(r){return r.json();});
-        destinations=data.destinations||[];
-        if(data.settings) applySiteBranding(data.settings);
+        var data=window.__publicDataPromise?await window.__publicDataPromise:await fetch('/api/public-data').then(function(r){return r.json();});
+        if(data){
+          destinations=data.destinations||[];
+          if(data.settings) applySiteBranding(data.settings);
+        }
       }catch(e){console.warn('API not available:',e.message);}
-      var loader=$('#pageLoading'); if(loader) loader.style.display='none';
-      var wiz=$('#bookingWizardWrap'); if(wiz) wiz.style.display='';
       renderBookingDestinations();
       updateNavAuth();
+      var loader=document.getElementById('loadingScreen');
+      if(loader){loader.classList.add('hidden');setTimeout(function(){loader.remove();},600);}
     }
     init();
   })();

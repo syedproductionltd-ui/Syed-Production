@@ -494,10 +494,13 @@ input, select, textarea {
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh; /* iOS Safari - small viewport height, excludes address bar */
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  width: 100%;
+  -webkit-background-size: cover;
 }
 
 .hero-carousel {
@@ -509,10 +512,19 @@ input, select, textarea {
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
   opacity: 0;
   transition: opacity 1.5s ease;
+  will-change: opacity;
+}
+
+/* Only enable parallax on devices that support it properly (not iOS) */
+@media (min-width: 1025px) and (hover: hover) and (pointer: fine) {
+  .hero-slide {
+    background-attachment: fixed;
+  }
 }
 
 .hero-slide.active {
@@ -3340,8 +3352,25 @@ input, select, textarea {
 
 /* <= 480px */
 @media (max-width: 480px) {
+  .hero {
+    min-height: 100svh;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  .hero-slide {
+    background-attachment: scroll !important;
+    background-position: center center;
+    background-size: cover;
+  }
+
+  .hero-content {
+    padding: var(--space-6) var(--space-4);
+    max-width: 100%;
+  }
+
   .hero-title {
     font-size: var(--fs-2xl);
+    line-height: 1.15;
   }
 
   .hero-description {

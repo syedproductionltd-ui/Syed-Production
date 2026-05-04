@@ -27,8 +27,8 @@ function renderTable() {
     <tr>
       <td><img class="thumb" src="${escapeHtml(r.avatar || '')}" alt="${escapeHtml(r.name)}" style="border-radius:50%;width:36px;height:36px;" onerror="this.style.display='none'"></td>
       <td><strong>${escapeHtml(r.name)}</strong></td>
-      <td>${escapeHtml(r.location)}</td>
-      <td>${escapeHtml(r.destination)}</td>
+      <td>${escapeHtml(r.city)}</td>
+      <td>${escapeHtml(r.service)}</td>
       <td>${r.rating}/5</td>
       <td>
         ${statusBadge(r.status)}
@@ -66,8 +66,8 @@ function editReview(id) {
   document.getElementById('modalTitle').textContent = 'Edit Review';
   document.getElementById('editId').value = r._id;
   document.getElementById('rName').value = r.name;
-  document.getElementById('rLocation').value = r.location;
-  document.getElementById('rDest').value = r.destination;
+  document.getElementById('rLocation').value = r.city;
+  document.getElementById('rDest').value = r.service;
   document.getElementById('rRating').value = r.rating;
   document.getElementById('rAvatar').value = r.avatar || '';
   document.getElementById('rText').value = r.text;
@@ -80,8 +80,8 @@ async function saveReview() {
   const editId = document.getElementById('editId').value;
   const body = {
     name: document.getElementById('rName').value.trim(),
-    location: document.getElementById('rLocation').value.trim(),
-    destination: document.getElementById('rDest').value.trim(),
+    city: document.getElementById('rLocation').value.trim(),
+    service: document.getElementById('rDest').value.trim(),
     rating: parseInt(document.getElementById('rRating').value),
     avatar: document.getElementById('rAvatar').value.trim(),
     text: document.getElementById('rText').value.trim(),

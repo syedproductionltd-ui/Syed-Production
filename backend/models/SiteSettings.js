@@ -5,7 +5,7 @@ const siteSettingsSchema = new mongoose.Schema({
 
   branding: {
     logoUrl: { type: String, default: 'images/Syed-production.png' },
-    logoSize: { type: Number, default: 44 },
+    logoSize: { type: Number, default: 100 },
     logoBorderRadius: { type: Number, default: 50 },
     companyName: { type: String, default: 'Syed Productions' },
     companyShortName: { type: String, default: 'Syed Productions' },
@@ -36,22 +36,17 @@ const siteSettingsSchema = new mongoose.Schema({
       title: { type: String, default: 'The Production Team' },
       description: { type: String, default: 'Creative professionals, technical experts, and passionate storytellers — the crew behind every Syed Productions project.' }
     },
-    topDestinations: {
+    featuredServices: {
       tag: { type: String, default: 'Spotlight' },
       title: { type: String, default: 'Featured Services' },
       description: { type: String, default: 'Our most popular production services — handpicked to showcase what Syed Productions does best.' }
     },
-    destinations: {
+    services: {
       tag: { type: String, default: 'What We Do' },
       title: { type: String, default: 'Our Services' },
       description: { type: String, default: 'From wedding films to corporate videos, event coverage to branding — explore the full range of Syed Productions services.' }
     },
-    map: {
-      tag: { type: String, default: 'Locations' },
-      title: { type: String, default: 'Our Coverage Area' },
-      description: { type: String, default: 'We cover events and productions across Pakistan. Click any service to learn more and book.' }
-    },
-    tripPlanner: {
+    projectPlanner: {
       tag: { type: String, default: 'AI-Powered' },
       title: { type: String, default: 'Project Planner' },
       description: { type: String, default: 'Tell us about your project and our AI will help estimate scope, timeline, and recommend the right production package.' }
@@ -117,20 +112,13 @@ const siteSettingsSchema = new mongoose.Schema({
   },
 
   bookingConfig: {
-    serviceFee: { type: Number, default: 2000 },
-    porterFeePerNight: { type: Number, default: 3000 },
-    childDiscount: { type: Number, default: 0.5 }
+    serviceFee: { type: Number, default: 2000 }
   },
 
-  aiTripPlanner: {
+  aiProjectPlanner: {
     welcomeMessage: { type: String, default: "Welcome! I'm your AI project planning assistant. Set your preferences on the left and click <strong>Plan My Project</strong> to get a personalized production estimate and recommendation!" },
     aiResponses: { type: mongoose.Schema.Types.Mixed, default: {} },
     chatResponses: { type: mongoose.Schema.Types.Mixed, default: {} }
-  },
-
-  loadingScreen: {
-    title: { type: String, default: 'Syed Productions' },
-    text: { type: String, default: 'Setting the stage...' }
   }
 
 }, { timestamps: true });

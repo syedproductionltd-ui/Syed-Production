@@ -23,7 +23,7 @@ function renderTable() {
       <tr>
         <td><img class="thumb" src="${escapeHtml(d.image)}" alt="${escapeHtml(d.name)}"></td>
         <td><strong>${escapeHtml(d.name)}</strong></td>
-        <td>${escapeHtml(d.destination)}</td>
+        <td>${escapeHtml(d.service)}</td>
         <td>${formatPKR(d.oldPrice)}</td>
         <td>${formatPKR(d.newPrice)}</td>
         <td>${escapeHtml(d.badge)}</td>
@@ -50,7 +50,7 @@ function editDeal(id) {
   document.getElementById('modalTitle').textContent = 'Edit Deal';
   document.getElementById('editId').value = d._id;
   document.getElementById('dlName').value = d.name;
-  document.getElementById('dlDest').value = d.destination;
+  document.getElementById('dlDest').value = d.service;
   document.getElementById('dlOldPrice').value = d.oldPrice;
   document.getElementById('dlNewPrice').value = d.newPrice;
   document.getElementById('dlBadge').value = d.badge;
@@ -67,7 +67,7 @@ async function saveDeal() {
   const editId = document.getElementById('editId').value;
   const body = {
     name: document.getElementById('dlName').value.trim(),
-    destination: document.getElementById('dlDest').value.trim(),
+    service: document.getElementById('dlDest').value.trim(),
     oldPrice: parseInt(document.getElementById('dlOldPrice').value),
     newPrice: parseInt(document.getElementById('dlNewPrice').value),
     badge: document.getElementById('dlBadge').value.trim(),

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Destinations — Admin Panel</title>
+  <title>Services — Admin Panel</title>
   <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
 
   <nav class="admin-nav">
     <a href="index.html">Dashboard</a>
-    <a href="destinations.html">Destinations</a>
+    <a href="destinations.html">Services</a>
     <a href="bookings.html">Bookings</a>
     <a href="reviews.html">Reviews</a>
     <a href="deals.html">Deals</a>
@@ -31,8 +31,8 @@
   <div class="admin-content">
     <div class="admin-card">
       <div class="admin-card-header">
-        <h2>Destinations</h2>
-        <button class="btn btn-primary" onclick="showAddModal()">+ Add Destination</button>
+        <h2>Services</h2>
+        <button class="btn btn-primary" onclick="showAddModal()">+ Add Service</button>
       </div>
       <div class="admin-card-body admin-table-wrap">
         <table class="admin-table">
@@ -41,7 +41,7 @@
               <th>Image</th>
               <th>ID</th>
               <th>Name</th>
-              <th>Region</th>
+              <th>Tier</th>
               <th>Category</th>
               <th>Price</th>
               <th>Rating</th>
@@ -61,7 +61,7 @@
   <div class="admin-modal-overlay" id="destModal">
     <div class="admin-modal">
       <div class="admin-modal-header">
-        <h3 id="modalTitle">Add Destination</h3>
+        <h3 id="modalTitle">Add Service</h3>
         <button class="admin-modal-close" onclick="closeModal('destModal')">&times;</button>
       </div>
       <div class="admin-modal-body">
@@ -79,17 +79,17 @@
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="dCountry">Region</label>
+              <label for="dCountry">Tier</label>
               <input type="text" id="dCountry" class="form-control" required>
             </div>
             <div class="form-group">
               <label for="dCategory">Category</label>
               <select id="dCategory" class="form-control" required>
-                <option value="valley">Valley</option>
-                <option value="trek">Trek</option>
-                <option value="lake">Lake</option>
-                <option value="peak">Peak</option>
-                <option value="heritage">Heritage</option>
+                <option value="film">Film</option>
+                <option value="photography">Photography</option>
+                <option value="events">Events</option>
+                <option value="editing">Editing</option>
+                <option value="branding">Branding</option>
               </select>
             </div>
           </div>
@@ -126,17 +126,7 @@
           </div>
           <div class="form-group">
             <label for="dHighlights">Highlights (comma separated)</label>
-            <input type="text" id="dHighlights" class="form-control" placeholder="e.g. Camping, Photography, Trekking">
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="dMapX">Map X</label>
-              <input type="number" id="dMapX" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="dMapY">Map Y</label>
-              <input type="number" id="dMapY" class="form-control">
-            </div>
+            <input type="text" id="dHighlights" class="form-control" placeholder="e.g. 4K Cinematic, Drone Shots, Color Grading">
           </div>
         </form>
       </div>

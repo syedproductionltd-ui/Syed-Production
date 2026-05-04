@@ -23,7 +23,12 @@
       "Bash(vercel:*)",
       "Bash(grep:*)",
       "Bash(git rm:*)",
-      "Bash(if not exist \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\backend\\\\utils\" mkdir \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\backend\\\\utils\")"
+      "Bash(if not exist \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\backend\\\\utils\" mkdir \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\backend\\\\utils\")",
+      "Bash(head:*)",
+      "Bash(nslookup:*)",
+      "Bash(ping:*)",
+      "Bash(done)",
+      "Bash(start:*)"
     ]
   }
 }

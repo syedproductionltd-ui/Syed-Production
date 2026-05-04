@@ -21,8 +21,8 @@ function renderTable() {
     <tr>
       <td><strong>${escapeHtml(b.reference)}</strong></td>
       <td>${escapeHtml(b.destination)}</td>
-      <td>${b.checkIn || 'Flexible'} &rarr; ${b.checkOut || 'Flexible'}</td>
-      <td>${b.adults}A ${b.children ? '+ ' + b.children + 'C' : ''}</td>
+      <td>${b.startDate || 'Flexible'} &rarr; ${b.endDate || 'Flexible'}</td>
+      <td>${escapeHtml(b.projectDetails || '—')}</td>
       <td>${b.totalPrice ? formatPKR(b.totalPrice) : '—'}</td>
       <td><span class="badge badge-${b.status}">${b.status}</span></td>
       <td>${formatDate(b.createdAt)}</td>

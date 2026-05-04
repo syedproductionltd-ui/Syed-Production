@@ -26,8 +26,6 @@ app.use(express.static(path.join(__dirname)));
 // Serve admin panel
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 
-// Serve developer panel
-app.use('/developer', express.static(path.join(__dirname, 'developer')));
 
 // Combined public data endpoint — single request instead of 6 + site settings
 app.get('/api/public-data', async (req, res) => {
@@ -63,10 +61,8 @@ app.use('/api/team', require('./backend/routes/team'));
 // Chat AI route
 app.use('/api/chat', require('./backend/routes/chat'));
 
-// Developer routes
-app.use('/api/dev', require('./backend/routes/devAuth'));
-app.use('/api/dev/settings', require('./backend/routes/siteSettings'));
-app.use('/api/dev/admins', require('./backend/routes/devAdmin'));
+// Site settings routes
+app.use('/api/site-settings', require('./backend/routes/siteSettings'));
 
 const PORT = process.env.PORT || 3000;
 

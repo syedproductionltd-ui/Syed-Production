@@ -810,7 +810,7 @@
           <div class="item-card">
             <div class="item-main">
               <h4>${b.destination}</h4>
-              <p>${b.reference} &middot; ${b.checkIn ? new Date(b.checkIn).toLocaleDateString() : 'N/A'} - ${b.checkOut ? new Date(b.checkOut).toLocaleDateString() : 'N/A'}</p>
+              <p>${b.reference} &middot; ${b.startDate ? new Date(b.startDate).toLocaleDateString() : 'N/A'} - ${b.endDate ? new Date(b.endDate).toLocaleDateString() : 'N/A'}</p>
               ${b.totalPrice ? '<p>Total: $' + b.totalPrice + '</p>' : ''}
             </div>
             <span class="item-badge badge-${b.status}">${b.status}</span>

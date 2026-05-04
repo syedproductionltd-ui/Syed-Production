@@ -14,7 +14,7 @@ async function loadDestinations() {
 function renderTable() {
   const tbody = document.getElementById('destBody');
   if (allDestinations.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#94a3b8;">No destinations</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#94a3b8;">No services</td></tr>';
     return;
   }
   tbody.innerHTML = allDestinations.map(d => `
@@ -22,7 +22,7 @@ function renderTable() {
       <td><img class="thumb" src="${escapeHtml(d.image)}" alt="${escapeHtml(d.name)}"></td>
       <td>${d.id}</td>
       <td><strong>${escapeHtml(d.name)}</strong></td>
-      <td>${escapeHtml(d.country)}</td>
+      <td>${escapeHtml(d.tier)}</td>
       <td>${d.category}</td>
       <td>${formatPKR(d.price)}</td>
       <td>${d.rating}</td>
@@ -36,7 +36,7 @@ function renderTable() {
 }
 
 function showAddModal() {
-  document.getElementById('modalTitle').textContent = 'Add Destination';
+  document.getElementById('modalTitle').textContent = 'Add Service';
   document.getElementById('destForm').reset();
   document.getElementById('editId').value = '';
   openModal('destModal');
@@ -45,11 +45,11 @@ function showAddModal() {
 function editDest(id) {
   const d = allDestinations.find(x => x.id === id);
   if (!d) return;
-  document.getElementById('modalTitle').textContent = 'Edit Destination';
+  document.getElementById('modalTitle').textContent = 'Edit Service';
   document.getElementById('editId').value = d.id;
   document.getElementById('dId').value = d.id;
   document.getElementById('dName').value = d.name;
-  document.getElementById('dCountry').value = d.country;
+  document.getElementById('dCountry').value = d.tier;
   document.getElementById('dCategory').value = d.category;
   document.getElementById('dPrice').value = d.price;
   document.getElementById('dRating').value = d.rating;
@@ -58,8 +58,6 @@ function editDest(id) {
   document.getElementById('dImage').value = d.image;
   document.getElementById('dDesc').value = d.description;
   document.getElementById('dHighlights').value = (d.highlights || []).join(', ');
-  document.getElementById('dMapX').value = d.mapX || '';
-  document.getElementById('dMapY').value = d.mapY || '';
   openModal('destModal');
 }
 
@@ -68,7 +66,7 @@ async function saveDest() {
   const body = {
     id: parseInt(document.getElementById('dId').value),
     name: document.getElementById('dName').value.trim(),
-    country: document.getElementById('dCountry').value.trim(),
+    tier: document.getElementById('dCountry').value.trim(),
     category: document.getElementById('dCategory').value,
     price: parseInt(document.getElementById('dPrice').value),
     rating: parseFloat(document.getElementById('dRating').value),
@@ -76,9 +74,7 @@ async function saveDest() {
     featured: document.getElementById('dFeatured').value === 'true',
     image: document.getElementById('dImage').value.trim(),
     description: document.getElementById('dDesc').value.trim(),
-    highlights: document.getElementById('dHighlights').value.split(',').map(s => s.trim()).filter(Boolean),
-    mapX: parseInt(document.getElementById('dMapX').value) || 0,
-    mapY: parseInt(document.getElementById('dMapY').value) || 0
+    highlights: document.getElementById('dHighlights').value.split(',').map(s => s.trim()).filter(Boolean)
   };
 
   try {
@@ -95,7 +91,7 @@ async function saveDest() {
 }
 
 async function deleteDest(id) {
-  if (!confirm('Delete this destination?')) return;
+  if (!confirm('Delete this service?')) return;
   try {
     await apiCall('/destinations/' + id, { method: 'DELETE' });
     loadDestinations();

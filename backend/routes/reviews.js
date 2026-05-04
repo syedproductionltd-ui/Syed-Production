@@ -28,17 +28,17 @@ router.get('/all', auth, async (req, res) => {
 // POST /api/reviews/user (user-submitted, pending approval)
 router.post('/user', userAuth, async (req, res) => {
   try {
-    const { destination, rating, text } = req.body;
+    const { service, rating, text } = req.body;
     const User = require('../models/User');
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const review = await Review.create({
       name: user.name,
-      location: user.location || 'Pakistan',
+      city: user.location || 'Pakistan',
       avatar: user.avatar || '',
       rating,
-      destination,
+      service,
       text,
       verified: false,
       userId: user._id,

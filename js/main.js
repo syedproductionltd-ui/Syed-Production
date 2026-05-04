@@ -14,7 +14,7 @@
   let videos = [];
   let galleryImages = [];
   let teamMembers = [];
-  let bookingConfig = { serviceFee: 2000, porterFeePerNight: 3000, childDiscount: 0.5 };
+  let bookingConfig = { serviceFee: 2000 };
 
   /* AI chat/planner responses — defaults overridden by site settings */
   let aiResponses = {
@@ -229,55 +229,55 @@
 
     filtered.forEach(dest => {
       const card = createEl('div', {
-        className: 'dest-card',
+        className: 'service-card',
         role: 'listitem',
         'data-id': String(dest.id)
       });
       card.innerHTML = `
-        <div class="dest-card-img">
+        <div class="service-card-img">
           <img src="${dest.image}" alt="${dest.name}" loading="lazy">
-          <span class="dest-card-badge">${dest.category}</span>
-          ${dest.featured ? '<span class="dest-card-top-badge">Top Pick</span>' : ''}
-          <button class="dest-card-favorite" aria-label="Add ${dest.name} to favorites">
+          <span class="service-card-badge">${dest.category}</span>
+          ${dest.featured ? '<span class="service-card-top-badge">Top Pick</span>' : ''}
+          <button class="service-card-favorite" aria-label="Add ${dest.name} to favorites">
             <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor"/></svg>
           </button>
         </div>
-        <div class="dest-card-body">
-          <span class="dest-card-location">
+        <div class="service-card-body">
+          <span class="service-card-tier">
             <svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="currentColor"/></svg>
-            ${dest.country}
+            ${dest.tier}
           </span>
-          <h3 class="dest-card-name">${dest.name}</h3>
-          <div class="dest-card-rating">
+          <h3 class="service-card-name">${dest.name}</h3>
+          <div class="service-card-rating">
             <span class="stars">${generateStars(dest.rating)}</span>
             <span class="rating-text">${dest.rating} (${dest.reviews.toLocaleString()})</span>
           </div>
-          <div class="dest-card-footer">
-            <div class="dest-card-price">
+          <div class="service-card-footer">
+            <div class="service-card-price">
               <span class="price-amount">${formatPKR(dest.price)}</span>
-              <span class="price-per"> /person</span>
+              <span class="price-per"> /project</span>
             </div>
-            <button class="dest-card-btn" data-id="${dest.id}">Explore</button>
+            <button class="service-card-btn" data-id="${dest.id}">Explore</button>
           </div>
         </div>
       `;
       destGrid.appendChild(card);
     });
 
-    $$('.dest-card-btn', destGrid).forEach(btn => {
+    $$('.service-card-btn', destGrid).forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         openModal(parseInt(btn.dataset.id));
       });
     });
 
-    $$('.dest-card', destGrid).forEach(card => {
+    $$('.service-card', destGrid).forEach(card => {
       card.addEventListener('click', () => {
         openModal(parseInt(card.dataset.id));
       });
     });
 
-    $$('.dest-card-favorite', destGrid).forEach(btn => {
+    $$('.service-card-favorite', destGrid).forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         btn.classList.toggle('active');
@@ -291,21 +291,21 @@
     topGrid.innerHTML = '';
     const featured = destinations.filter(d => d.featured);
     featured.forEach(dest => {
-      const card = createEl('div', { className: 'top-dest-card', role: 'button', tabindex: '0' });
+      const card = createEl('div', { className: 'featured-card', role: 'button', tabindex: '0' });
       card.innerHTML = `
         <img src="${dest.image}" alt="${dest.name}" loading="lazy">
-        <div class="top-dest-overlay">
-          <span class="top-dest-tag">Featured Service</span>
-          <h3 class="top-dest-name">${dest.name}</h3>
-          <p class="top-dest-region">${dest.country}</p>
-          <div class="top-dest-meta">
-            <span class="top-dest-rating">
+        <div class="featured-overlay">
+          <span class="featured-tag">Featured Service</span>
+          <h3 class="featured-name">${dest.name}</h3>
+          <p class="featured-region">${dest.tier}</p>
+          <div class="featured-meta">
+            <span class="featured-rating">
               <svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
               ${dest.rating}
             </span>
-            <span class="top-dest-price">From ${formatPKR(dest.price)}</span>
+            <span class="featured-price">From ${formatPKR(dest.price)}</span>
           </div>
-          <button class="top-dest-btn" data-id="${dest.id}">Explore</button>
+          <button class="featured-btn" data-id="${dest.id}">Explore</button>
         </div>
       `;
       card.addEventListener('click', () => openModal(dest.id));
@@ -316,46 +316,20 @@
     });
   }
 
-  function renderMapList() {
-    const mapDestList = $('#mapDestList');
-    if (!mapDestList) return;
-    mapDestList.innerHTML = '';
-    destinations.forEach(dest => {
-      const item = createEl('div', { className: 'map-dest-item', role: 'button', tabindex: '0' });
-      item.innerHTML = `
-        <div class="map-dest-pin">
-          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="currentColor"/></svg>
-        </div>
-        <div class="map-dest-info">
-          <div class="map-dest-name">${dest.name}</div>
-          <div class="map-dest-detail">From ${formatPKR(dest.price)}</div>
-        </div>
-      `;
-      item.addEventListener('click', () => openModal(dest.id));
-      item.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openModal(dest.id);
-        }
-      });
-      mapDestList.appendChild(item);
-    });
-  }
-
   function renderBookingDestinations() {
     const bookingDests = $('#bookingDestinations');
     if (!bookingDests) return;
     bookingDests.innerHTML = '';
     const bookingList = [...destinations.filter(d => d.featured), ...destinations.filter(d => !d.featured)].slice(0, 6);
     bookingList.forEach(dest => {
-      const card = createEl('div', { className: 'booking-dest-card', 'data-id': String(dest.id) });
+      const card = createEl('div', { className: 'booking-service-card', 'data-id': String(dest.id) });
       card.innerHTML = `
         <img src="${dest.image}" alt="${dest.name}" loading="lazy">
         <h4>${dest.name}</h4>
-        <p>From ${formatPKR(dest.price)}/person</p>
+        <p>From ${formatPKR(dest.price)}/project</p>
       `;
       card.addEventListener('click', () => {
-        $$('.booking-dest-card').forEach(c => c.classList.remove('selected'));
+        $$('.booking-service-card').forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
         booking.destination = dest;
       });
@@ -392,7 +366,7 @@
     $('#modalRating').innerHTML = `<span class="stars">${generateStars(dest.rating)}</span> ${dest.rating} (${dest.reviews.toLocaleString()} reviews)`;
     $('#modalDescription').textContent = dest.description;
     $('#modalHighlights').innerHTML = dest.highlights.map(h => `<span class="highlight-tag">${h}</span>`).join('');
-    $('#modalPrice').innerHTML = `${formatPKR(dest.price)} <span>/person</span>`;
+    $('#modalPrice').innerHTML = `${formatPKR(dest.price)} <span>/project</span>`;
     $('#modalBookBtn').onclick = () => {
       closeModal();
       document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
@@ -571,7 +545,7 @@
   -------------------------------------------------------- */
   let wizardStep = 1;
   const totalSteps = 5;
-  const booking = { destination: null, checkIn: '', checkOut: '', adults: 2, children: 0, infants: 0 };
+  const booking = { destination: null, startDate: '', endDate: '', projectDetails: '' };
 
   const wizardPrev = $('#wizardPrev');
   const wizardNext = $('#wizardNext');
@@ -595,6 +569,12 @@
     wizardPrev.disabled = wizardStep === 1;
     wizardNext.textContent = wizardStep === totalSteps - 1 ? 'Confirm Booking' : wizardStep === totalSteps ? 'Book Another Service' : 'Continue';
 
+    if (wizardStep === 3) {
+      // Sync project details textarea to booking state
+      const ta = $('#bookingProjectDetails');
+      if (ta) ta.addEventListener('input', () => { booking.projectDetails = ta.value; });
+    }
+
     if (wizardStep === 4) renderBookingReview();
 
     if (wizardStep === 5) {
@@ -604,40 +584,26 @@
     }
   }
 
-  // Step 3: Traveler counters
-  $$('.counter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.target;
-      const isPlus = btn.classList.contains('plus');
-      const current = booking[target];
-
-      if (isPlus && current < 10) booking[target]++;
-      else if (!isPlus && current > (target === 'adults' ? 1 : 0)) booking[target]--;
-
-      $(`#${target}Count`).textContent = booking[target];
-    });
-  });
-
-  const bookingCheckIn = $('#bookingCheckIn');
-  const bookingCheckOut = $('#bookingCheckOut');
+  const bookingStartDate = $('#bookingStartDate');
+  const bookingEndDate = $('#bookingEndDate');
 
   function updateDateSummary() {
-    const ci = bookingCheckIn.value;
-    const co = bookingCheckOut.value;
+    const ci = bookingStartDate.value;
+    const co = bookingEndDate.value;
     if (ci && co) {
       const days = Math.ceil((new Date(co) - new Date(ci)) / (1000 * 60 * 60 * 24));
       if (days > 0) {
         $('#dateSummary').textContent = `${days} day${days > 1 ? 's' : ''} production schedule`;
-        booking.checkIn = ci;
-        booking.checkOut = co;
+        booking.startDate = ci;
+        booking.endDate = co;
       } else {
         $('#dateSummary').textContent = 'End date must be after start date';
       }
     }
   }
 
-  bookingCheckIn.addEventListener('change', updateDateSummary);
-  bookingCheckOut.addEventListener('change', updateDateSummary);
+  bookingStartDate.addEventListener('change', updateDateSummary);
+  bookingEndDate.addEventListener('change', updateDateSummary);
 
   function renderBookingReview() {
     const review = $('#bookingReview');
@@ -647,28 +613,24 @@
       return;
     }
 
-    const nights = booking.checkIn && booking.checkOut
-      ? Math.ceil((new Date(booking.checkOut) - new Date(booking.checkIn)) / (1000 * 60 * 60 * 24))
-      : 5;
+    const days = booking.startDate && booking.endDate
+      ? Math.ceil((new Date(booking.endDate) - new Date(booking.startDate)) / (1000 * 60 * 60 * 24))
+      : 1;
 
-    const basePrice = dest.price * booking.adults + dest.price * bookingConfig.childDiscount * booking.children;
-    const nightsTotal = basePrice * (nights / 5);
-    const porterFee = booking.infants * bookingConfig.porterFeePerNight * nights;
+    const basePrice = dest.price;
     const serviceFee = bookingConfig.serviceFee;
-    const total = nightsTotal + porterFee + serviceFee;
+    const total = basePrice + serviceFee;
 
     // Store total for submission
     booking.totalPrice = Math.round(total);
 
     review.innerHTML = `
       <div class="review-line"><span class="label">Service</span><span>${dest.name}</span></div>
-      <div class="review-line"><span class="label">Region</span><span>${dest.country}</span></div>
-      <div class="review-line"><span class="label">Dates</span><span>${booking.checkIn || 'Flexible'} → ${booking.checkOut || 'Flexible'}</span></div>
-      <div class="review-line"><span class="label">Duration</span><span>${nights} days</span></div>
-      <div class="review-line"><span class="label">Travelers</span><span>${booking.adults} adult${booking.adults > 1 ? 's' : ''}${booking.children ? ', ' + booking.children + ' child' + (booking.children > 1 ? 'ren' : '') : ''}</span></div>
-      ${booking.infants > 0 ? `<div class="review-line"><span class="label">Porters</span><span>${booking.infants} porter${booking.infants > 1 ? 's' : ''}</span></div>` : ''}
-      <div class="review-line"><span class="label">Base Package</span><span>${formatPKR(Math.round(nightsTotal))}</span></div>
-      ${porterFee > 0 ? `<div class="review-line"><span class="label">Porter Fee</span><span>${formatPKR(porterFee)}</span></div>` : ''}
+      <div class="review-line"><span class="label">Tier</span><span>${dest.tier}</span></div>
+      <div class="review-line"><span class="label">Dates</span><span>${booking.startDate || 'Flexible'} → ${booking.endDate || 'Flexible'}</span></div>
+      <div class="review-line"><span class="label">Duration</span><span>${days} day${days > 1 ? 's' : ''}</span></div>
+      ${booking.projectDetails ? `<div class="review-line"><span class="label">Project Details</span><span>${booking.projectDetails.substring(0, 100)}${booking.projectDetails.length > 100 ? '…' : ''}</span></div>` : ''}
+      <div class="review-line"><span class="label">Base Package</span><span>${formatPKR(basePrice)}</span></div>
       <div class="review-line"><span class="label">Service Fee</span><span>${formatPKR(serviceFee)}</span></div>
       <div class="review-line total"><span>Total</span><span>${formatPKR(Math.round(total))}</span></div>
     `;
@@ -693,12 +655,9 @@
         body: JSON.stringify({
           reference,
           destination: dest.name,
-          region: dest.country,
-          checkIn: booking.checkIn || null,
-          checkOut: booking.checkOut || null,
-          adults: booking.adults,
-          children: booking.children,
-          infants: booking.infants,
+          startDate: booking.startDate || null,
+          endDate: booking.endDate || null,
+          projectDetails: booking.projectDetails || '',
           totalPrice: booking.totalPrice || 0
         })
       });
@@ -713,7 +672,7 @@
     if (wizardStep === totalSteps) {
       wizardStep = 1;
       booking.destination = null;
-      $$('.booking-dest-card').forEach(c => c.classList.remove('selected'));
+      $$('.booking-service-card').forEach(c => c.classList.remove('selected'));
       updateWizard();
       return;
     }
@@ -756,14 +715,14 @@
           <div>
             <div class="review-author">${rev.name}</div>
             <div class="review-meta">
-              ${rev.location}
+              ${rev.city}
               ${rev.verified ? '<span class="verified-badge"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/></svg> Verified</span>' : ''}
             </div>
           </div>
         </div>
         <div class="review-stars">${generateStars(rev.rating)}</div>
         <p class="review-text">"${rev.text}"</p>
-        <span class="review-destination">${rev.destination}</span>
+        <span class="review-service">${rev.service}</span>
       `;
       reviewsTrack.appendChild(card);
     });
@@ -915,7 +874,7 @@
       if (dest) {
         const match = destinations.find(d =>
           d.name.toLowerCase().includes(dest) ||
-          d.country.toLowerCase().includes(dest) ||
+          d.tier.toLowerCase().includes(dest) ||
           d.category.includes(dest)
         );
         if (match) {
@@ -927,7 +886,7 @@
           renderDestinations(category);
         }
       }
-      document.getElementById('destinations').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
     });
   }
 
@@ -1373,11 +1332,11 @@
      INITIAL SETUP — Date pickers
   -------------------------------------------------------- */
   const today = new Date().toISOString().split('T')[0];
-  bookingCheckIn.min = today;
-  bookingCheckOut.min = today;
+  bookingStartDate.min = today;
+  bookingEndDate.min = today;
 
-  bookingCheckIn.addEventListener('change', () => {
-    bookingCheckOut.min = bookingCheckIn.value;
+  bookingStartDate.addEventListener('change', () => {
+    bookingEndDate.min = bookingStartDate.value;
   });
 
   /* --------------------------------------------------------
@@ -1411,7 +1370,7 @@
   }
 
   /* --------------------------------------------------------
-     APPLY SITE SETTINGS — Dynamic content from developer panel
+     APPLY SITE SETTINGS — Dynamic content from site configuration
   -------------------------------------------------------- */
   function applySiteSettings(s) {
     if (!s) return;
@@ -1498,10 +1457,9 @@
         gallery: '#gallery',
         videos: '#videos',
         team: '#team',
-        topDestinations: '#top-destinations',
-        destinations: '#destinations',
-        map: '#map',
-        tripPlanner: '#trip-planner',
+        featuredServices: '#featured-services',
+        services: '#services',
+        projectPlanner: '#project-planner',
         booking: '#booking',
         reviews: '#reviews',
         deals: '#deals'
@@ -1540,32 +1498,22 @@
       if (nlNote && n.subscriberNote) nlNote.textContent = n.subscriberNote;
     }
 
-    // Loading screen
-    if (s.loadingScreen) {
-      const lt = $('.loading-title');
-      const ltxt = $('.loading-text');
-      if (lt && s.loadingScreen.title) lt.textContent = s.loadingScreen.title;
-      if (ltxt && s.loadingScreen.text) ltxt.textContent = s.loadingScreen.text;
-    }
-
     // Booking config
     if (s.bookingConfig) {
       if (s.bookingConfig.serviceFee !== undefined) bookingConfig.serviceFee = s.bookingConfig.serviceFee;
-      if (s.bookingConfig.porterFeePerNight !== undefined) bookingConfig.porterFeePerNight = s.bookingConfig.porterFeePerNight;
-      if (s.bookingConfig.childDiscount !== undefined) bookingConfig.childDiscount = s.bookingConfig.childDiscount;
     }
 
     // AI planner responses (override defaults if present)
-    if (s.aiTripPlanner) {
-      if (s.aiTripPlanner.aiResponses && Object.keys(s.aiTripPlanner.aiResponses).length > 0) {
-        aiResponses = s.aiTripPlanner.aiResponses;
+    if (s.aiProjectPlanner) {
+      if (s.aiProjectPlanner.aiResponses && Object.keys(s.aiProjectPlanner.aiResponses).length > 0) {
+        aiResponses = s.aiProjectPlanner.aiResponses;
       }
-      if (s.aiTripPlanner.chatResponses && Object.keys(s.aiTripPlanner.chatResponses).length > 0) {
-        chatResponses = s.aiTripPlanner.chatResponses;
+      if (s.aiProjectPlanner.chatResponses && Object.keys(s.aiProjectPlanner.chatResponses).length > 0) {
+        chatResponses = s.aiProjectPlanner.chatResponses;
       }
-      if (s.aiTripPlanner.welcomeMessage) {
+      if (s.aiProjectPlanner.welcomeMessage) {
         const firstAiMsg = $('.chat-message.ai .chat-bubble');
-        if (firstAiMsg) firstAiMsg.innerHTML = '<p>' + s.aiTripPlanner.welcomeMessage + '</p>';
+        if (firstAiMsg) firstAiMsg.innerHTML = '<p>' + s.aiProjectPlanner.welcomeMessage + '</p>';
       }
     }
   }
@@ -1602,7 +1550,6 @@
     // Render data-dependent sections
     renderDestinations();
     renderTopDestinations();
-    renderMapList();
     renderBookingDestinations();
     renderReviews();
     renderDeals();
@@ -1617,12 +1564,6 @@
     const heroStats = $('.hero-stats');
     if (heroStats) statsObserver.observe(heroStats);
 
-    // Hide loading screen
-    const loader = document.getElementById('loadingScreen');
-    if (loader) {
-      loader.classList.add('hidden');
-      setTimeout(() => loader.remove(), 600);
-    }
   }
 
   init();
@@ -1787,7 +1728,7 @@
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('user_token')
           },
-          body: JSON.stringify({ destination: dest, rating: rmRating, text: text })
+          body: JSON.stringify({ service: dest, rating: rmRating, text: text })
         });
         var data = await res.json();
         if (!res.ok) {

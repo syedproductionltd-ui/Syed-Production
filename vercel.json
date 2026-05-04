@@ -20,7 +20,6 @@
           "js/**",
           "images/**",
           "admin/**",
-          "developer/**",
           "backend/**",
           "videos/**"
         ],
@@ -35,10 +34,6 @@
     },
     {
       "src": "/admin/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/developer/(.*)",
       "dest": "server.js"
     },
     {

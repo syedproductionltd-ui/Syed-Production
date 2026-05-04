@@ -18,42 +18,9 @@
 </head>
 <body>
 
-  <!-- ============ LOADING SCREEN ============ -->
-  <div class="loading-screen" id="loadingScreen">
-    <div class="loading-content">
-      <img src="images/Syed-production.png" alt="Syed Productions" class="loading-logo" style="opacity:0;transition:opacity 0.3s" onerror="this.onerror=null;this.src='images/Syed-production.png';">
-      <h2 class="loading-title">Syed Productions</h2>
-      <div class="loading-spinner">
-        <div class="spinner-ring"></div>
-      </div>
-      <p class="loading-text">Setting the stage...</p>
-    </div>
-  </div>
   <script>
-    // Early fetch: update loading screen + store promise for main.js to reuse
-    window.__publicDataPromise = fetch('/api/public-data').then(function(r){return r.json()}).then(function(d){
-      if(d.settings){
-        var s=d.settings;
-        if(s.loadingScreen){
-          var t=document.querySelector('.loading-title');
-          var p=document.querySelector('.loading-text');
-          if(t&&s.loadingScreen.title)t.textContent=s.loadingScreen.title;
-          if(p&&s.loadingScreen.text)p.textContent=s.loadingScreen.text;
-        }
-        if(s.branding){
-          var logo=document.querySelector('.loading-logo');
-          if(logo){
-            var logoSrc=s.branding.logoUrl||'images/Syed-production.png';
-            if(s.branding.logoBorderRadius!=null)logo.style.borderRadius=s.branding.logoBorderRadius+'%';
-            logo.onerror=function(){logo.onerror=null;logo.src='images/Syed-production.png';logo.style.opacity='1';};
-            logo.onload=function(){logo.style.opacity='1';};
-            if(logoSrc!==logo.src)logo.src=logoSrc;
-            else logo.style.opacity='1';
-          }
-        }
-      }
-      return d;
-    }).catch(function(){ return null; });
+    // Early fetch: store promise for main.js to reuse
+    window.__publicDataPromise = fetch('/api/public-data').then(function(r){return r.json()}).catch(function(){return null;});
   </script>
 
   <!-- ============ NAVIGATION ============ -->
@@ -232,22 +199,22 @@
     </div>
   </section>
 
-  <!-- ============ TOP DESTINATIONS ============ -->
-  <section class="top-destinations section" id="top-destinations">
+  <!-- ============ FEATURED SERVICES ============ -->
+  <section class="featured-services section" id="featured-services">
     <div class="container">
       <div class="section-header reveal-up">
         <span class="section-tag">Spotlight</span>
         <h2 class="section-title">Featured Services</h2>
         <p class="section-description">Our most popular production services — handpicked to showcase what Syed Productions does best.</p>
       </div>
-      <div class="top-dest-grid reveal-up" id="topDestGrid">
+      <div class="featured-grid reveal-up" id="topDestGrid">
         <!-- Featured cards injected by JS -->
       </div>
     </div>
   </section>
 
-  <!-- ============ DESTINATIONS SECTION ============ -->
-  <section class="destinations section" id="destinations">
+  <!-- ============ SERVICES SECTION ============ -->
+  <section class="services section" id="services">
     <div class="container">
       <div class="section-header reveal-up">
         <span class="section-tag">What We Do</span>
@@ -262,43 +229,14 @@
         <button class="filter-tab" data-filter="editing" role="tab" aria-selected="false">Editing</button>
         <button class="filter-tab" data-filter="branding" role="tab" aria-selected="false">Branding</button>
       </div>
-      <div class="destinations-grid" id="destinationsGrid" role="list">
+      <div class="services-grid" id="destinationsGrid" role="list">
         <!-- Cards injected by JS -->
       </div>
     </div>
   </section>
 
-  <!-- ============ INTERACTIVE MAP SECTION ============ -->
-  <section class="map-section section" id="map">
-    <div class="container">
-      <div class="section-header reveal-up">
-        <span class="section-tag">Locations</span>
-        <h2 class="section-title">Our Coverage Area</h2>
-        <p class="section-description">We cover events and productions across Pakistan. Click any service to learn more and book.</p>
-      </div>
-      <div class="map-wrapper reveal-up">
-        <div class="google-map-container">
-          <iframe
-            id="googleMap"
-            src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1500000!2d75.5!3d36.0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2s"
-            width="100%"
-            height="500"
-            style="border:0;"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Pakistan - Syed Productions Coverage Area">
-          </iframe>
-        </div>
-        <div class="map-destinations-list" id="mapDestList">
-          <!-- Destination pins injected by JS -->
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ AI TRIP PLANNER SECTION ============ -->
-  <section class="trip-planner section" id="trip-planner">
+  <!-- ============ AI PROJECT PLANNER SECTION ============ -->
+  <section class="project-planner section" id="project-planner">
     <div class="container">
       <div class="section-header reveal-up">
         <span class="section-tag">AI-Powered</span>
@@ -411,7 +349,7 @@
           <!-- Step 1: Destination -->
           <div class="wizard-panel active" data-panel="1" role="tabpanel">
             <h3>Select a service</h3>
-            <div class="booking-destinations" id="bookingDestinations">
+            <div class="booking-services" id="bookingDestinations">
               <!-- Injected by JS -->
             </div>
           </div>
@@ -420,53 +358,22 @@
             <h3>When is your event/project?</h3>
             <div class="date-picker-group">
               <div class="date-field">
-                <label for="bookingCheckIn">Start Date</label>
-                <input type="date" id="bookingCheckIn">
+                <label for="bookingStartDate">Start Date</label>
+                <input type="date" id="bookingStartDate">
               </div>
               <div class="date-field">
-                <label for="bookingCheckOut">End Date</label>
-                <input type="date" id="bookingCheckOut">
+                <label for="bookingEndDate">End Date</label>
+                <input type="date" id="bookingEndDate">
               </div>
             </div>
             <div class="date-summary" id="dateSummary"></div>
           </div>
-          <!-- Step 3: Travelers -->
+          <!-- Step 3: Project Details -->
           <div class="wizard-panel" data-panel="3" role="tabpanel">
             <h3>Project details</h3>
-            <div class="traveler-selectors">
-              <div class="traveler-row">
-                <div class="traveler-info">
-                  <span class="traveler-type">Crew Members</span>
-                  <span class="traveler-desc">Camera operators, etc.</span>
-                </div>
-                <div class="traveler-counter">
-                  <button class="counter-btn minus" data-target="adults" aria-label="Decrease adults">−</button>
-                  <span class="counter-value" id="adultsCount">2</span>
-                  <button class="counter-btn plus" data-target="adults" aria-label="Increase adults">+</button>
-                </div>
-              </div>
-              <div class="traveler-row">
-                <div class="traveler-info">
-                  <span class="traveler-type">Cameras</span>
-                  <span class="traveler-desc">Number of camera angles</span>
-                </div>
-                <div class="traveler-counter">
-                  <button class="counter-btn minus" data-target="children" aria-label="Decrease children">−</button>
-                  <span class="counter-value" id="childrenCount">0</span>
-                  <button class="counter-btn plus" data-target="children" aria-label="Increase children">+</button>
-                </div>
-              </div>
-              <div class="traveler-row">
-                <div class="traveler-info">
-                  <span class="traveler-type">Editing Hours</span>
-                  <span class="traveler-desc">Post-production time</span>
-                </div>
-                <div class="traveler-counter">
-                  <button class="counter-btn minus" data-target="infants" aria-label="Decrease porters">−</button>
-                  <span class="counter-value" id="infantsCount">0</span>
-                  <button class="counter-btn plus" data-target="infants" aria-label="Increase porters">+</button>
-                </div>
-              </div>
+            <div style="max-width:500px; margin:0 auto;">
+              <label for="bookingProjectDetails" style="display:block; font-size:0.9rem; font-weight:600; color:var(--clr-gray-600); margin-bottom:0.5rem;">Describe your project</label>
+              <textarea id="bookingProjectDetails" rows="6" placeholder="Tell us about your project — what type of production, location, special requirements, number of people involved, etc." style="width:100%; padding:0.75rem 1rem; border:2px solid var(--clr-gray-200); border-radius:var(--radius-sm); font-family:inherit; font-size:var(--fs-base); resize:vertical; outline:none; transition:border-color var(--transition-fast);" onfocus="this.style.borderColor='var(--clr-primary)'" onblur="this.style.borderColor='var(--clr-gray-200)'"></textarea>
             </div>
           </div>
           <!-- Step 4: Review -->
@@ -550,11 +457,11 @@
         <div class="footer-links">
           <h4>Services</h4>
           <ul>
-            <li><a href="#top-destinations">Wedding Films</a></li>
-            <li><a href="#top-destinations">Corporate Videos</a></li>
-            <li><a href="#top-destinations">Event Coverage</a></li>
-            <li><a href="#top-destinations">Photography</a></li>
-            <li><a href="#destinations">All Services</a></li>
+            <li><a href="#featured-services">Wedding Films</a></li>
+            <li><a href="#featured-services">Corporate Videos</a></li>
+            <li><a href="#featured-services">Event Coverage</a></li>
+            <li><a href="#featured-services">Photography</a></li>
+            <li><a href="#services">All Services</a></li>
           </ul>
         </div>
         <div class="footer-links">

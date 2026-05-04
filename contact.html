@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us — Syed Productions</title>
   <meta name="description" content="Get in touch with Syed Productions — contact info, newsletter, and social media links.">
-  <link rel="icon" type="image/png" href="images/Syed-production.png">
+  <link rel="icon" type="image/webp" href="images/Syed-production.webp">
   <script>
     (function(){var s=localStorage.getItem('dark_mode');if(s==='false')return;document.documentElement.classList.add('dark-mode');})();
   </script>
@@ -21,7 +21,7 @@
   <nav class="navbar scrolled" id="navbar" aria-label="Main navigation">
     <div class="nav-container">
       <a href="index.html" class="nav-logo" aria-label="Syed Productions Home">
-        <img src="images/Gemini_Generated_Image_ukpyqqukpyqqukpy-removebg-preview.png" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.png';">
+        <img src="images/Syed-production.webp" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.webp';">
         <span id="brandSyed" class="brand-swap-a">Syed</span><span id="brandProd" class="brand-swap-b">Productions</span>
       </a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
@@ -123,7 +123,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a href="index.html" class="nav-logo"><img src="images/Syed-production.png" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.png';"><span>Syed Productions</span></a>
+          <a href="index.html" class="nav-logo"><img src="images/Syed-production.webp" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.webp';"><span>Syed Productions</span></a>
           <p>Professional media production house. Specializing in cinematic films, photography, videography, and event coverage across Pakistan.</p>
           <div class="social-links">
             <a href="#" aria-label="Facebook" class="social-link"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="currentColor"/></svg></a>
@@ -178,7 +178,7 @@
     function applySiteBranding(s){
       if(!s)return;
       if(s.branding){var b=s.branding;
-        if(b.logoUrl) $$('.logo-img').forEach(function(img){img.onerror=function(){this.onerror=null;this.src='images/Syed-production.png';};img.src=b.logoUrl;if(b.logoSize){img.style.width=b.logoSize+'px';img.style.height=b.logoSize+'px';}if(b.logoBorderRadius!=null)img.style.borderRadius=b.logoBorderRadius+'%';});
+        if(b.logoUrl) $$('.logo-img').forEach(function(img){img.onerror=function(){this.onerror=null;this.src='images/Syed-production.webp';};img.src=b.logoUrl;if(b.logoSize){img.style.width=b.logoSize+'px';img.style.height=b.logoSize+'px';}if(b.logoBorderRadius!=null)img.style.borderRadius=b.logoBorderRadius+'%';});
         if(b.companyName){var p=b.companyName.split(' ');if(syed&&prod&&p.length>=2){syed.textContent=p[0];prod.textContent=p.slice(1).join(' ');}document.title=b.companyName+' — Contact Us';}
         if(b.faviconUrl){var fav=$('link[rel="icon"]');if(fav)fav.href=b.faviconUrl;}
         if(b.companyShortName){var fs=$('.footer-brand .nav-logo span');if(fs)fs.textContent=b.companyShortName;}

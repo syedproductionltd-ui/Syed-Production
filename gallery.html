@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery — Syed Productions</title>
   <meta name="description" content="Explore Syed Productions gallery — photos and videos from our productions, weddings, events, and creative projects.">
-  <link rel="icon" type="image/png" href="images/Syed-production.png">
+  <link rel="icon" type="image/webp" href="images/Syed-production.webp">
   <script>
     (function(){
       var s=localStorage.getItem('dark_mode');
@@ -25,7 +25,7 @@
   <nav class="navbar scrolled" id="navbar" aria-label="Main navigation">
     <div class="nav-container">
       <a href="index.html" class="nav-logo" aria-label="Syed Productions Home">
-        <img src="images/Gemini_Generated_Image_ukpyqqukpyqqukpy-removebg-preview.png" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.png';">
+        <img src="images/Syed-production.webp" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.webp';">
         <span id="brandSyed" class="brand-swap-a">Syed</span><span id="brandProd" class="brand-swap-b">Productions</span>
       </a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
@@ -116,7 +116,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="index.html" class="nav-logo">
-            <img src="images/Syed-production.png" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.png';">
+            <img src="images/Syed-production.webp" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.webp';">
             <span>Syed Productions</span>
           </a>
           <p>Professional media production house. Specializing in cinematic films, photography, videography, and event coverage across Pakistan.</p>
@@ -429,7 +429,7 @@
       if(!s) return;
       if(s.branding){
         var b=s.branding;
-        if(b.logoUrl) $$('.logo-img').forEach(function(img){img.onerror=function(){this.onerror=null;this.src='images/Syed-production.png';};img.src=b.logoUrl;if(b.logoSize){img.style.width=b.logoSize+'px';img.style.height=b.logoSize+'px';}if(b.logoBorderRadius!=null)img.style.borderRadius=b.logoBorderRadius+'%';});
+        if(b.logoUrl) $$('.logo-img').forEach(function(img){img.onerror=function(){this.onerror=null;this.src='images/Syed-production.webp';};img.src=b.logoUrl;if(b.logoSize){img.style.width=b.logoSize+'px';img.style.height=b.logoSize+'px';}if(b.logoBorderRadius!=null)img.style.borderRadius=b.logoBorderRadius+'%';});
         if(b.companyName){var p=b.companyName.split(' ');if(syed&&prod&&p.length>=2){syed.textContent=p[0];prod.textContent=p.slice(1).join(' ');}document.title=b.companyName+' — Gallery';}
         if(b.faviconUrl){var fav=$('link[rel="icon"]');if(fav)fav.href=b.faviconUrl;}
         if(b.companyShortName){var fs=$('.footer-brand .nav-logo span');if(fs)fs.textContent=b.companyShortName;}

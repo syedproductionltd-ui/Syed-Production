@@ -6,10 +6,8 @@
   <title>Syed Productions</title>
   <meta name="description" content="Syed Productions — Professional film, photography, videography, and event coverage. Bringing your vision to life with cinematic storytelling and creative media production.">
   <link rel="icon" type="image/webp" href="images/Syed-production.webp">
-  <!-- Preload hero background images -->
-  <link rel="preload" as="image" type="image/webp" href="images/hero-background/_DSC2040.webp">
-  <link rel="preload" as="image" type="image/webp" href="images/DSC00557.webp">
-  <link rel="preload" as="image" type="image/webp" href="images/hero-background/DSC09876.webp">
+  <!-- Preload first hero image for fastest LCP -->
+  <link rel="preload" as="image" type="image/webp" href="images/hero-background/_DSC2040.webp" fetchpriority="high">
   <!-- Times New Roman system font — no external font needed -->
   <script>
     (function(){
@@ -60,10 +58,53 @@
   <!-- ============ HERO SECTION ============ -->
   <section class="hero" id="hero">
     <div class="hero-carousel" aria-hidden="true">
-      <div class="hero-slide active" style="background-image: url('images/hero-background/_DSC2040.webp')"></div>
-      <div class="hero-slide" style="background-image: url('images/DSC00557.webp')"></div>
-      <div class="hero-slide" style="background-image: url('images/hero-background/DSC09876.webp')"></div>
+      <div class="hero-slide active" data-bg="images/hero-background/_DSC2040.webp"></div>
+      <div class="hero-slide" data-bg="images/DSC00557.webp"></div>
+      <div class="hero-slide" data-bg="images/hero-background/DSC09876.webp"></div>
     </div>
+    <!-- Hero preloader: shows shimmer until first image is ready -->
+    <div class="hero-preloader" id="heroPreloader">
+      <div class="hero-preloader-spinner"></div>
+    </div>
+    <script>
+      (function(){
+        var slides = document.querySelectorAll('.hero-slide[data-bg]');
+        var preloader = document.getElementById('heroPreloader');
+        var firstLoaded = false;
+
+        slides.forEach(function(slide, i) {
+          var url = slide.getAttribute('data-bg');
+          var img = new Image();
+          img.onload = function() {
+            slide.style.backgroundImage = "url('" + url + "')";
+            slide.classList.add('loaded');
+            if (i === 0 && !firstLoaded) {
+              firstLoaded = true;
+              preloader.classList.add('done');
+              setTimeout(function(){ preloader.remove(); }, 600);
+            }
+          };
+          img.onerror = function() {
+            slide.style.backgroundImage = "url('" + url + "')";
+            slide.classList.add('loaded');
+            if (i === 0 && !firstLoaded) {
+              firstLoaded = true;
+              preloader.classList.add('done');
+              setTimeout(function(){ preloader.remove(); }, 600);
+            }
+          };
+          img.src = url;
+        });
+
+        // Fallback: remove preloader after 5s even if images fail
+        setTimeout(function(){
+          if (!firstLoaded && preloader) {
+            preloader.classList.add('done');
+            setTimeout(function(){ if(preloader.parentNode) preloader.remove(); }, 600);
+          }
+        }, 5000);
+      })();
+    </script>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-subtitle reveal-up">Professional Film & Media Production</p>

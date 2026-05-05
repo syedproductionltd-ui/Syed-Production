@@ -5,38 +5,14 @@
       "src": "server.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": [
-          "index.html",
-          "login.html",
-          "register.html",
-          "profile.html",
-          "portfolio.html",
-          "gallery.html",
-          "booking.html",
-          "reviews.html",
-          "contact.html",
-          "css/**",
-          "js/**",
-          "images/**",
-          "admin/**",
-          "backend/**",
-          "videos/**"
-        ],
-        "maxLambdaSize": "100mb"
+        "includeFiles": ["backend/**"]
       }
     }
   ],
   "routes": [
+    { "handle": "filesystem" },
     {
       "src": "/api/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/(.*)",
       "dest": "server.js"
     }
   ]

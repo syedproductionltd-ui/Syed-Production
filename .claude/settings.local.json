@@ -28,7 +28,21 @@
       "Bash(nslookup:*)",
       "Bash(ping:*)",
       "Bash(done)",
-      "Bash(start:*)"
+      "Bash(start:*)",
+      "Bash(copy:*)",
+      "Bash(copy \"D:\\\\Syed prodection\\\\iPad data\\\\016A5554.JPG\" \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\images\\\\gallery\\\\016A5554.JPG\")",
+      "Bash(copy \"D:\\\\Syed prodection\\\\iPad data\\\\016A5694.JPG\" \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\images\\\\gallery\\\\016A5694.JPG\")",
+      "Bash(copy \"D:\\\\Syed prodection\\\\iPad data\\\\016A7313.JPG\" \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\images\\\\gallery\\\\016A7313.JPG\")",
+      "Bash(copy \"D:\\\\Syed prodection\\\\iPad data\\\\DSC00440.JPG\" \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\images\\\\gallery\\\\DSC00440.JPG\")",
+      "Bash(copy \"D:\\\\Syed prodection\\\\iPad data\\\\DSC00488.JPG\" \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\images\\\\gallery\\\\DSC00488.JPG\")",
+      "Bash(copy \"D:\\\\Syed prodection\\\\iPad data\\\\DSC00518.JPG\" \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\images\\\\gallery\\\\DSC00518.JPG\")",
+      "Bash(copy \"D:\\\\Syed prodection\\\\iPad data\\\\DSC00542.JPG\" \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\images\\\\gallery\\\\DSC00542.JPG\")",
+      "Bash(copy \"D:\\\\Syed prodection\\\\iPad data\\\\DSC00546.JPG\" \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\images\\\\gallery\\\\DSC00546.JPG\")",
+      "Bash(copy \"D:\\\\Syed prodection\\\\iPad data\\\\DSC00579.JPG\" \"D:\\\\Syed prodection\\\\New folder \\(2\\)\\\\images\\\\gallery\\\\DSC00579.JPG\")",
+      "Bash(python:*)",
+      "Bash(timeout:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(powershell:*)"
     ]
   }
 }

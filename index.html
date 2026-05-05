@@ -42,7 +42,6 @@
         <li><a href="gallery.html" class="nav-link">Gallery</a></li>
         <li><a href="booking.html" class="nav-link">Book Now</a></li>
         <li><a href="reviews.html" class="nav-link">Reviews</a></li>
-        <li><a href="packages.html" class="nav-link">Packages</a></li>
         <li><a href="contact.html" class="nav-link nav-link--cta">Contact Us</a></li>
         <li>
           <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
@@ -287,11 +286,11 @@
         <div class="planner-inputs">
           <h3>Your Preferences</h3>
           <div class="planner-field">
-            <label for="plannerBudget">Budget (PKR)</label>
+            <label for="plannerBudget">Project Scale</label>
             <select id="plannerBudget">
-              <option value="budget">Budget (PKR 30,000–80,000)</option>
-              <option value="mid" selected>Mid-Range (PKR 80,000–200,000)</option>
-              <option value="luxury">Premium (PKR 200,000+)</option>
+              <option value="budget">Budget</option>
+              <option value="mid" selected>Mid-Range</option>
+              <option value="luxury">Premium</option>
             </select>
           </div>
           <div class="planner-field">
@@ -340,7 +339,7 @@
             </div>
           </div>
           <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="Ask about our services, pricing, packages..." aria-label="Chat message input">
+            <input type="text" id="chatInput" placeholder="Ask about our services..." aria-label="Chat message input">
             <button class="chat-send-btn" id="chatSendBtn" aria-label="Send message">
               <svg viewBox="0 0 24 24" width="20" height="20"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"/></svg>
             </button>
@@ -356,7 +355,7 @@
       <div class="section-header reveal-up">
         <span class="section-tag">Book a Service</span>
         <h2 class="section-title">Book Your Production</h2>
-        <p class="section-description">Simple, transparent booking in just a few steps. No hidden fees — honest pricing from a professional team.</p>
+        <p class="section-description">Simple booking in just a few steps. Tell us about your project and we'll take care of the rest.</p>
       </div>
       <div class="booking-wizard reveal-up">
         <div class="wizard-steps" role="tablist" aria-label="Booking steps">
@@ -443,26 +442,13 @@
     </div>
   </section>
 
-  <!-- ============ TRENDING / DEALS SECTION ============ -->
-  <section class="deals section" id="deals">
-    <div class="container">
-      <div class="section-header reveal-up">
-        <span class="section-tag">Special Offers</span>
-        <h2 class="section-title">Production Packages</h2>
-        <p class="section-description">Grab these exclusive production packages at special rates — limited availability, book now to secure your dates.</p>
-      </div>
-      <div class="deals-grid reveal-up" id="dealsGrid">
-        <!-- Deal cards injected by JS -->
-      </div>
-    </div>
-  </section>
 
   <!-- ============ NEWSLETTER & FOOTER ============ -->
   <section class="newsletter" id="contact">
     <div class="container">
       <div class="newsletter-content reveal-up">
-        <h2>Get Production Updates & Exclusive Offers</h2>
-        <p>Subscribe for exclusive production packages, behind-the-scenes content, and creative insights delivered to your inbox.</p>
+        <h2>Get Production Updates</h2>
+        <p>Subscribe for behind-the-scenes content, production updates, and creative insights delivered to your inbox.</p>
         <form class="newsletter-form" id="newsletterForm" aria-label="Newsletter signup">
           <div class="newsletter-input-wrapper">
             <input type="email" id="newsletterEmail" placeholder="Enter your email address" required aria-label="Email address">
@@ -562,7 +548,6 @@
         <p class="modal-description" id="modalDescription"></p>
         <div class="modal-highlights" id="modalHighlights"></div>
         <div class="modal-footer">
-          <span class="modal-price" id="modalPrice"></span>
           <button class="btn btn-primary modal-book-btn" id="modalBookBtn">Book Now</button>
         </div>
       </div>

@@ -32,7 +32,6 @@
         <li><a href="gallery.html" class="nav-link">Gallery</a></li>
         <li><a href="booking.html" class="nav-link">Book Now</a></li>
         <li><a href="reviews.html" class="nav-link">Reviews</a></li>
-        <li><a href="packages.html" class="nav-link">Packages</a></li>
         <li><a href="contact.html" class="nav-link nav-link--cta">Contact Us</a></li>
         <li>
           <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
@@ -124,7 +123,7 @@
           </div>
         </div>
         <div class="footer-links"><h4>Services</h4><ul><li><a href="index.html#featured-services">Wedding Films</a></li><li><a href="index.html#featured-services">Corporate Videos</a></li><li><a href="index.html#featured-services">Event Coverage</a></li><li><a href="index.html#featured-services">Photography</a></li><li><a href="index.html#services">All Services</a></li></ul></div>
-        <div class="footer-links"><h4>Company</h4><ul><li><a href="index.html">About Us</a></li><li><a href="index.html#team">Our Team</a></li><li><a href="portfolio.html">Portfolio</a></li><li><a href="contact.html">Contact</a></li><li><a href="packages.html">Packages</a></li></ul></div>
+        <div class="footer-links"><h4>Company</h4><ul><li><a href="index.html">About Us</a></li><li><a href="index.html#team">Our Team</a></li><li><a href="portfolio.html">Portfolio</a></li><li><a href="contact.html">Contact</a></li></ul></div>
         <div class="footer-links"><h4>Support</h4><ul><li><a href="contact.html">Help Center</a></li><li><a href="booking.html">Reschedule Booking</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">FAQ</a></li></ul></div>
       </div>
       <div class="footer-bottom"><p>&copy; 2026 Syed Productions. All rights reserved. Based in Pakistan.</p></div>
@@ -152,11 +151,10 @@
 
     /* Data */
     var destinations=[];
-    var bookingConfig={serviceFee:2000};
+    /* booking config — unused on frontend */
     var wizardStep=1, totalSteps=5;
     var booking={destination:null,startDate:'',endDate:'',projectDetails:''};
 
-    function formatPKR(a){return 'PKR '+a.toLocaleString('en-PK');}
     function generateStars(r){var f=Math.floor(r),h=r%1>=0.5?1:0,e=5-f-h,html='';for(var i=0;i<f;i++)html+='<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>';if(h)html+='<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor" opacity="0.4"/></svg>';for(var j=0;j<e;j++)html+='<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor" opacity="0.15"/></svg>';return html;}
 
     /* Render booking destinations */
@@ -165,7 +163,7 @@
       var list=destinations.filter(function(d){return d.featured;}).concat(destinations.filter(function(d){return !d.featured;})).slice(0,12);
       list.forEach(function(dest){
         var card=document.createElement('div');card.className='booking-service-card';card.dataset.id=dest.id;
-        card.innerHTML='<img src="'+dest.image+'" alt="'+dest.name+'" loading="lazy"><h4>'+dest.name+'</h4><p>From '+formatPKR(dest.price)+'/project</p>';
+        card.innerHTML='<img src="'+dest.image+'" alt="'+dest.name+'" loading="lazy"><h4>'+dest.name+'</h4><p>'+dest.tier+'</p>';
         card.addEventListener('click',function(){$$('.booking-service-card').forEach(function(c){c.classList.remove('selected');});card.classList.add('selected');booking.destination=dest;});
         grid.appendChild(card);
       });
@@ -206,11 +204,7 @@
       var rev=$('#bookingReview'), dest=booking.destination;
       if(!dest){rev.innerHTML='<p style="text-align:center;color:#94a3b8;">Please select a service first.</p>';return;}
       var days=booking.startDate&&booking.endDate?Math.ceil((new Date(booking.endDate)-new Date(booking.startDate))/(1000*60*60*24)):1;
-      var basePrice=dest.price;
-      var serviceFee=bookingConfig.serviceFee;
-      var total=basePrice+serviceFee;
-      booking.totalPrice=Math.round(total);
-      rev.innerHTML='<div class="review-line"><span class="label">Service</span><span>'+dest.name+'</span></div><div class="review-line"><span class="label">Tier</span><span>'+dest.tier+'</span></div><div class="review-line"><span class="label">Dates</span><span>'+(booking.startDate||'Flexible')+' → '+(booking.endDate||'Flexible')+'</span></div><div class="review-line"><span class="label">Duration</span><span>'+days+' day'+(days>1?'s':'')+'</span></div>'+(booking.projectDetails?'<div class="review-line"><span class="label">Project Details</span><span>'+booking.projectDetails.substring(0,100)+(booking.projectDetails.length>100?'…':'')+'</span></div>':'')+'<div class="review-line"><span class="label">Base Package</span><span>'+formatPKR(basePrice)+'</span></div><div class="review-line"><span class="label">Service Fee</span><span>'+formatPKR(serviceFee)+'</span></div><div class="review-line total"><span>Total</span><span>'+formatPKR(Math.round(total))+'</span></div>';
+      rev.innerHTML='<div class="review-line"><span class="label">Service</span><span>'+dest.name+'</span></div><div class="review-line"><span class="label">Tier</span><span>'+dest.tier+'</span></div><div class="review-line"><span class="label">Dates</span><span>'+(booking.startDate||'Flexible')+' → '+(booking.endDate||'Flexible')+'</span></div><div class="review-line"><span class="label">Duration</span><span>'+days+' day'+(days>1?'s':'')+'</span></div>'+(booking.projectDetails?'<div class="review-line"><span class="label">Project Details</span><span>'+booking.projectDetails.substring(0,100)+(booking.projectDetails.length>100?'…':'')+'</span></div>':'');
     }
 
     async function submitBooking(){
@@ -218,7 +212,7 @@
       var ref='SP-2026-'+Math.random().toString(36).substring(2,7).toUpperCase();
       var headers={'Content-Type':'application/json'};
       var token=localStorage.getItem('user_token');if(token) headers['Authorization']='Bearer '+token;
-      try{await fetch('/api/bookings',{method:'POST',headers:headers,body:JSON.stringify({reference:ref,destination:dest.name,startDate:booking.startDate||null,endDate:booking.endDate||null,projectDetails:booking.projectDetails||'',totalPrice:booking.totalPrice||0})});}catch(e){}
+      try{await fetch('/api/bookings',{method:'POST',headers:headers,body:JSON.stringify({reference:ref,destination:dest.name,startDate:booking.startDate||null,endDate:booking.endDate||null,projectDetails:booking.projectDetails||''})});}catch(e){}
       $('#bookingRef').textContent=ref;
     }
 
@@ -234,7 +228,6 @@
       if(!s)return;
       if(s.branding){var b=s.branding;if(b.logoUrl)$$('.logo-img').forEach(function(img){img.onerror=function(){this.onerror=null;this.src='images/Syed-production.webp';};img.src=b.logoUrl;if(b.logoSize){img.style.width=b.logoSize+'px';img.style.height=b.logoSize+'px';}if(b.logoBorderRadius!=null)img.style.borderRadius=b.logoBorderRadius+'%';});if(b.companyName){var p=b.companyName.split(' ');if(syed&&prod&&p.length>=2){syed.textContent=p[0];prod.textContent=p.slice(1).join(' ');}document.title=b.companyName+' — Book Now';}if(b.faviconUrl){var fav=$('link[rel="icon"]');if(fav)fav.href=b.faviconUrl;}if(b.companyShortName){var fs=$('.footer-brand .nav-logo span');if(fs)fs.textContent=b.companyShortName;}}
       if(s.footer){var fd=$('.footer-brand > p');if(fd&&s.footer.description)fd.textContent=s.footer.description;var fc=$('.footer-bottom p');if(fc&&s.footer.copyrightText)fc.innerHTML=s.footer.copyrightText;}
-      if(s.bookingConfig){if(s.bookingConfig.serviceFee!==undefined)bookingConfig.serviceFee=s.bookingConfig.serviceFee;}
       if(s.socialLinks){var sl=s.socialLinks,lk=$$('.social-link');if(sl.facebook&&lk[0])lk[0].href=sl.facebook;if(sl.instagram&&lk[1])lk[1].href=sl.instagram;if(sl.whatsapp&&lk[2])lk[2].href=sl.whatsapp;if(sl.youtube&&lk[3])lk[3].href=sl.youtube;}
     }
 

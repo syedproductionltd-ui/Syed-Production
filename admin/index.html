@@ -20,7 +20,6 @@
     <a href="destinations.html">Services</a>
     <a href="bookings.html">Bookings</a>
     <a href="reviews.html">Reviews</a>
-    <a href="deals.html">Deals</a>
     <a href="subscribers.html">Subscribers</a>
     <a href="videos.html">Videos</a>
     <a href="gallery.html">Gallery</a>
@@ -33,7 +32,6 @@
       <div class="stat-card"><div class="stat-label">Services</div><div class="stat-value" id="statDest">—</div></div>
       <div class="stat-card"><div class="stat-label">Bookings</div><div class="stat-value" id="statBook">—</div></div>
       <div class="stat-card"><div class="stat-label">Reviews</div><div class="stat-value" id="statReview">—</div></div>
-      <div class="stat-card"><div class="stat-label">Deals</div><div class="stat-value" id="statDeal">—</div></div>
       <div class="stat-card"><div class="stat-label">Subscribers</div><div class="stat-value" id="statSub">—</div></div>
       <div class="stat-card"><div class="stat-label">Videos</div><div class="stat-value" id="statVideo">—</div></div>
       <div class="stat-card"><div class="stat-label">Gallery</div><div class="stat-value" id="statGallery">—</div></div>
@@ -66,11 +64,10 @@
 
     (async () => {
       try {
-        const [destinations, bookings, reviews, deals, subscribers, videos, gallery, team] = await Promise.all([
+        const [destinations, bookings, reviews, subscribers, videos, gallery, team] = await Promise.all([
           apiCall('/destinations'),
           apiCall('/bookings'),
           apiCall('/reviews'),
-          apiCall('/deals'),
           apiCall('/subscribers'),
           apiCall('/videos'),
           apiCall('/gallery'),
@@ -80,7 +77,6 @@
         document.getElementById('statDest').textContent = destinations.length;
         document.getElementById('statBook').textContent = bookings.length;
         document.getElementById('statReview').textContent = reviews.length;
-        document.getElementById('statDeal').textContent = deals.length;
         document.getElementById('statSub').textContent = subscribers.length;
         document.getElementById('statVideo').textContent = videos.length;
         document.getElementById('statGallery').textContent = gallery.length;

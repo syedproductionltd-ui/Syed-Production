@@ -2,7 +2,6 @@ require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') }
 const mongoose = require('mongoose');
 const Destination = require('./models/Destination');
 const Review = require('./models/Review');
-const Deal = require('./models/Deal');
 const Admin = require('./models/Admin');
 const Video = require('./models/Video');
 const GalleryImage = require('./models/GalleryImage');
@@ -11,84 +10,84 @@ const TeamMember = require('./models/TeamMember');
 const destinations = [
   {
     id: 1, name: 'Cinematic Wedding Films', tier: 'Premium', category: 'film', featured: true,
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',
+    image: 'images/services/DSC_4732.JPG',
     rating: 4.9, reviews: 340, price: 150000,
     description: 'Capture your special day with cinematic storytelling. Our wedding films blend emotion, artistry, and technical excellence to create timeless memories you will cherish forever.',
     highlights: ['4K Cinematic', 'Drone Shots', 'Same-Day Edit', 'Full Ceremony', 'Highlight Reel']
   },
   {
     id: 2, name: 'Corporate Video Production', tier: 'Business', category: 'film',
-    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80',
+    image: 'images/services/DSC_4742.JPG',
     rating: 4.8, reviews: 280, price: 120000,
     description: 'Professional corporate videos that communicate your brand story, culture, and values. From company profiles to training videos and product launches.',
     highlights: ['Brand Story', 'Product Launch', 'Training Videos', 'Interviews', 'Motion Graphics']
   },
   {
     id: 3, name: 'Music Video Production', tier: 'Creative', category: 'film', featured: true,
-    image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80',
+    image: 'images/services/DSC_4762.JPG',
     rating: 4.9, reviews: 210, price: 200000,
     description: 'Bring your music to life with visually stunning music videos. We handle concept development, location scouting, filming, and post-production from start to finish.',
     highlights: ['Concept Design', 'Multi-Location', 'Color Grading', 'VFX', 'Choreography']
   },
   {
     id: 4, name: 'Product Photography', tier: 'Commercial', category: 'photography', featured: true,
-    image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600&q=80',
+    image: 'images/services/IMG_5618.JPG',
     rating: 4.7, reviews: 160, price: 50000,
     description: 'High-quality product photography for e-commerce, catalogues, and advertising. Studio and on-location setups with professional lighting and styling.',
     highlights: ['Studio Setup', 'Lifestyle Shots', 'White Background', '360° Views', 'Retouching']
   },
   {
     id: 5, name: 'Event Coverage', tier: 'Live', category: 'events', featured: true,
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80',
+    image: 'images/services/IMG_5656.JPG',
     rating: 4.9, reviews: 890, price: 80000,
     description: 'Comprehensive event coverage including conferences, galas, concerts, and ceremonies. Multi-camera setups, live streaming, and rapid turnaround.',
     highlights: ['Multi-Camera', 'Live Stream', 'Same-Day Highlights', 'Drone Coverage', 'Photo + Video']
   },
   {
     id: 6, name: 'Documentary Filmmaking', tier: 'Storytelling', category: 'film',
-    image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=600&q=80',
+    image: 'images/services/IMG_5921.JPG',
     rating: 4.8, reviews: 135, price: 250000,
     description: 'Compelling documentary films that tell powerful stories. From concept to distribution, we handle research, interviews, cinematography, and post-production.',
     highlights: ['Research', 'Interviews', 'Narration', 'Archival Footage', 'Festival Ready']
   },
   {
     id: 7, name: 'Portrait & Fashion Photography', tier: 'Creative', category: 'photography',
-    image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&q=80',
+    image: 'images/services/IMG_7236.JPG',
     rating: 4.7, reviews: 180, price: 40000,
     description: 'Professional portrait and fashion photography sessions. From headshots to editorial spreads, we bring out the best in every subject with expert lighting and direction.',
     highlights: ['Studio Portraits', 'Outdoor Shoots', 'Fashion Editorial', 'Headshots', 'Retouching']
   },
   {
     id: 8, name: 'Social Media Content', tier: 'Digital', category: 'branding',
-    image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=600&q=80',
+    image: 'images/services/IMG_7247.JPG',
     rating: 4.6, reviews: 140, price: 35000,
     description: 'Engaging social media content creation — reels, stories, posts, and ad creatives optimized for Instagram, TikTok, YouTube, and Facebook.',
     highlights: ['Reels', 'Stories', 'Ad Creatives', 'Content Calendar', 'Platform Optimization']
   },
   {
     id: 9, name: 'Video Editing & Post-Production', tier: 'Post', category: 'editing',
-    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80',
+    image: 'images/services/IMG_7255.JPG',
     rating: 4.8, reviews: 220, price: 30000,
     description: 'Professional video editing, color grading, sound design, and motion graphics. Transform your raw footage into polished, broadcast-ready content.',
     highlights: ['Color Grading', 'Sound Design', 'Motion Graphics', 'VFX', 'Subtitles']
   },
   {
     id: 10, name: 'Real Estate Videography', tier: 'Property', category: 'film',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=80',
+    image: 'images/services/IMG_8253.JPG',
     rating: 4.7, reviews: 95, price: 60000,
     description: 'Showcase properties with stunning aerial and interior videography. Virtual tours, drone footage, and cinematic walkthroughs for real estate marketing.',
     highlights: ['Drone Footage', 'Virtual Tours', 'Interior Shots', 'Twilight Shoots', '3D Tours']
   },
   {
     id: 11, name: 'Brand Identity & Logo Design', tier: 'Creative', category: 'branding',
-    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80',
+    image: 'images/services/IMG_8261.JPG',
     rating: 4.6, reviews: 170, price: 45000,
     description: 'Complete brand identity packages — logo design, color palettes, typography, brand guidelines, and visual assets for a cohesive professional look.',
     highlights: ['Logo Design', 'Brand Guidelines', 'Color Palette', 'Typography', 'Visual Assets']
   },
   {
     id: 12, name: 'Photo & Video Retouching', tier: 'Post', category: 'editing',
-    image: 'https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=600&q=80',
+    image: 'images/services/IMG_8285.JPG',
     rating: 4.8, reviews: 110, price: 25000,
     description: 'Expert photo and video retouching services. Skin retouching, background removal, color correction, and compositing to make every frame perfect.',
     highlights: ['Skin Retouching', 'Background Removal', 'Color Correction', 'Compositing', 'Batch Processing']
@@ -134,37 +133,6 @@ const reviews = [
   }
 ];
 
-const now = Date.now();
-const deals = [
-  {
-    name: 'Wedding Film Package', service: 'Cinematic Wedding Films',
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',
-    oldPrice: 200000, newPrice: 150000, badge: 'Hot Deal',
-    description: 'Complete wedding coverage — 2 cinematographers, drone, same-day edit, 10-min highlight film, full ceremony edit.',
-    expiresAt: new Date(now + 47 * 3600000)
-  },
-  {
-    name: 'Corporate Starter Package', service: 'Corporate Video Production',
-    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80',
-    oldPrice: 150000, newPrice: 99000, badge: 'Trending',
-    description: 'Brand story video + 3 social media cuts. Includes scripting, filming, editing, and motion graphics.',
-    expiresAt: new Date(now + 23 * 3600000)
-  },
-  {
-    name: 'Event Coverage Bundle', service: 'Event Coverage',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80',
-    oldPrice: 120000, newPrice: 80000, badge: 'Best Seller',
-    description: 'Full event photo + video coverage, live streaming, same-day highlight reel, and social media package.',
-    expiresAt: new Date(now + 71 * 3600000)
-  },
-  {
-    name: 'Complete Branding Suite', service: 'Brand Identity & Logo Design',
-    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80',
-    oldPrice: 180000, newPrice: 120000, badge: 'Save 33%',
-    description: 'Logo + brand guidelines + social media templates + product photography + promotional video.',
-    expiresAt: new Date(now + 35 * 3600000)
-  }
-];
 
 const videos = [
   { title: 'Syed Productions Showreel', description: 'A showcase of our best cinematic work across all categories', tag: 'Cinematic', videoUrl: 'videos/Syed Productions-1.mp4', sortOrder: 1 },
@@ -180,23 +148,43 @@ const videos = [
 ];
 
 const galleryImages = [
-  { imageUrl: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=80', altText: 'Wedding cinematography', hidden: false, sortOrder: 1 },
-  { imageUrl: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=80', altText: 'Music video production', hidden: false, sortOrder: 2 },
-  { imageUrl: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=400&q=80', altText: 'Corporate shoot', hidden: false, sortOrder: 3 },
-  { imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=80', altText: 'Event coverage', hidden: false, sortOrder: 4 },
-  { imageUrl: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=400&q=80', altText: 'Product photography', hidden: false, sortOrder: 5 },
-  { imageUrl: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80', altText: 'Documentary filming', hidden: false, sortOrder: 6 },
-  { imageUrl: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80', altText: 'Fashion photography', hidden: false, sortOrder: 7 },
-  { imageUrl: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&q=80', altText: 'Real estate shoot', hidden: false, sortOrder: 8 },
-  { imageUrl: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&q=80', altText: 'Social media content', hidden: false, sortOrder: 9 },
-  { imageUrl: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80', altText: 'Branding project', hidden: false, sortOrder: 10 },
-  { imageUrl: 'https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=400&q=80', altText: 'Photo retouching', hidden: false, sortOrder: 11 },
-  { imageUrl: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&q=80', altText: 'Conference coverage', hidden: true, sortOrder: 12 },
-  { imageUrl: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=400&q=80', altText: 'On-set filming', hidden: true, sortOrder: 13 },
-  { imageUrl: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80', altText: 'Camera setup', hidden: true, sortOrder: 14 },
-  { imageUrl: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=400&q=80', altText: 'Film production', hidden: true, sortOrder: 15 },
-  { imageUrl: 'https://images.unsplash.com/photo-1524712245354-2c4e5e7121c0?w=400&q=80', altText: 'Studio session', hidden: true, sortOrder: 16 },
-  { imageUrl: 'https://images.unsplash.com/photo-1533488765986-dfa2a9939acd?w=400&q=80', altText: 'Editing suite', hidden: true, sortOrder: 17 }
+  { imageUrl: 'images/gallery/016A5232.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 1 },
+  { imageUrl: 'images/gallery/016A5554.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 2 },
+  { imageUrl: 'images/gallery/016A5694.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 3 },
+  { imageUrl: 'images/gallery/016A6854.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 4 },
+  { imageUrl: 'images/gallery/016A7255.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 5 },
+  { imageUrl: 'images/gallery/016A7313.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 6 },
+  { imageUrl: 'images/gallery/016A7354.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 7 },
+  { imageUrl: 'images/gallery/016A7448.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 8 },
+  { imageUrl: 'images/gallery/016A7491.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 9 },
+  { imageUrl: 'images/gallery/3C4A5309.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 10 },
+  { imageUrl: 'images/gallery/3C4A5429.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 11 },
+  { imageUrl: 'images/gallery/DSC00440.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 12 },
+  { imageUrl: 'images/gallery/DSC00488.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 13 },
+  { imageUrl: 'images/gallery/DSC00518.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 14 },
+  { imageUrl: 'images/gallery/DSC00542.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 15 },
+  { imageUrl: 'images/gallery/DSC00546.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 16 },
+  { imageUrl: 'images/gallery/DSC00579.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 17 },
+  { imageUrl: 'images/gallery/DSC01185.JPG', altText: 'Syed Productions shoot', hidden: false, sortOrder: 18 },
+  { imageUrl: 'images/gallery/DSC01270.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 19 },
+  { imageUrl: 'images/gallery/DSC01310.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 20 },
+  { imageUrl: 'images/gallery/DSC01418.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 21 },
+  { imageUrl: 'images/gallery/DSC01916.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 22 },
+  { imageUrl: 'images/gallery/DSC02039.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 23 },
+  { imageUrl: 'images/gallery/DSC02069.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 24 },
+  { imageUrl: 'images/gallery/DSC02160.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 25 },
+  { imageUrl: 'images/gallery/DSC02194.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 26 },
+  { imageUrl: 'images/gallery/DSC02227.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 27 },
+  { imageUrl: 'images/gallery/DSC02309.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 28 },
+  { imageUrl: 'images/gallery/DSC02367.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 29 },
+  { imageUrl: 'images/gallery/DSC02419.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 30 },
+  { imageUrl: 'images/gallery/DSC04563.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 31 },
+  { imageUrl: 'images/gallery/DSC09472.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 32 },
+  { imageUrl: 'images/gallery/DSC09537.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 33 },
+  { imageUrl: 'images/gallery/IMG_1266.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 34 },
+  { imageUrl: 'images/gallery/IMG_4983.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 35 },
+  { imageUrl: 'images/gallery/M4M05012.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 36 },
+  { imageUrl: 'images/gallery/M4M05048.JPG', altText: 'Syed Productions shoot', hidden: true, sortOrder: 37 }
 ];
 
 const teamMembers = [
@@ -215,7 +203,6 @@ async function seed() {
     await Promise.all([
       Destination.deleteMany({}),
       Review.deleteMany({}),
-      Deal.deleteMany({}),
       Admin.deleteMany({}),
       Video.deleteMany({}),
       GalleryImage.deleteMany({}),
@@ -230,8 +217,6 @@ async function seed() {
     await Review.insertMany(reviews);
     console.log(`Seeded ${reviews.length} reviews`);
 
-    await Deal.insertMany(deals);
-    console.log(`Seeded ${deals.length} deals`);
 
     await Video.insertMany(videos);
     console.log(`Seeded ${videos.length} videos`);

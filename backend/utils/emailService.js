@@ -49,7 +49,7 @@ async function sendWelcomeEmail(email) {
           <td style="padding:32px;">
             <h2 style="margin:0 0 16px;color:#1a1a1a;font-size:22px;">Welcome to the Family!</h2>
             <p style="margin:0 0 16px;color:#444;font-size:15px;line-height:1.6;">
-              Thank you for subscribing to <strong>Syed Productions</strong>. You'll now receive exclusive updates on our latest projects, behind-the-scenes content, special production packages, and creative insights.
+              Thank you for subscribing to <strong>Syed Productions</strong>. You'll now receive exclusive updates on our latest projects, behind-the-scenes content, and creative insights.
             </p>
 
             <!-- Offer Box -->
@@ -95,7 +95,7 @@ async function sendWelcomeEmail(email) {
 
   const text = `Welcome to Syed Productions!
 
-Thank you for subscribing. You'll now receive exclusive updates, behind-the-scenes content, and special production packages.
+Thank you for subscribing. You'll now receive exclusive updates, behind-the-scenes content, and creative insights.
 
 SPECIAL OFFER: 15% OFF your first booking!
 Use code: WELCOME15

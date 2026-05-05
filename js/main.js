@@ -10,11 +10,9 @@
   -------------------------------------------------------- */
   let destinations = [];
   let reviews = [];
-  let deals = [];
   let videos = [];
   let galleryImages = [];
   let teamMembers = [];
-  let bookingConfig = { serviceFee: 2000 };
 
   /* AI chat/planner responses — defaults overridden by site settings */
   let aiResponses = {
@@ -64,8 +62,8 @@
     'corporate': 'We produce professional corporate videos — brand films, training videos, event coverage, and promotional content with broadcast-quality finishing.',
     'photography': 'Our photography services cover portraits, products, events, fashion, and real estate — with professional lighting, retouching, and fast delivery.',
     'music': 'We create stunning music videos from concept to final cut — creative direction, choreography, location scouting, and professional color grading.',
-    'price': 'Our packages start from PKR 25,000 for basic shoots. Wedding films from PKR 150,000, corporate videos from PKR 75,000. Custom quotes available!',
-    'budget': 'We have packages for every budget! Basic event coverage starts at PKR 25,000. Contact us for a custom quote tailored to your needs.',
+    'price': 'For pricing details, please contact us on WhatsApp or fill out the booking form — we\u0027ll get back to you with a custom quote!',
+    'budget': 'We offer packages for every scale of project. Contact us to discuss your needs and we\u0027ll provide a tailored quote!',
     'editing': 'Our post-production services include video editing, color grading, motion graphics, VFX, and sound design — all done in-house.',
     'branding': 'Our branding services include logo design, visual identity, brand guidelines, and social media assets — everything to establish your brand.',
     'event': 'We cover all types of events — corporate conferences, product launches, galas, concerts, and private celebrations with multi-camera setups.',
@@ -110,9 +108,6 @@
     return html;
   }
 
-  function formatPKR(amount) {
-    return 'PKR ' + amount.toLocaleString('en-PK');
-  }
 
   /* --------------------------------------------------------
      NAVIGATION
@@ -253,10 +248,6 @@
             <span class="rating-text">${dest.rating} (${dest.reviews.toLocaleString()})</span>
           </div>
           <div class="service-card-footer">
-            <div class="service-card-price">
-              <span class="price-amount">${formatPKR(dest.price)}</span>
-              <span class="price-per"> /project</span>
-            </div>
             <button class="service-card-btn" data-id="${dest.id}">Explore</button>
           </div>
         </div>
@@ -303,7 +294,6 @@
               <svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
               ${dest.rating}
             </span>
-            <span class="featured-price">From ${formatPKR(dest.price)}</span>
           </div>
           <button class="featured-btn" data-id="${dest.id}">Explore</button>
         </div>
@@ -326,7 +316,7 @@
       card.innerHTML = `
         <img src="${dest.image}" alt="${dest.name}" loading="lazy">
         <h4>${dest.name}</h4>
-        <p>From ${formatPKR(dest.price)}/project</p>
+        <p>${dest.tier}</p>
       `;
       card.addEventListener('click', () => {
         $$('.booking-service-card').forEach(c => c.classList.remove('selected'));
@@ -366,7 +356,6 @@
     $('#modalRating').innerHTML = `<span class="stars">${generateStars(dest.rating)}</span> ${dest.rating} (${dest.reviews.toLocaleString()} reviews)`;
     $('#modalDescription').textContent = dest.description;
     $('#modalHighlights').innerHTML = dest.highlights.map(h => `<span class="highlight-tag">${h}</span>`).join('');
-    $('#modalPrice').innerHTML = `${formatPKR(dest.price)} <span>/project</span>`;
     $('#modalBookBtn').onclick = () => {
       closeModal();
       document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
@@ -445,7 +434,7 @@
     const intro = responsePool[Math.floor(Math.random() * responsePool.length)];
 
     const durationMap = { weekend: '3 Days', week: '7 Days', twoweeks: '14 Days', month: '30 Days' };
-    const budgetMap = { budget: 'PKR 25,000–75,000', mid: 'PKR 75,000–200,000', luxury: 'PKR 200,000+' };
+    const budgetMap = { budget: 'Budget', mid: 'Mid-Range', luxury: 'Premium' };
 
     const relevant = destinations.filter(d =>
       interests.includes(d.category) ||
@@ -478,7 +467,7 @@
       <p>${intro}</p>
       <div class="itinerary-card">
         <h4>Your ${durationMap[duration]} ${style === 'solo' ? 'Solo' : style === 'couple' ? 'Couple' : style === 'family' ? 'Family' : 'Group'} Production Plan</h4>
-        <p style="font-size:12px; color:#64748b; margin-bottom:8px;">Budget: ${budgetMap[budget]} | Interests: ${interests.join(', ')}</p>
+        <p style="font-size:12px; color:#64748b; margin-bottom:8px;">Scale: ${budgetMap[budget]} | Interests: ${interests.join(', ')}</p>
         ${itineraryDays.join('')}
         ${days > 7 ? '<div class="itinerary-day"><strong>Days 8–' + days + ':</strong> Extended post-production — color grading, VFX, sound design, and final delivery!</div>' : ''}
       </div>
@@ -617,22 +606,12 @@
       ? Math.ceil((new Date(booking.endDate) - new Date(booking.startDate)) / (1000 * 60 * 60 * 24))
       : 1;
 
-    const basePrice = dest.price;
-    const serviceFee = bookingConfig.serviceFee;
-    const total = basePrice + serviceFee;
-
-    // Store total for submission
-    booking.totalPrice = Math.round(total);
-
     review.innerHTML = `
       <div class="review-line"><span class="label">Service</span><span>${dest.name}</span></div>
       <div class="review-line"><span class="label">Tier</span><span>${dest.tier}</span></div>
       <div class="review-line"><span class="label">Dates</span><span>${booking.startDate || 'Flexible'} → ${booking.endDate || 'Flexible'}</span></div>
       <div class="review-line"><span class="label">Duration</span><span>${days} day${days > 1 ? 's' : ''}</span></div>
       ${booking.projectDetails ? `<div class="review-line"><span class="label">Project Details</span><span>${booking.projectDetails.substring(0, 100)}${booking.projectDetails.length > 100 ? '…' : ''}</span></div>` : ''}
-      <div class="review-line"><span class="label">Base Package</span><span>${formatPKR(basePrice)}</span></div>
-      <div class="review-line"><span class="label">Service Fee</span><span>${formatPKR(serviceFee)}</span></div>
-      <div class="review-line total"><span>Total</span><span>${formatPKR(Math.round(total))}</span></div>
     `;
   }
 
@@ -657,8 +636,7 @@
           destination: dest.name,
           startDate: booking.startDate || null,
           endDate: booking.endDate || null,
-          projectDetails: booking.projectDetails || '',
-          totalPrice: booking.totalPrice || 0
+          projectDetails: booking.projectDetails || ''
         })
       });
     } catch (err) {
@@ -775,65 +753,6 @@
     updateReviewsCarousel();
   });
 
-  /* --------------------------------------------------------
-     DEALS & COUNTDOWNS
-  -------------------------------------------------------- */
-  const dealsGrid = $('#dealsGrid');
-  let countdownEndTimes = [];
-
-  function renderDeals() {
-    dealsGrid.innerHTML = '';
-    countdownEndTimes = deals.map(d => new Date(d.expiresAt).getTime());
-
-    deals.forEach((deal, idx) => {
-      const card = createEl('div', { className: 'deal-card' });
-      const savePercent = Math.round((1 - deal.newPrice / deal.oldPrice) * 100);
-
-      card.innerHTML = `
-        <span class="deal-badge">${deal.badge}</span>
-        <div class="deal-card-img">
-          <img src="${deal.image}" alt="${deal.name}" loading="lazy">
-        </div>
-        <div class="deal-card-body">
-          <h3 class="deal-card-name">${deal.name}</h3>
-          <p class="deal-card-desc">${deal.description}</p>
-          <div class="deal-pricing">
-            <span class="deal-old-price">${formatPKR(deal.oldPrice)}</span>
-            <span class="deal-new-price">${formatPKR(deal.newPrice)}</span>
-            <span class="deal-save">Save ${savePercent}%</span>
-          </div>
-          <div class="deal-countdown" data-idx="${idx}">
-            <div class="countdown-unit"><span class="countdown-value" data-unit="days">0</span><span class="countdown-label">Days</span></div>
-            <div class="countdown-unit"><span class="countdown-value" data-unit="hours">0</span><span class="countdown-label">Hours</span></div>
-            <div class="countdown-unit"><span class="countdown-value" data-unit="mins">0</span><span class="countdown-label">Mins</span></div>
-            <div class="countdown-unit"><span class="countdown-value" data-unit="secs">0</span><span class="countdown-label">Secs</span></div>
-          </div>
-          <a href="#booking" class="deal-book-btn">Book This Package</a>
-        </div>
-      `;
-      dealsGrid.appendChild(card);
-    });
-
-    updateCountdowns();
-  }
-
-  function updateCountdowns() {
-    $$('.deal-countdown').forEach((el, idx) => {
-      const remaining = Math.max(0, countdownEndTimes[idx] - Date.now());
-      const days = Math.floor(remaining / 86400000);
-      const hours = Math.floor((remaining % 86400000) / 3600000);
-      const mins = Math.floor((remaining % 3600000) / 60000);
-      const secs = Math.floor((remaining % 60000) / 1000);
-
-      const vals = el.querySelectorAll('.countdown-value');
-      vals[0].textContent = String(days).padStart(2, '0');
-      vals[1].textContent = String(hours).padStart(2, '0');
-      vals[2].textContent = String(mins).padStart(2, '0');
-      vals[3].textContent = String(secs).padStart(2, '0');
-    });
-  }
-
-  setInterval(updateCountdowns, 1000);
 
   /* --------------------------------------------------------
      NEWSLETTER — POST to API
@@ -1462,7 +1381,6 @@
         projectPlanner: '#project-planner',
         booking: '#booking',
         reviews: '#reviews',
-        deals: '#deals'
       };
       for (const [key, selector] of Object.entries(sectionMap)) {
         const section = s.sectionHeaders[key];
@@ -1498,10 +1416,6 @@
       if (nlNote && n.subscriberNote) nlNote.textContent = n.subscriberNote;
     }
 
-    // Booking config
-    if (s.bookingConfig) {
-      if (s.bookingConfig.serviceFee !== undefined) bookingConfig.serviceFee = s.bookingConfig.serviceFee;
-    }
 
     // AI planner responses (override defaults if present)
     if (s.aiProjectPlanner) {
@@ -1525,7 +1439,6 @@
       delete window.__publicDataPromise;
       destinations = data.destinations || [];
       reviews = data.reviews || [];
-      deals = data.deals || [];
       videos = data.videos || [];
       galleryImages = data.gallery || [];
       teamMembers = data.team || [];
@@ -1552,7 +1465,6 @@
     renderTopDestinations();
     renderBookingDestinations();
     renderReviews();
-    renderDeals();
     renderVideos();
     renderGallery();
     renderTeam();
@@ -1620,19 +1532,6 @@
   // Initialize dark mode immediately (not inside async init)
   initDarkMode();
 
-  /* --------------------------------------------------------
-     BRAND FONT SWAP (every 1 second)
-  -------------------------------------------------------- */
-  (function() {
-    var syed = document.getElementById('brandSyed');
-    var prod = document.getElementById('brandProd');
-    if (syed && prod) {
-      setInterval(function() {
-        syed.classList.toggle('swapped');
-        prod.classList.toggle('swapped');
-      }, 1000);
-    }
-  })();
 
   /* --------------------------------------------------------
      HOMEPAGE REVIEW MODAL

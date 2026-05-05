@@ -54,18 +54,13 @@ const siteSettingsSchema = new mongoose.Schema({
     booking: {
       tag: { type: String, default: 'Book a Service' },
       title: { type: String, default: 'Book Your Production' },
-      description: { type: String, default: 'Simple, transparent booking in just a few steps. No hidden fees — honest pricing from a professional team.' }
+      description: { type: String, default: 'Simple booking in just a few steps. Tell us about your project and we\u0027ll take care of the rest.' }
     },
     reviews: {
       tag: { type: String, default: 'Client Stories' },
       title: { type: String, default: 'What Our Clients Say' },
       description: { type: String, default: 'Real feedback from real clients. See why hundreds trust Syed Productions for their most important moments.' }
     },
-    deals: {
-      tag: { type: String, default: 'Special Offers' },
-      title: { type: String, default: 'Production Packages' },
-      description: { type: String, default: 'Grab these exclusive production packages at special rates — limited availability, book now to secure your dates.' }
-    }
   },
 
   navigation: {
@@ -98,8 +93,8 @@ const siteSettingsSchema = new mongoose.Schema({
   },
 
   newsletter: {
-    heading: { type: String, default: 'Get Production Updates & Exclusive Offers' },
-    description: { type: String, default: 'Subscribe for exclusive production packages, behind-the-scenes content, and creative insights delivered to your inbox.' },
+    heading: { type: String, default: 'Get Production Updates' },
+    description: { type: String, default: 'Subscribe for behind-the-scenes content, production updates, and creative insights delivered to your inbox.' },
     subscriberNote: { type: String, default: 'No spam, unsubscribe anytime. Join 5,000+ creative professionals.' }
   },
 

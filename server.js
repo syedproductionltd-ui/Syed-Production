@@ -7,6 +7,14 @@ const connectDB = require('./backend/config/db');
 
 const app = express();
 
+let localFallbackData = null;
+try {
+  localFallbackData = require(path.join(__dirname, 'data', 'local-data.json'));
+  console.log('Loaded local fallback data successfully');
+} catch (err) {
+  console.error('Failed to load local fallback data at startup:', err.message);
+}
+
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '5mb' }));
@@ -72,22 +80,19 @@ app.get('/api/public-data', async (req, res) => {
   }
 
   // Fallback to local JSON data
-  try {
-    const dataPath = path.join(process.cwd(), 'data', 'local-data.json');
-    console.log('Vercel fallback data path:', dataPath);
-    const localData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-    res.json({
-      destinations: localData.destinations,
-      reviews: localData.reviews,
-      videos: localData.videos,
-      gallery: localData.gallery,
-      team: localData.team,
-      settings: localData.settings
+  if (localFallbackData) {
+    return res.json({
+      destinations: localFallbackData.destinations || [],
+      reviews: localFallbackData.reviews || [],
+      videos: localFallbackData.videos || [],
+      gallery: localFallbackData.gallery || [],
+      team: localFallbackData.team || [],
+      settings: localFallbackData.settings || {}
     });
-  } catch (err) {
-    console.error('Failed to load local fallback data:', err.message);
-    res.status(500).json({ error: 'Failed to load data', message: err.message });
   }
+
+  console.error('Local fallback data is not available');
+  res.status(500).json({ error: 'Failed to load data', message: 'Local fallback data is missing' });
 });
 
 // API Routes
@@ -106,6 +111,19 @@ app.use('/api/chat', require('./backend/routes/chat'));
 
 // Site settings routes
 app.use('/api/site-settings', require('./backend/routes/siteSettings'));
+
+app.get('/api/debug-fallback', (req, res) => {
+  if (localFallbackData) {
+    return res.json({ status: 'ok', hasFallbackData: true, items: {
+      destinations: localFallbackData.destinations?.length,
+      reviews: localFallbackData.reviews?.length,
+      videos: localFallbackData.videos?.length,
+      gallery: localFallbackData.gallery?.length,
+      team: localFallbackData.team?.length
+    }});
+  }
+  res.status(500).json({ status: 'error', message: 'Local fallback data not loaded' });
+});
 
 const PORT = process.env.PORT || 3000;
 

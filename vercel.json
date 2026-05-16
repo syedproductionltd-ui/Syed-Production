@@ -5,7 +5,7 @@
       "src": "server.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["backend/**"]
+        "includeFiles": ["backend/**", "uploads/**"]
       }
     },
     { "src": "*.html", "use": "@vercel/static" },
@@ -13,7 +13,8 @@
     { "src": "js/**", "use": "@vercel/static" },
     { "src": "images/**", "use": "@vercel/static" },
     { "src": "admin/**", "use": "@vercel/static" },
-    { "src": "videos/**", "use": "@vercel/static" }
+    { "src": "videos/**", "use": "@vercel/static" },
+    { "src": "uploads/**", "use": "@vercel/static" }
   ],
   "routes": [
     { "handle": "filesystem" },

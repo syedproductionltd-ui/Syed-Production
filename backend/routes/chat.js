@@ -37,7 +37,7 @@ router.get('/test', async (req, res) => {
       },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: 'say hi in one sentence' }],
+        messages: [{ role: 'user', content: 'Say hi in one sentence' }],
         max_tokens: 50
       })
     });

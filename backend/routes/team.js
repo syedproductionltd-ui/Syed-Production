@@ -1,6 +1,49 @@
 const router = require('express').Router();
 const TeamMember = require('../models/TeamMember');
 const auth = require('../middleware/auth');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Ensure team uploads directory exists
+const teamUploadDir = path.join(__dirname, '../../uploads/team');
+if (!fs.existsSync(teamUploadDir)) {
+  fs.mkdirSync(teamUploadDir, { recursive: true });
+}
+
+// Multer config for team image uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, teamUploadDir),
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E6) + path.extname(file.originalname);
+    cb(null, uniqueName);
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max
+  fileFilter: (req, file, cb) => {
+    const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/heic'];
+    if (allowed.includes(file.mimetype) || file.originalname.match(/\.(jpg|jpeg|png|gif|webp|heic)$/i)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files (JPG, PNG, GIF, WEBP, HEIC) are allowed'));
+    }
+  }
+});
+
+// POST /api/team/upload — upload team member photo
+router.post('/upload', auth, (req, res) => {
+  upload.single('image')(req, res, (err) => {
+    if (err) {
+      return res.status(400).json({ message: err.message || 'Upload failed' });
+    }
+    if (!req.file) return res.status(400).json({ message: 'No image file uploaded' });
+    const imageUrl = 'uploads/team/' + req.file.filename;
+    res.json({ imageUrl });
+  });
+});
 
 // GET /api/team (public)
 router.get('/', async (req, res) => {

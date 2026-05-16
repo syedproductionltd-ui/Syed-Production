@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Admin pages — do not index
+Disallow: /admin/
+Disallow: /login.html
+Disallow: /register.html
+Disallow: /profile.html
+
+# Sitemap
+Sitemap: https://syedproductions.com/sitemap.xml

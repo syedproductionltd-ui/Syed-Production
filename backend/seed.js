@@ -188,10 +188,10 @@ const galleryImages = [
 ];
 
 const teamMembers = [
-  { name: 'Syed Ahmed', role: 'Director & Founder', bio: 'Visionary filmmaker with 10+ years of experience in cinematic storytelling. Leads every production with passion and precision.', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 1 },
-  { name: 'Maria Khan', role: 'Lead Cinematographer', bio: 'Expert in visual composition and camera work. Specializes in wedding films, music videos, and commercial productions.', image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 2 },
-  { name: 'Ali Hassan', role: 'Senior Editor & Colorist', bio: 'Master of post-production with expertise in color grading, VFX, and motion graphics. Brings raw footage to cinematic life.', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 3 },
-  { name: 'Zara Batool', role: 'Producer & Client Relations', bio: 'Manages projects from concept to delivery. Ensures every client vision is executed flawlessly and on schedule.', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80', facebook: '#', instagram: '#', sortOrder: 4 }
+  { name: 'Burhan Uddin Shah', role: 'CEO & Founder', bio: 'Visionary leader driving Syed Productions forward with creative excellence and strategic vision. The driving force behind every project.', image: 'images/team/Burhan.png', facebook: '#', instagram: '#', sortOrder: 1 },
+  { name: 'Tehseen Abbas', role: 'Head of Production', bio: 'Manages end-to-end production workflows ensuring every project meets the highest standards of quality and creativity.', image: 'images/team/tehseen.png', facebook: '#', instagram: '#', sortOrder: 2 },
+  { name: 'Tashfeen Bin Riaz', role: 'Photographer', bio: 'Talented photographer with a keen eye for capturing stunning visuals and unforgettable moments.', image: 'images/team/Tashfeen Bin Riaz.png', facebook: '#', instagram: '#', sortOrder: 3 },
+  { name: 'Hussain', role: 'Media Head', bio: 'Leads media strategy and content creation, delivering impactful visual stories across all platforms.', image: 'images/team/Hussain.jpg', facebook: '#', instagram: '#', sortOrder: 4 }
 ];
 
 async function seed() {

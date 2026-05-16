@@ -3,8 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Syed Productions</title>
+  <title>Syed Productions — Film, Photography & Videography</title>
   <meta name="description" content="Syed Productions — Professional film, photography, videography, and event coverage. Bringing your vision to life with cinematic storytelling and creative media production.">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://syedproductions.com/">
+  <meta property="og:title" content="Syed Productions — Film, Photography & Videography">
+  <meta property="og:description" content="Professional film, photography, videography, and event coverage. Bringing your vision to life with cinematic storytelling.">
+  <meta property="og:image" content="https://syedproductions.com/images/DSC00557.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Syed Productions">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://syedproductions.com/">
+  <meta name="twitter:title" content="Syed Productions — Film, Photography & Videography">
+  <meta name="twitter:description" content="Professional film, photography, videography, and event coverage. Bringing your vision to life with cinematic storytelling.">
+  <meta name="twitter:image" content="https://syedproductions.com/images/DSC00557.webp">
+
   <link rel="icon" type="image/webp" href="images/Syed-production.webp">
   <!-- Preload first hero image for fastest LCP -->
   <link rel="preload" as="image" type="image/webp" href="images/DSC00557.webp" fetchpriority="high">
@@ -554,6 +572,19 @@
     </div>
   </div>
 
+  <!-- Team Member Popup -->
+  <div class="team-popup-overlay" id="teamPopup" role="dialog" aria-modal="true" aria-labelledby="teamPopupName" hidden>
+    <div class="team-popup">
+      <button class="team-popup-close" id="teamPopupClose" aria-label="Close profile">&times;</button>
+      <img class="team-popup-img" id="teamPopupImg" src="" alt="">
+      <div class="team-popup-body">
+        <h2 class="team-popup-name" id="teamPopupName"></h2>
+        <span class="team-popup-role" id="teamPopupRole"></span>
+        <p class="team-popup-bio" id="teamPopupBio"></p>
+      </div>
+    </div>
+  </div>
+
   <!-- Gallery Lightbox -->
   <div class="lightbox" id="galleryLightbox" hidden>
     <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
@@ -580,6 +611,6 @@
     </div>
   </div>
 
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=2"></script>
 </body>
 </html>

@@ -106,10 +106,12 @@ app.use('/api/site-settings', require('./backend/routes/siteSettings'));
 
 const PORT = process.env.PORT || 3000;
 
-// Start server (needed for Render and local dev)
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Start server only during local development or node hosting.
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 // Export for Vercel serverless
 module.exports = app;

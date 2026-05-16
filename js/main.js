@@ -935,25 +935,65 @@
     const teamGrid = $('#teamGrid');
     if (!teamGrid) return;
     teamGrid.innerHTML = '';
+    
+    // Collect team schema data for JSON-LD
+    const teamMembers_schemas = [];
 
     teamMembers.forEach((m, i) => {
       const card = createEl('div', { className: 'team-card' });
+      // Add schema.org Person microdata attributes
+      card.setAttribute('itemscope', '');
+      card.setAttribute('itemtype', 'https://schema.org/Person');
+      card.setAttribute('data-team-name', m.name.toLowerCase().replace(/\s+/g, '-'));
+      
       card.innerHTML = `
         <div class="team-card-img">
-          <img src="${m.image}" alt="${m.name}" loading="lazy">
+          <img src="${m.image}" alt="${m.name} — ${m.role} at Syed Productions" loading="lazy" itemprop="image">
         </div>
         <div class="team-card-body">
-          <h3 class="team-card-name">${m.name}</h3>
-          <span class="team-card-role">${m.role}</span>
-          <p class="team-card-bio">${m.bio}</p>
-          <button class="team-card-btn" data-team-index="${i}" aria-label="View ${m.name} profile">
+          <h3 class="team-card-name" itemprop="name">${m.name}</h3>
+          <span class="team-card-role" itemprop="jobTitle">${m.role}</span>
+          <p class="team-card-bio" itemprop="description">${m.bio}</p>
+          <div itemprop="affiliation" itemscope itemtype="https://schema.org/Organization">
+            <meta itemprop="name" content="Syed Productions">
+          </div>
+          <button class="team-card-btn" data-team-index="${i}" data-member-name="${m.name}" aria-label="View ${m.name} profile">
             View Profile
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
         </div>
       `;
       teamGrid.appendChild(card);
+      
+      // Build schema for this team member
+      teamMembers_schemas.push({
+        "@type": "Person",
+        "name": m.name,
+        "jobTitle": m.role,
+        "description": m.bio,
+        "image": m.image,
+        "url": "https://syedproductions.com#team",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Syed Productions",
+          "url": "https://syedproductions.com"
+        }
+      });
     });
+
+    // Inject team members into schema
+    if (document.getElementById('teamMembersSchema')) {
+      document.getElementById('teamMembersSchema').remove();
+    }
+    const teamSchema = document.createElement('script');
+    teamSchema.type = 'application/ld+json';
+    teamSchema.id = 'teamMembersSchema';
+    teamSchema.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "itemListElement": teamMembers_schemas
+    });
+    document.head.appendChild(teamSchema);
 
     // Open team popup on button click
     teamGrid.querySelectorAll('.team-card-btn').forEach(btn => {

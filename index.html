@@ -4,17 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Syed Productions — Film, Photography & Videography</title>
-  <meta name="description" content="Syed Productions — Professional film, photography, videography, and event coverage. Bringing your vision to life with cinematic storytelling and creative media production.">
+  <meta name="description" content="Syed Productions — Professional film, photography, videography, and event coverage. Meet our creative team including Tashfeen Bin Riaz, Burhan Uddin Shah, Tehseen Abbas, and Hussain. Bringing your vision to life with cinematic storytelling and creative media production.">
+  
+  <!-- SEO Keywords & Meta Tags -->
+  <meta name="keywords" content="Syed Productions, film production, photography, videography, media production, creative professionals, Tashfeen Bin Riaz photographer, Burhan Uddin Shah, Tehseen Abbas, production team, video production company, event coverage, Pakistani media, cinematic storytelling">
+  <meta name="author" content="Syed Productions Team">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="language" content="English">
+  <meta name="revisit-after" content="7 days">
+  <meta name="copyright" content="© 2024 Syed Productions. All rights reserved.">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://syedproductions.com/">
   <meta property="og:title" content="Syed Productions — Film, Photography & Videography">
-  <meta property="og:description" content="Professional film, photography, videography, and event coverage. Bringing your vision to life with cinematic storytelling.">
+  <meta property="og:description" content="Professional film, photography, videography, and event coverage. Creative team including Tashfeen Bin Riaz, Burhan, Tehseen, and Hussain.">
   <meta property="og:image" content="https://syedproductions.com/images/DSC00557.webp">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="Syed Productions">
+  
+  <!-- Team Member OG Tags for Search Visibility -->
+  <meta property="og:see_also" content="https://syedproductions.com#team">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
@@ -22,6 +33,12 @@
   <meta name="twitter:title" content="Syed Productions — Film, Photography & Videography">
   <meta name="twitter:description" content="Professional film, photography, videography, and event coverage. Bringing your vision to life with cinematic storytelling.">
   <meta name="twitter:image" content="https://syedproductions.com/images/DSC00557.webp">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://syedproductions.com/">
+  
+  <!-- Alternate Language URLs (if needed in future) -->
+  <link rel="alternate" hreflang="en" href="https://syedproductions.com/">
 
   <link rel="icon" type="image/webp" href="images/Syed-production.webp">
   <!-- Preload first hero image for fastest LCP -->
@@ -35,6 +52,53 @@
     })();
   </script>
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- ============ SCHEMA.ORG JSON-LD SEO MARKUP ============ -->
+  <!-- Organization Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Syed Productions",
+    "url": "https://syedproductions.com",
+    "logo": "https://syedproductions.com/images/Syed-production.webp",
+    "description": "Professional film, photography, videography, and event coverage",
+    "foundingDate": "2020",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+      "email": "contact@syedproductions.com"
+    },
+    "sameAs": [
+      "https://www.facebook.com/syedproductions",
+      "https://www.instagram.com/syedproductions",
+      "https://www.youtube.com/syedproductions"
+    ]
+  }
+  </script>
+
+  <!-- Team Members Schema - dynamically injected by main.js -->
+  <script type="application/ld+json" id="teamSchema">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://syedproductions.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Team",
+        "item": "https://syedproductions.com#team"
+      }
+    ]
+  }
+  </script>
+
 </head>
 <body>
 

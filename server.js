@@ -11,8 +11,31 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '5mb' }));
 
-// Serve static files — public site
+// SEO & Security Headers Middleware
+app.use((req, res, next) => {
+  // Cache headers for static content
+  if (req.path.match(/\.(js|css|png|jpg|jpeg|gif|webp|svg|woff|woff2|ttf|eot)$/)) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  } else if (req.path.match(/\.(html)$/)) {
+    res.setHeader('Cache-Control', 'public, max-age=3600, must-revalidate');
+  }
+  
+  // SEO Headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  next();
+});
 app.use(express.static(path.join(__dirname)));
+
+// Team images - serve with optimized headers
+app.use('/images/team', (req, res, next) => {
+  res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  res.setHeader('Content-Type', 'image/png');
+  next();
+}, express.static(path.join(__dirname, 'images', 'team')));
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

@@ -73,7 +73,9 @@ app.get('/api/public-data', async (req, res) => {
 
   // Fallback to local JSON data
   try {
-    const localData = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'local-data.json'), 'utf8'));
+    const dataPath = path.join(process.cwd(), 'data', 'local-data.json');
+    console.log('Vercel fallback data path:', dataPath);
+    const localData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     res.json({
       destinations: localData.destinations,
       reviews: localData.reviews,
@@ -83,6 +85,7 @@ app.get('/api/public-data', async (req, res) => {
       settings: localData.settings
     });
   } catch (err) {
+    console.error('Failed to load local fallback data:', err.message);
     res.status(500).json({ error: 'Failed to load data', message: err.message });
   }
 });

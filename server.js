@@ -92,7 +92,13 @@ app.get('/api/public-data', async (req, res) => {
         require('./backend/models/TeamMember').find().sort({ sortOrder: 1 }).lean(),
         SiteSettings.getSettings()
       ]);
-      const normalizedTeam = team.map(normalizeTeamMember);
+      const normalizedTeam = await Promise.all(team.map(async member => {
+        const normalized = normalizeTeamMember(member);
+        if (normalized.image !== member.image && member._id) {
+          await require('./backend/models/TeamMember').updateOne({ _id: member._id }, { $set: { image: normalized.image } });
+        }
+        return normalized;
+      }));
       return res.json({ destinations, reviews, videos, gallery, team: normalizedTeam, settings });
     }
   } catch (err) {

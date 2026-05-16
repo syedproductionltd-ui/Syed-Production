@@ -6,19 +6,22 @@ const fs = require('fs');
 const connectDB = require('./backend/config/db');
 
 const localTeamImageMap = {
-  'Burhan Uddin Shah': 'images/team/Burhan.png',
-  'Tehseen Abbas': 'images/team/tehseen.png',
-  'Tashfeen Bin Riaz': 'images/team/Tashfeen Bin Riaz.png',
-  'Hussain': 'images/team/Hussain.jpg'
+  'burhan uddin shah': 'images/team/Burhan.png',
+  'tehseen abbas': 'images/team/tehseen.png',
+  'tashfeen bin riaz': 'images/team/Tashfeen Bin Riaz.png',
+  'hussain': 'images/team/Hussain.jpg'
 };
 
 function normalizeTeamMember(member) {
   if (!member) return member;
   const teamMember = typeof member.toObject === 'function' ? member.toObject() : { ...member };
-  return {
-    ...teamMember,
-    image: localTeamImageMap[teamMember.name] || teamMember.image
-  };
+  const normalizedName = String(teamMember.name || '').trim().toLowerCase();
+  const localImage = localTeamImageMap[normalizedName];
+  const shouldReplaceRemoteImage = typeof teamMember.image === 'string' && teamMember.image.includes('images.unsplash.com');
+  if (localImage && (shouldReplaceRemoteImage || !teamMember.image || teamMember.image.startsWith('http'))) {
+    teamMember.image = localImage;
+  }
+  return teamMember;
 }
 
 const app = express();

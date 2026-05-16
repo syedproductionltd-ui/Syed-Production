@@ -5,6 +5,23 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
+const teamLocalImageMap = {
+  'burhan uddin shah': 'images/team/Burhan.png',
+  'tehseen abbas': 'images/team/tehseen.png',
+  'tashfeen bin riaz': 'images/team/Tashfeen Bin Riaz.png',
+  'hussain': 'images/team/Hussain.jpg'
+};
+
+function normalizeTeamMember(member) {
+  if (!member) return member;
+  const normalizedName = String(member.name || '').trim().toLowerCase();
+  const localImage = teamLocalImageMap[normalizedName];
+  if (localImage && (typeof member.image !== 'string' || member.image.includes('images.unsplash.com') || member.image.startsWith('http'))) {
+    return { ...member, image: localImage };
+  }
+  return member;
+}
+
 // Ensure team uploads directory exists and handle serverless (Vercel) environments
 const teamUploadDir = path.join(__dirname, '../../uploads/team');
 let uploadsEnabled = true;
@@ -66,18 +83,13 @@ router.post('/upload', auth, (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const teamMembers = await TeamMember.find().sort({ sortOrder: 1 }).lean();
-    const normalised = teamMembers.map(member => {
-      const imageMap = {
-        'Burhan Uddin Shah': 'images/team/Burhan.png',
-        'Tehseen Abbas': 'images/team/tehseen.png',
-        'Tashfeen Bin Riaz': 'images/team/Tashfeen Bin Riaz.png',
-        'Hussain': 'images/team/Hussain.jpg'
-      };
-      return {
-        ...member,
-        image: imageMap[member.name] || member.image
-      };
-    });
+    const normalised = await Promise.all(teamMembers.map(async member => {
+      const normalized = normalizeTeamMember(member);
+      if (normalized.image !== member.image && member._id) {
+        await TeamMember.updateOne({ _id: member._id }, { $set: { image: normalized.image } });
+      }
+      return normalized;
+    }));
     res.json(normalised);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });

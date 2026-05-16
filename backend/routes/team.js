@@ -65,8 +65,20 @@ router.post('/upload', auth, (req, res) => {
 // GET /api/team (public)
 router.get('/', async (req, res) => {
   try {
-    const members = await TeamMember.find().sort({ sortOrder: 1 });
-    res.json(members);
+    const teamMembers = await TeamMember.find().sort({ sortOrder: 1 }).lean();
+    const normalised = teamMembers.map(member => {
+      const imageMap = {
+        'Burhan Uddin Shah': 'images/team/Burhan.png',
+        'Tehseen Abbas': 'images/team/tehseen.png',
+        'Tashfeen Bin Riaz': 'images/team/Tashfeen Bin Riaz.png',
+        'Hussain': 'images/team/Hussain.jpg'
+      };
+      return {
+        ...member,
+        image: imageMap[member.name] || member.image
+      };
+    });
+    res.json(normalised);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }

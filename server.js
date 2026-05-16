@@ -5,6 +5,22 @@ const path = require('path');
 const fs = require('fs');
 const connectDB = require('./backend/config/db');
 
+const localTeamImageMap = {
+  'Burhan Uddin Shah': 'images/team/Burhan.png',
+  'Tehseen Abbas': 'images/team/tehseen.png',
+  'Tashfeen Bin Riaz': 'images/team/Tashfeen Bin Riaz.png',
+  'Hussain': 'images/team/Hussain.jpg'
+};
+
+function normalizeTeamMember(member) {
+  if (!member) return member;
+  const teamMember = typeof member.toObject === 'function' ? member.toObject() : { ...member };
+  return {
+    ...teamMember,
+    image: localTeamImageMap[teamMember.name] || teamMember.image
+  };
+}
+
 const app = express();
 
 let localFallbackData = null;
@@ -70,10 +86,11 @@ app.get('/api/public-data', async (req, res) => {
         require('./backend/models/Review').find({ $or: [{ status: 'approved' }, { status: { $exists: false } }] }).sort({ createdAt: -1 }),
         require('./backend/models/Video').find().sort({ sortOrder: 1 }),
         require('./backend/models/GalleryImage').find().sort({ sortOrder: 1 }),
-        require('./backend/models/TeamMember').find().sort({ sortOrder: 1 }),
+        require('./backend/models/TeamMember').find().sort({ sortOrder: 1 }).lean(),
         SiteSettings.getSettings()
       ]);
-      return res.json({ destinations, reviews, videos, gallery, team, settings });
+      const normalizedTeam = team.map(normalizeTeamMember);
+      return res.json({ destinations, reviews, videos, gallery, team: normalizedTeam, settings });
     }
   } catch (err) {
     console.warn('MongoDB query failed, falling back to local data:', err.message);

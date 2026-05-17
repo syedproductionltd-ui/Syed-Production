@@ -67,6 +67,9 @@ app.use('/images/team', (req, res, next) => {
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Redirect bare /admin to /admin/ so relative paths resolve correctly
+app.get('/admin', (req, res) => res.redirect(301, '/admin/'));
+
 // Serve admin panel
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 

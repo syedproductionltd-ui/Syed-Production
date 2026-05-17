@@ -742,13 +742,14 @@
     return Math.max(0, reviews.length - getReviewsPerView());
   }
 
-  function updateReviewsCarousel() {
-    const cardWidth = reviewsTrack.children[0]?.offsetWidth || 300;
-    const gap = 24;
-    reviewsTrack.style.transform = `translateX(-${reviewIndex * (cardWidth + gap)}px)`;
+  function isMobileReviews() {
+    return window.innerWidth <= 768;
+  }
 
+  function updateReviewsDots() {
     const totalDots = getMaxReviewIndex() + 1;
     reviewsDots.innerHTML = '';
+
     for (let i = 0; i < totalDots; i++) {
       const dot = createEl('button', {
         className: `carousel-dot${i === reviewIndex ? ' active' : ''}`,
@@ -756,15 +757,44 @@
       });
       dot.addEventListener('click', () => {
         reviewIndex = i;
-        updateReviewsCarousel();
+        updateReviewsCarousel(true);
       });
       reviewsDots.appendChild(dot);
     }
   }
 
+  function updateReviewsCarousel(scrollIntoView = false) {
+    const cardWidth = reviewsTrack.children[0]?.offsetWidth || 300;
+    const gap = 24;
+    const scrollPosition = reviewIndex * (cardWidth + gap);
+
+    if (isMobileReviews()) {
+      reviewsTrack.style.transform = '';
+      if (scrollIntoView && reviewsTrack.children[reviewIndex]) {
+        reviewsTrack.children[reviewIndex].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      }
+    } else {
+      reviewsTrack.style.transform = `translateX(-${scrollPosition}px)`;
+    }
+
+    updateReviewsDots();
+  }
+
+  reviewsTrack.addEventListener('scroll', () => {
+    if (!isMobileReviews()) return;
+    const cardWidth = reviewsTrack.children[0]?.offsetWidth || 300;
+    const gap = 24;
+    const newIndex = Math.round(reviewsTrack.scrollLeft / (cardWidth + gap));
+    const clampedIndex = Math.min(getMaxReviewIndex(), Math.max(0, newIndex));
+    if (clampedIndex !== reviewIndex) {
+      reviewIndex = clampedIndex;
+      updateReviewsDots();
+    }
+  });
+
   reviewsPrev.addEventListener('click', () => {
     reviewIndex = Math.max(0, reviewIndex - 1);
-    updateReviewsCarousel();
+    updateReviewsCarousel(true);
   });
 
   reviewsNext.addEventListener('click', () => {
@@ -774,7 +804,7 @@
 
   window.addEventListener('resize', () => {
     reviewIndex = Math.min(reviewIndex, getMaxReviewIndex());
-    updateReviewsCarousel();
+    updateReviewsCarousel(true);
   });
 
 

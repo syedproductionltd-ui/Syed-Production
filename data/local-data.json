@@ -22,16 +22,14 @@
     { "name": "Hassan Ali", "city": "Multan, Pakistan", "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80", "rating": 5, "service": "Documentary Filmmaking", "verified": true, "text": "Syed Productions brought our documentary vision to life. From research to final edit, every step was handled with care. The storytelling was powerful and the cinematography was world-class." }
   ],
   "videos": [
-    { "title": "Syed Productions Showreel", "description": "A showcase of our best cinematic work across all categories", "tag": "Cinematic", "videoUrl": "videos/Syed Productions-1.mp4", "sortOrder": 1 },
-    { "title": "Wedding Highlights", "description": "Beautiful wedding films that capture every emotion", "tag": "Client Story", "videoUrl": "videos/Syed Productions-2.mp4", "sortOrder": 2 },
-    { "title": "Corporate Reel", "description": "Professional corporate videos for leading brands", "tag": "Corporate", "videoUrl": "videos/Syed Productions-3.mp4", "sortOrder": 3 },
-    { "title": "Behind the Scenes", "description": "See how we bring creative visions to life on set", "tag": "Cinematic", "videoUrl": "videos/Syed Productions-4.mp4", "sortOrder": 4 },
-    { "title": "Event Coverage Reel", "description": "Conferences, galas, and live events captured beautifully", "tag": "Client Story", "videoUrl": "videos/Syed Productions-5.mp4", "sortOrder": 5 },
-    { "title": "Music Video Showcase", "description": "Creative music videos with stunning visuals", "tag": "Creative", "videoUrl": "videos/Syed Productions-6.mp4", "sortOrder": 6 },
-    { "title": "Documentary Preview", "description": "Powerful stories told through compelling documentary films", "tag": "Cinematic", "videoUrl": "videos/Syed Productions-7.mp4", "sortOrder": 7 },
-    { "title": "Client Testimonials", "description": "Hear what our clients have to say about working with us", "tag": "Client Story", "videoUrl": "videos/Syed Productions-8.mp4", "sortOrder": 8 },
-    { "title": "Product Showcase", "description": "Product photography and videography highlights", "tag": "Commercial", "videoUrl": "videos/Syed Productions-9.mp4", "sortOrder": 9 },
-    { "title": "Aerial Cinematography", "description": "Stunning drone footage from our productions", "tag": "Cinematic", "videoUrl": "videos/Syed Productions-10.mp4", "sortOrder": 10 }
+    { "title": "Attabad Lake Adventure", "description": "Cinematic lake footage from the heart of Gilgit-Baltistan.", "tag": "Travel", "videoUrl": "videos/Attabad Lake ❣️….mp4", "sortOrder": 1 },
+    { "title": "Boat Escape on Attabad Lake", "description": "A scenic boat journey across the blue waters of Attabad.", "tag": "Travel", "videoUrl": "videos/Attabad Lake 🛥️⛵️ ….mp4", "sortOrder": 2 },
+    { "title": "Mark X Commercial Shoot", "description": "A high-energy commercial production capturing the Mark X.", "tag": "Commercial", "videoUrl": "videos/Commercial Mark X Shoot 🥵 …Great Work Bois . Team - GB Secrets ❣️ …Mark X 2010 model double eco.mp4", "sortOrder": 3 },
+    { "title": "Empowering Women Stories", "description": "A powerful story-driven film celebrating women's empowerment.", "tag": "Story", "videoUrl": "videos/Empowering Women, Capturing Stories - AKRSP x Syed Production ✨ ….....#womenempowerment #akrsp #.mp4", "sortOrder": 4 },
+    { "title": "Shahrukh & Sehrish Wedding Story", "description": "A romantic wedding story captured with cinematic detail.", "tag": "Client Story", "videoUrl": "videos/Every day is the best day when I’m with you ❣️… Shahrukh & Sehrish The story of a wedding in Att.mp4", "sortOrder": 5 },
+    { "title": "Gilgit Baltistan Journey", "description": "Dynamic scenery and storytelling from the mountains of Gilgit.", "tag": "Travel", "videoUrl": "videos/Gilgit Baltistan 🥵 ….mp4", "sortOrder": 6 },
+    { "title": "Mountain Valley Cinematic", "description": "A fast-paced reel showcasing stunning mountain valley landscapes and cinematic scenery.", "tag": "Cinematic", "videoUrl": "videos/Hunza ♥️ #reels #gbsecrets.mp4", "sortOrder": 7 },
+    { "title": "Naltar Snow Story", "description": "A snowy winter reel from Naltar's breathtaking valleys.", "tag": "Cinematic", "videoUrl": "videos/Naltar ❄️.mp4", "sortOrder": 8 }
   ],
   "gallery": [
     { "imageUrl": "images/gallery/016A5232.JPG", "altText": "Syed Productions shoot", "hidden": false, "sortOrder": 1 },

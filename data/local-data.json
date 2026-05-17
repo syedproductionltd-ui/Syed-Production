@@ -22,14 +22,14 @@
     { "name": "Hassan Ali", "city": "Multan, Pakistan", "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80", "rating": 5, "service": "Documentary Filmmaking", "verified": true, "text": "Syed Productions brought our documentary vision to life. From research to final edit, every step was handled with care. The storytelling was powerful and the cinematography was world-class." }
   ],
   "videos": [
-    { "title": "Attabad Lake Adventure", "description": "Cinematic lake footage from the heart of Gilgit-Baltistan.", "tag": "Travel", "videoUrl": "videos/Attabad Lake ❣️….mp4", "sortOrder": 1 },
-    { "title": "Boat Escape on Attabad Lake", "description": "A scenic boat journey across the blue waters of Attabad.", "tag": "Travel", "videoUrl": "videos/Attabad Lake 🛥️⛵️ ….mp4", "sortOrder": 2 },
-    { "title": "Mark X Commercial Shoot", "description": "A high-energy commercial production capturing the Mark X.", "tag": "Commercial", "videoUrl": "videos/Commercial Mark X Shoot 🥵 …Great Work Bois . Team - GB Secrets ❣️ …Mark X 2010 model double eco.mp4", "sortOrder": 3 },
-    { "title": "Empowering Women Stories", "description": "A powerful story-driven film celebrating women's empowerment.", "tag": "Story", "videoUrl": "videos/Empowering Women, Capturing Stories - AKRSP x Syed Production ✨ ….....#womenempowerment #akrsp #.mp4", "sortOrder": 4 },
-    { "title": "Shahrukh & Sehrish Wedding Story", "description": "A romantic wedding story captured with cinematic detail.", "tag": "Client Story", "videoUrl": "videos/Every day is the best day when I’m with you ❣️… Shahrukh & Sehrish The story of a wedding in Att.mp4", "sortOrder": 5 },
-    { "title": "Gilgit Baltistan Journey", "description": "Dynamic scenery and storytelling from the mountains of Gilgit.", "tag": "Travel", "videoUrl": "videos/Gilgit Baltistan 🥵 ….mp4", "sortOrder": 6 },
-    { "title": "Mountain Valley Cinematic", "description": "A fast-paced reel showcasing stunning mountain valley landscapes and cinematic scenery.", "tag": "Cinematic", "videoUrl": "videos/Hunza ♥️ #reels #gbsecrets.mp4", "sortOrder": 7 },
-    { "title": "Naltar Snow Story", "description": "A snowy winter reel from Naltar's breathtaking valleys.", "tag": "Cinematic", "videoUrl": "videos/Naltar ❄️.mp4", "sortOrder": 8 }
+    { "title": "Attabad Lake Adventure", "description": "Cinematic lake footage from the heart of Gilgit-Baltistan.", "tag": "Travel", "videoUrl": "videos/attabad-lake-adventure.mp4", "sortOrder": 1 },
+    { "title": "Boat Escape on Attabad Lake", "description": "A scenic boat journey across the blue waters of Attabad.", "tag": "Travel", "videoUrl": "videos/attabad-lake-boat.mp4", "sortOrder": 2 },
+    { "title": "Mark X Commercial Shoot", "description": "A high-energy commercial production capturing the Mark X.", "tag": "Commercial", "videoUrl": "videos/mark-x-commercial.mp4", "sortOrder": 3 },
+    { "title": "Empowering Women Stories", "description": "A powerful story-driven film celebrating women’s empowerment.", "tag": "Story", "videoUrl": "videos/empowering-women-stories.mp4", "sortOrder": 4 },
+    { "title": "Shahrukh & Sehrish Wedding Story", "description": "A romantic wedding story captured with cinematic detail.", "tag": "Client Story", "videoUrl": "videos/shahrukh-sehrish-wedding.mp4", "sortOrder": 5 },
+    { "title": "Gilgit Baltistan Journey", "description": "Dynamic scenery and storytelling from the mountains of Gilgit.", "tag": "Travel", "videoUrl": "videos/gilgit-baltistan-journey.mp4", "sortOrder": 6 },
+    { "title": "Mountain Valley Cinematic", "description": "A fast-paced reel showcasing stunning mountain valley landscapes and cinematic scenery.", "tag": "Cinematic", "videoUrl": "videos/mountain-valley-cinematic.mp4", "sortOrder": 7 },
+    { "title": "Naltar Snow Story", "description": "A snowy winter reel from Naltar’s breathtaking valleys.", "tag": "Cinematic", "videoUrl": "videos/naltar-snow-story.mp4", "sortOrder": 8 }
   ],
   "gallery": [
     { "imageUrl": "images/gallery/016A5232.JPG", "altText": "Syed Productions shoot", "hidden": false, "sortOrder": 1 },

@@ -81,6 +81,19 @@
     return [...context.querySelectorAll(selector)];
   }
 
+  const CONFIG = window.SITE_CONFIG || {};
+
+  // This site is fully static — every form hands off to WhatsApp instead of
+  // posting to a server. Change the number in data/site-data.js.
+  function whatsappLink(message) {
+    const number = String(CONFIG.whatsappNumber || '').replace(/\D/g, '');
+    return 'https://wa.me/' + number + '?text=' + encodeURIComponent(message);
+  }
+
+  function sendToWhatsApp(message) {
+    window.open(whatsappLink(message), '_blank', 'noopener');
+  }
+
   function createEl(tag, attrs = {}, children = []) {
     const el = document.createElement(tag);
     for (const [key, val] of Object.entries(attrs)) {
@@ -522,7 +535,7 @@
     return null;
   }
 
-  async function handleChatSend() {
+  function handleChatSend() {
     const text = chatInput.value.trim();
     if (!text) return;
 
@@ -530,22 +543,9 @@
     chatInput.value = '';
     showTypingIndicator();
 
-    try {
-      const resp = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text })
-      });
-      const data = await resp.json();
-      if (!resp.ok || !data.reply) throw new Error('AI unavailable');
-      removeTypingIndicator();
-      addChatMessage(data.reply);
-    } catch (err) {
-      // Fallback to local keyword matching if API fails
-      removeTypingIndicator();
-      const fallback = getKeywordResponse(text) || chatResponses.default;
-      addChatMessage(fallback);
-    }
+    // Static site: no AI server, so answer from the built-in keyword table.
+    removeTypingIndicator();
+    addChatMessage(getKeywordResponse(text) || chatResponses.default);
   }
 
   chatSendBtn.addEventListener('click', handleChatSend);
@@ -639,38 +639,30 @@
     `;
   }
 
-  async function submitBooking() {
+  function submitBooking() {
     const dest = booking.destination;
     if (!dest) return;
 
     const reference = 'SP-2026-' + Math.random().toString(36).substring(2, 7).toUpperCase();
 
-    const headers = { 'Content-Type': 'application/json' };
-    const userToken = localStorage.getItem('user_token');
-    if (userToken) {
-      headers['Authorization'] = 'Bearer ' + userToken;
+    const lines = [
+      'Hello! I would like to book a production.',
+      '',
+      'Reference: ' + reference,
+      'Service: ' + dest.name,
+      'Start date: ' + (booking.startDate || 'Flexible'),
+      'End date: ' + (booking.endDate || 'Flexible')
+    ];
+    if (booking.projectDetails) {
+      lines.push('', 'Project details:', booking.projectDetails);
     }
+    lines.push('', 'Please let me know availability and a quote. Thank you!');
 
-    try {
-      await fetch('/api/bookings', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          reference,
-          destination: dest.name,
-          startDate: booking.startDate || null,
-          endDate: booking.endDate || null,
-          projectDetails: booking.projectDetails || ''
-        })
-      });
-    } catch (err) {
-      // Silently fail — booking UI still shows confirmation
-    }
-
+    sendToWhatsApp(lines.join('\n'));
     $('#bookingRef').textContent = reference;
   }
 
-  wizardNext.addEventListener('click', async () => {
+  wizardNext.addEventListener('click', () => {
     if (wizardStep === totalSteps) {
       wizardStep = 1;
       booking.destination = null;
@@ -679,8 +671,8 @@
       return;
     }
     if (wizardStep === totalSteps - 1) {
-      // Confirm Booking — submit to API then advance
-      await submitBooking();
+      // Confirm Booking — hand the request off to WhatsApp, then advance
+      submitBooking();
       wizardStep++;
       updateWizard();
       return;
@@ -809,35 +801,6 @@
 
 
   /* --------------------------------------------------------
-     NEWSLETTER — POST to API
-  -------------------------------------------------------- */
-  const newsletterForm = $('#newsletterForm');
-  const newsletterSuccess = $('#newsletterSuccess');
-
-  newsletterForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = $('#newsletterEmail').value;
-    if (email) {
-      try {
-        const res = await fetch('/api/subscribers', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        });
-        const data = await res.json();
-        newsletterForm.style.display = 'none';
-        newsletterSuccess.hidden = false;
-        if (data.message === 'Already subscribed') {
-          newsletterSuccess.querySelector('p').textContent = "You're already subscribed! Stay tuned for updates.";
-        }
-      } catch (err) {
-        newsletterForm.style.display = 'none';
-        newsletterSuccess.hidden = false;
-      }
-    }
-  });
-
-  /* --------------------------------------------------------
      HERO SEARCH
   -------------------------------------------------------- */
   const heroSearchBtn = $('#heroSearchBtn');
@@ -864,6 +827,40 @@
   }
 
   /* --------------------------------------------------------
+     GALLERY LAZY BACKGROUNDS
+     Gallery tiles use background-image, which cannot take
+     loading="lazy", so paint them only once they are near the
+     viewport. Without this every photo downloads + decodes up
+     front and scrolling stutters.
+  -------------------------------------------------------- */
+  let galleryObserver = null;
+
+  function paintGalleryItem(el) {
+    const src = el.getAttribute('data-bg-src');
+    if (!src) return;
+    el.style.backgroundImage = `url('${src}')`;
+    el.removeAttribute('data-bg-src');
+    if (galleryObserver) galleryObserver.unobserve(el);
+  }
+
+  function lazyGalleryBackground(el, url) {
+    el.setAttribute('data-bg-src', url);
+    if (!('IntersectionObserver' in window)) { paintGalleryItem(el); return; }
+    if (!galleryObserver) {
+      galleryObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) paintGalleryItem(e.target);
+        });
+      }, { rootMargin: '500px 0px' });
+    }
+    galleryObserver.observe(el);
+  }
+
+  function paintAllGalleryItems() {
+    $$('#galleryGrid .gallery-item[data-bg-src]').forEach(paintGalleryItem);
+  }
+
+  /* --------------------------------------------------------
      GALLERY SEE MORE
   -------------------------------------------------------- */
   const gallerySeeMore = $('#gallerySeeMore');
@@ -876,6 +873,7 @@
       gallerySeeMore.innerHTML = expanded
         ? 'See Less <svg viewBox="0 0 24 24" width="18" height="18"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" fill="currentColor"/></svg>'
         : 'See More <svg viewBox="0 0 24 24" width="18" height="18"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" fill="currentColor"/></svg>';
+      if (expanded) paintAllGalleryItems();
     });
   }
 
@@ -889,8 +887,11 @@
   let lightboxIndex = 0;
 
   function getGalleryImageUrl(el) {
-    const bg = el.style.backgroundImage;
-    return bg.replace(/url\(['"]?/, '').replace(/['"]?\)/, '').replace('w=400', 'w=1200');
+    // prefer the painted background, fall back to the pending lazy src
+    if (el.style.backgroundImage) {
+      return el.style.backgroundImage.replace(/url\(['"]?/, '').replace(/['"]?\)/, '');
+    }
+    return el.getAttribute('data-bg-src') || '';
   }
 
   function openLightbox(index) {
@@ -954,7 +955,7 @@
       const item = createEl('div', {
         className: img.hidden ? 'gallery-item gallery-hidden' : 'gallery-item'
       });
-      item.style.backgroundImage = `url('${img.imageUrl}')`;
+      lazyGalleryBackground(item, img.imageUrl);
       galleryGrid.appendChild(item);
     });
 
@@ -1399,30 +1400,25 @@
      ASYNC INIT — Fetch data from API, then render
   -------------------------------------------------------- */
   /* --------------------------------------------------------
-     NAVBAR AUTH — login / user info toggle
+     SOCIAL LINKS — point the footer icons at the real accounts
+     and hide any that have no URL configured in data/site-data.js
   -------------------------------------------------------- */
-  function updateNavAuth() {
-    const container = document.getElementById('navAuthLinks');
-    if (!container) return;
+  function applySocialLinks() {
+    const sl = (window.__SITE_DATA__ && window.__SITE_DATA__.settings &&
+      window.__SITE_DATA__.settings.socialLinks) || null;
+    if (!sl) return;
 
-    const token = localStorage.getItem('user_token');
-    const name = localStorage.getItem('user_name');
-
-    if (token && name) {
-      var avatar = localStorage.getItem('user_avatar');
-      var avatarSrc = avatar || '';
-      container.innerHTML =
-        '<a href="profile.html" class="nav-link" style="display:inline-flex;align-items:center;padding:0.25rem;" title="' + name + '">' +
-          (avatarSrc
-            ? '<img src="' + avatarSrc + '" alt="' + name + '" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.4);" onerror="this.outerHTML=\'<svg viewBox=\\\'0 0 24 24\\\' width=\\\'24\\\' height=\\\'24\\\' style=\\\'fill:currentColor\\\'><path d=\\\'M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z\\\'/></svg>\'">'
-            : '<svg viewBox="0 0 24 24" width="24" height="24" style="fill:currentColor;"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>') +
-        '</a>';
-    } else {
-      container.innerHTML =
-        '<a href="login.html" class="nav-link" style="display:inline-flex;align-items:center;padding:0.25rem;" title="Login">' +
-          '<svg viewBox="0 0 24 24" width="24" height="24" style="fill:currentColor;"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>' +
-        '</a>';
-    }
+    $$('.social-link').forEach(function(a) {
+      const key = (a.getAttribute('aria-label') || '').toLowerCase();
+      const url = sl[key];
+      if (url) {
+        a.href = url;
+        a.removeAttribute('hidden');
+      } else {
+        a.hidden = true;
+        a.removeAttribute('href');
+      }
+    });
   }
 
   /* --------------------------------------------------------
@@ -1569,32 +1565,16 @@
     }
   }
 
-  async function init() {
-    try {
-      // Reuse pre-fetched data from loading screen script, or fetch fresh
-      const data = (window.__publicDataPromise && await window.__publicDataPromise) || await fetch('/api/public-data').then(r => r.json());
-      delete window.__publicDataPromise;
-      destinations = data.destinations || [];
-      reviews = data.reviews || [];
-      videos = data.videos || [];
-      galleryImages = data.gallery || [];
-      teamMembers = data.team || [];
+  function init() {
+    const data = window.__SITE_DATA__ || {};
+    destinations = data.destinations || [];
+    reviews = data.reviews || [];
+    videos = data.videos || [];
+    galleryImages = data.gallery || [];
+    teamMembers = data.team || [];
 
-      // Preload video thumbnails so they're ready before user scrolls
-      videos.forEach(function(v) {
-        var embed = getVideoEmbed(v.videoUrl);
-        if (embed.type === 'youtube') {
-          var img = new Image();
-          img.src = 'https://img.youtube.com/vi/' + embed.videoId + '/hqdefault.jpg';
-        }
-      });
-
-      // Apply site settings before rendering
-      if (data.settings) {
-        applySiteSettings(data.settings);
-      }
-    } catch (err) {
-      console.warn('API not available, site will show empty sections:', err.message);
+    if (data.settings) {
+      applySiteSettings(data.settings);
     }
 
     // Render data-dependent sections
@@ -1605,7 +1585,7 @@
     renderVideos();
     renderGallery();
     renderTeam();
-    updateNavAuth();
+    applySocialLinks();
 
     // Start reveal animations NOW — after settings are applied and content rendered
     // This prevents flash of old hardcoded text before dynamic settings replace it
@@ -1680,10 +1660,6 @@
   var writeBtn = document.getElementById('writeReviewBtn');
   if (writeBtn) {
     writeBtn.addEventListener('click', function() {
-      if (!localStorage.getItem('user_token')) {
-        window.location.href = 'login.html';
-        return;
-      }
       // Populate destinations
       var sel = document.getElementById('rmDest');
       if (sel.options.length <= 1) {
@@ -1740,11 +1716,10 @@
   // Submit
   var rmForm = document.getElementById('rmForm');
   if (rmForm) {
-    rmForm.addEventListener('submit', async function(e) {
+    rmForm.addEventListener('submit', function(e) {
       e.preventDefault();
       var errEl = document.getElementById('rmError');
       var sucEl = document.getElementById('rmSuccess');
-      var btn = document.getElementById('rmSubmit');
       errEl.style.display = 'none';
       sucEl.style.display = 'none';
 
@@ -1755,34 +1730,23 @@
       if (!rmRating) { errEl.textContent = 'Please select a rating'; errEl.style.display = 'block'; return; }
       if (!text) { errEl.textContent = 'Please write your review'; errEl.style.display = 'block'; return; }
 
-      btn.disabled = true;
-      btn.textContent = 'Submitting...';
-      try {
-        var res = await fetch('/api/reviews/user', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('user_token')
-          },
-          body: JSON.stringify({ service: dest, rating: rmRating, text: text })
-        });
-        var data = await res.json();
-        if (!res.ok) {
-          errEl.textContent = data.message || 'Failed to submit';
-          errEl.style.display = 'block';
-        } else {
-          sucEl.textContent = 'Review submitted! It will appear after admin approval.';
-          sucEl.style.display = 'block';
-          rmForm.reset();
-          rmRating = 0;
-          rmUpdateStars();
-        }
-      } catch (err) {
-        errEl.textContent = 'Network error';
-        errEl.style.display = 'block';
-      }
-      btn.disabled = false;
-      btn.textContent = 'Submit Review';
+      var stars = new Array(rmRating + 1).join('*');
+      sendToWhatsApp([
+        'New review submission!',
+        '',
+        'Service: ' + dest,
+        'Rating: ' + stars + ' (' + rmRating + '/5)',
+        '',
+        text,
+        '',
+        'Please publish this on the website. Thank you!'
+      ].join('\n'));
+
+      sucEl.textContent = 'Thanks! We have opened WhatsApp with your review — send it there to have it published.';
+      sucEl.style.display = 'block';
+      rmForm.reset();
+      rmRating = 0;
+      rmUpdateStars();
     });
   }
 

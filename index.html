@@ -102,10 +102,8 @@
 </head>
 <body>
 
-  <script>
-    // Early fetch: store promise for main.js to reuse
-    window.__publicDataPromise = fetch('/api/public-data').then(function(r){return r.json()}).catch(function(){return null;});
-  </script>
+  <!-- Site content (services, videos, gallery, team, settings) — plain JS, no server -->
+  <script src="data/site-data.js"></script>
 
   <!-- ============ NAVIGATION ============ -->
   <nav class="navbar" id="navbar" aria-label="Main navigation">
@@ -131,8 +129,7 @@
             <svg class="dm-icon dm-icon--sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           </button>
         </li>
-        <li id="navAuthLinks"></li>
-      </ul>
+        </ul>
     </div>
   </nav>
 
@@ -265,10 +262,6 @@
         </button>
       </div>
       <div class="carousel-dots" id="reviewsDots" role="tablist" aria-label="Review navigation"></div>
-
-      <div style="text-align:center; margin-top:1.5rem;" class="reveal-up">
-        <button class="btn btn-primary" id="writeReviewBtn" style="padding:0.75rem 2rem; font-size:1rem;">Write a Review</button>
-      </div>
 
     </div>
   </section>
@@ -525,22 +518,15 @@
   </section>
 
 
-  <!-- ============ NEWSLETTER & FOOTER ============ -->
+<!-- ============ CONTACT CTA & FOOTER ============ -->
   <section class="newsletter" id="contact">
     <div class="container">
       <div class="newsletter-content reveal-up">
-        <h2>Get Production Updates</h2>
-        <p>Subscribe for behind-the-scenes content, production updates, and creative insights delivered to your inbox.</p>
-        <form class="newsletter-form" id="newsletterForm" aria-label="Newsletter signup">
-          <div class="newsletter-input-wrapper">
-            <input type="email" id="newsletterEmail" placeholder="Enter your email address" required aria-label="Email address">
-            <button type="submit" class="btn btn-primary newsletter-btn">Get Updates</button>
-          </div>
-          <p class="newsletter-note">No spam, unsubscribe anytime. Join 5,000+ creative professionals.</p>
-        </form>
-        <div class="newsletter-success" id="newsletterSuccess" hidden>
-          <svg viewBox="0 0 24 24" width="48" height="48"><circle cx="12" cy="12" r="10" fill="#2D6A4F"/><path d="M8 12l3 3 5-5" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-          <p>Welcome aboard! Check your inbox for a confirmation and exclusive production insights.</p>
+        <h2>Ready to Create Something Cinematic?</h2>
+        <p>Tell us about your project and get a custom quote. We reply within 24 hours.</p>
+        <div class="newsletter-form" style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;">
+          <a href="#" class="social-link btn btn-primary" aria-label="WhatsApp" style="width:auto;height:auto;padding:0.85rem 2rem;border-radius:var(--radius-md);font-size:0.95rem;font-weight:600;">Chat on WhatsApp</a>
+          <a href="booking.html" class="btn btn-outline" style="padding:0.85rem 2rem;">Start Booking</a>
         </div>
       </div>
     </div>

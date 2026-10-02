@@ -31,9 +31,8 @@
 </head>
 <body>
 
-  <script>
-    window.__publicDataPromise = fetch('/api/public-data').then(function(r){return r.json()}).catch(function(){return null;});
-  </script>
+  <!-- Site content — plain JS, no server -->
+  <script src="data/site-data.js"></script>
 
   <!-- ============ NAVIGATION ============ -->
   <nav class="navbar scrolled" id="navbar" aria-label="Main navigation">
@@ -57,8 +56,7 @@
             <svg class="dm-icon dm-icon--sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           </button>
         </li>
-        <li id="navAuthLinks"></li>
-      </ul>
+        </ul>
     </div>
   </nav>
 
@@ -73,9 +71,6 @@
   <!-- ============ REVIEWS GRID ============ -->
   <main class="section">
     <div class="container">
-      <div style="text-align:center;margin-bottom:2rem;">
-        <button class="btn btn-primary" id="writeReviewBtn" style="padding:0.75rem 2rem;font-size:1rem;">Write a Review</button>
-      </div>
       <div class="reviews-grid-page" id="reviewsGrid">
         <!-- Review cards injected by JS -->
       </div>
@@ -166,7 +161,6 @@
     var rmModal=document.getElementById('reviewModal'), rmRating=0;
     var writeBtn=document.getElementById('writeReviewBtn');
     if(writeBtn) writeBtn.addEventListener('click',function(){
-      if(!localStorage.getItem('user_token')){window.location.href='login.html';return;}
       var sel=document.getElementById('rmDest');
       if(sel.options.length<=1) destinations.forEach(function(d){var opt=document.createElement('option');opt.value=d.name;opt.textContent=d.name;sel.appendChild(opt);});
       rmRating=0;rmUpdateStars();document.getElementById('rmForm').reset();
@@ -186,22 +180,20 @@
     if(rmStarsWrap) rmStarsWrap.addEventListener('mouseleave',rmUpdateStars);
 
     var rmForm=document.getElementById('rmForm');
-    if(rmForm) rmForm.addEventListener('submit',async function(e){
+    if(rmForm) rmForm.addEventListener('submit',function(e){
       e.preventDefault();
-      var errEl=document.getElementById('rmError'),sucEl=document.getElementById('rmSuccess'),btn=document.getElementById('rmSubmit');
+      var errEl=document.getElementById('rmError'),sucEl=document.getElementById('rmSuccess');
       errEl.style.display='none';sucEl.style.display='none';
       var dest=document.getElementById('rmDest').value,text=document.getElementById('rmText').value.trim();
       if(!dest){errEl.textContent='Please select a service';errEl.style.display='block';return;}
       if(!rmRating){errEl.textContent='Please select a rating';errEl.style.display='block';return;}
       if(!text){errEl.textContent='Please write your review';errEl.style.display='block';return;}
-      btn.disabled=true;btn.textContent='Submitting...';
-      try{
-        var res=await fetch('/api/reviews/user',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+localStorage.getItem('user_token')},body:JSON.stringify({service:dest,rating:rmRating,text:text})});
-        var data=await res.json();
-        if(!res.ok){errEl.textContent=data.message||'Failed to submit';errEl.style.display='block';}
-        else{sucEl.textContent='Review submitted! It will appear after admin approval.';sucEl.style.display='block';rmForm.reset();rmRating=0;rmUpdateStars();}
-      }catch(err){errEl.textContent='Network error. Please try again.';errEl.style.display='block';}
-      btn.disabled=false;btn.textContent='Submit Review';
+      var stars=new Array(rmRating+1).join('*');
+      var lines=['New review submission!','','Service: '+dest,'Rating: '+stars+' ('+rmRating+'/5)','',text,'','Please publish this on the website. Thank you!'];
+      var num=String((window.SITE_CONFIG||{}).whatsappNumber||'').replace(/\D/g,'');
+      window.open('https://wa.me/'+num+'?text='+encodeURIComponent(lines.join('\n')),'_blank','noopener');
+      sucEl.textContent='Thanks! We have opened WhatsApp with your review — send it there to have it published.';
+      sucEl.style.display='block';rmForm.reset();rmRating=0;rmUpdateStars();
     });
 
     /* Branding */
@@ -212,19 +204,12 @@
       if(s.socialLinks){var sl=s.socialLinks,lk=$$('.social-link');if(sl.facebook&&lk[0])lk[0].href=sl.facebook;if(sl.instagram&&lk[1])lk[1].href=sl.instagram;if(sl.whatsapp&&lk[2])lk[2].href=sl.whatsapp;if(sl.youtube&&lk[3])lk[3].href=sl.youtube;}
     }
 
-    function updateNavAuth(){var c=document.getElementById('navAuthLinks');if(!c)return;var token=localStorage.getItem('user_token'),name=localStorage.getItem('user_name');if(token&&name){var av=localStorage.getItem('user_avatar')||'';c.innerHTML='<a href="profile.html" class="nav-link" style="display:inline-flex;align-items:center;padding:0.25rem;" title="'+name+'">'+(av?'<img src="'+av+'" alt="'+name+'" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.4);">':'<svg viewBox="0 0 24 24" width="24" height="24" style="fill:currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>')+'</a>';}else{c.innerHTML='<a href="login.html" class="nav-link" style="display:inline-flex;align-items:center;padding:0.25rem;" title="Login"><svg viewBox="0 0 24 24" width="24" height="24" style="fill:currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></a>';}}
-
-    async function init(){
-      try{
-        var data=window.__publicDataPromise?await window.__publicDataPromise:await fetch('/api/public-data').then(function(r){return r.json();});
-        if(data){
-          reviews=data.reviews||[];
-          destinations=data.destinations||[];
-          if(data.settings) applySiteBranding(data.settings);
-        }
-      }catch(e){console.warn('API not available:',e.message);}
+    function init(){
+      var data=window.__SITE_DATA__||{};
+      reviews=data.reviews||[];
+      destinations=data.destinations||[];
+      if(data.settings) applySiteBranding(data.settings);
       renderReviews();
-      updateNavAuth();
     }
     init();
   })();

@@ -257,9 +257,12 @@ input, select, textarea {
 }
 
 .navbar.scrolled .nav-container {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  /* Opaque instead of backdrop-filter. A sticky element with a backdrop blur
+     must re-composite the blurred backdrop on every scroll frame, which is a
+     major cause of laggy scrolling on low-power GPUs. */
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   box-shadow: var(--shadow-md);
 }
 
@@ -1795,6 +1798,8 @@ input, select, textarea {
 }
 
 .gallery-item {
+  /* placeholder tint shown until the lazy background paints */
+  background-color: var(--clr-gray-800, #1f2937);
   background-size: cover;
   background-position: center;
   border-radius: var(--radius-sm);
@@ -3325,7 +3330,7 @@ select:focus-visible {
 }
 
 .dark-mode .navbar.scrolled .nav-container {
-  background: rgba(18, 24, 32, 0.85);
+  background: rgba(18, 24, 32, 0.97);
 }
 
 .dark-mode .dark-mode-toggle {

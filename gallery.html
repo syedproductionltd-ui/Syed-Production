@@ -8,7 +8,7 @@
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://syedproductions.com/gallery.html">
+  <meta property="og:url" content="https://syedproductions.com/gallery">
   <meta property="og:title" content="Gallery — Syed Productions">
   <meta property="og:description" content="Explore Syed Productions gallery — photos and videos from our productions, weddings, events, and creative projects.">
   <meta property="og:image" content="https://syedproductions.com/images/DSC00557.webp">
@@ -18,7 +18,7 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://syedproductions.com/gallery.html">
+  <meta name="twitter:url" content="https://syedproductions.com/gallery">
   <meta name="twitter:title" content="Gallery — Syed Productions">
   <meta name="twitter:description" content="Explore Syed Productions gallery — photos and videos from our productions, weddings, events, and creative projects.">
   <meta name="twitter:image" content="https://syedproductions.com/images/DSC00557.webp">
@@ -32,6 +32,7 @@
     })();
   </script>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="canonical" href="https://syedproductions.com/gallery" />
 </head>
 <body>
 
@@ -41,7 +42,7 @@
   <!-- ============ NAVIGATION ============ -->
   <nav class="navbar scrolled" id="navbar" aria-label="Main navigation">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo" aria-label="Syed Productions Home">
+      <a href="/" class="nav-logo" aria-label="Syed Productions Home">
         <img src="images/Syed-production.webp" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.webp';">
         <span id="brandSyed" class="brand-swap-a">Syed</span><span id="brandProd" class="brand-swap-b">Productions</span>
       </a>
@@ -51,11 +52,11 @@
         <span class="hamburger-line"></span>
       </button>
       <ul class="nav-links" id="navLinks" role="list">
-        <li><a href="portfolio.html" class="nav-link">Portfolio</a></li>
-        <li><a href="gallery.html" class="nav-link">Gallery</a></li>
-        <li><a href="booking.html" class="nav-link">Book Now</a></li>
-        <li><a href="reviews.html" class="nav-link">Reviews</a></li>
-        <li><a href="contact.html" class="nav-link nav-link--cta">Contact Us</a></li>
+        <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
+        <li><a href="/gallery" class="nav-link">Gallery</a></li>
+        <li><a href="/booking" class="nav-link">Book Now</a></li>
+        <li><a href="/reviews" class="nav-link">Reviews</a></li>
+        <li><a href="/contact" class="nav-link nav-link--cta">Contact Us</a></li>
         <li>
           <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
             <svg class="dm-icon dm-icon--moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
@@ -130,7 +131,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a href="index.html" class="nav-logo">
+          <a href="/" class="nav-logo">
             <img src="images/Syed-production.webp" alt="Syed Productions" class="logo-img" onerror="this.onerror=null;this.src='images/Syed-production.webp';">
             <span>Syed Productions</span>
           </a>
@@ -145,27 +146,27 @@
         <div class="footer-links">
           <h4>Services</h4>
           <ul>
-            <li><a href="index.html#featured-services">Wedding Films</a></li>
-            <li><a href="index.html#featured-services">Corporate Videos</a></li>
-            <li><a href="index.html#featured-services">Event Coverage</a></li>
-            <li><a href="index.html#featured-services">Photography</a></li>
-            <li><a href="index.html#services">All Services</a></li>
+            <li><a href="/#featured-services">Wedding Films</a></li>
+            <li><a href="/#featured-services">Corporate Videos</a></li>
+            <li><a href="/#featured-services">Event Coverage</a></li>
+            <li><a href="/#featured-services">Photography</a></li>
+            <li><a href="/#services">All Services</a></li>
           </ul>
         </div>
         <div class="footer-links">
           <h4>Company</h4>
           <ul>
-            <li><a href="index.html">About Us</a></li>
-            <li><a href="index.html#team">Our Team</a></li>
-            <li><a href="portfolio.html">Portfolio</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="/">About Us</a></li>
+            <li><a href="/#team">Our Team</a></li>
+            <li><a href="/portfolio">Portfolio</a></li>
+            <li><a href="/contact">Contact</a></li>
                       </ul>
         </div>
         <div class="footer-links">
           <h4>Support</h4>
           <ul>
-            <li><a href="contact.html">Help Center</a></li>
-            <li><a href="booking.html">Reschedule Booking</a></li>
+            <li><a href="/contact">Help Center</a></li>
+            <li><a href="/booking">Reschedule Booking</a></li>
             <li><a href="#">Privacy Policy</a></li>
             <li><a href="#">Terms of Service</a></li>
             <li><a href="#">FAQ</a></li>
@@ -365,7 +366,7 @@
       requestAnimationFrame(function(){reelsViewer.classList.add('open');});
       document.body.style.overflow='hidden';updateMuteBtn();
       var target=reelsTrack.children[startIndex];
-      if(target) target.scrollIntoView({behavior:'instant'});
+      if(target) reelsTrack.scrollTop=target.offsetTop;
       updateReelsCounter(startIndex);
       var initVid=target&&target.querySelector('video');
       if(initVid){

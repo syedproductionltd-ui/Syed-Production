@@ -1,11 +1,31 @@
 {
-  "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "statusCode": 301 },
+    { "source": "/portfolio.html", "destination": "/portfolio", "statusCode": 301 },
+    { "source": "/gallery.html", "destination": "/gallery", "statusCode": 301 },
+    { "source": "/booking.html", "destination": "/booking", "statusCode": 301 },
+    { "source": "/contact.html", "destination": "/contact", "statusCode": 301 },
+    { "source": "/reviews.html", "destination": "/reviews", "statusCode": 301 }
+  ],
+  "rewrites": [
+    { "source": "/portfolio", "destination": "/portfolio.html" },
+    { "source": "/gallery", "destination": "/gallery.html" },
+    { "source": "/booking", "destination": "/booking.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/reviews", "destination": "/reviews.html" }
+  ],
   "headers": [
     {
       "source": "/(images|videos|uploads|css|js|data)/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(portfolio|gallery|booking|contact|reviews)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     },
     {

@@ -755,15 +755,17 @@
     }
   }
 
-  function updateReviewsCarousel(scrollIntoView = false) {
+  function updateReviewsCarousel(shouldScroll = false) {
     const cardWidth = reviewsTrack.children[0]?.offsetWidth || 300;
     const gap = 24;
     const scrollPosition = reviewIndex * (cardWidth + gap);
 
     if (isMobileReviews()) {
       reviewsTrack.style.transform = '';
-      if (scrollIntoView && reviewsTrack.children[reviewIndex]) {
-        reviewsTrack.children[reviewIndex].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      if (shouldScroll) {
+        // Scroll the track only. scrollIntoView() walks up every scrollable
+        // ancestor, so it drags the whole page with it.
+        reviewsTrack.scrollTo({ left: scrollPosition, behavior: 'smooth' });
       }
     } else {
       reviewsTrack.style.transform = `translateX(-${scrollPosition}px)`;
@@ -794,9 +796,15 @@
     updateReviewsCarousel();
   });
 
+  // Mobile fires resize constantly (URL bar, on-screen keyboard, orientation).
+  // Never scroll from here or the page drifts on its own.
+  let reviewsResizeTimer;
   window.addEventListener('resize', () => {
-    reviewIndex = Math.min(reviewIndex, getMaxReviewIndex());
-    updateReviewsCarousel(true);
+    clearTimeout(reviewsResizeTimer);
+    reviewsResizeTimer = setTimeout(() => {
+      reviewIndex = Math.min(reviewIndex, getMaxReviewIndex());
+      updateReviewsCarousel();
+    }, 150);
   });
 
 
@@ -1227,7 +1235,9 @@
     updateMuteBtn();
 
     const targetSlide = reelsTrack.children[startIndex];
-    if (targetSlide) targetSlide.scrollIntoView({ behavior: 'instant' });
+    // Scroll the track directly. scrollIntoView() would also scroll the page
+    // behind the overlay, so it opens at the wrong offset and stays there.
+    if (targetSlide) reelsTrack.scrollTop = targetSlide.offsetTop;
 
     updateReelsCounter(startIndex);
 

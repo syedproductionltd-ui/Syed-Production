@@ -48,7 +48,7 @@ export default function SiteNav() {
             className="logo-img"
           />
           <span className="brand-swap-a">Syed</span>
-          <span className="brand-swap-b">Productions</span>
+          <span className="brand-swap-b">Production</span>
         </Link>
 
         <button

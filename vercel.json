@@ -1,5 +1,9 @@
 {
   "trailingSlash": false,
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "out",
+  "installCommand": "npm ci",
   "redirects": [
     { "source": "/index.html", "destination": "/", "statusCode": 301 },
     { "source": "/portfolio.html", "destination": "/portfolio", "statusCode": 301 },

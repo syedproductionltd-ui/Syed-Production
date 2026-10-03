@@ -562,39 +562,48 @@
   "team": [
     {
       "name": "Burhan Uddin Shah",
-      "role": "CEO & Founder",
-      "bio": "Visionary leader driving Syed Production forward with creative excellence and strategic vision. The driving force behind every project.",
-      "image": "images/team/Burhan.png",
+      "role": "Chairman",
+      "bio": "Leads Syed Production, setting the creative direction and overseeing every project from first brief to final delivery.",
+      "image": "images/team/Burhan Uddin Shah.jpeg",
       "facebook": "#",
       "instagram": "#",
       "sortOrder": 1
     },
     {
-      "name": "Tehseen Abbas",
-      "role": "Head of Production",
-      "bio": "Manages end-to-end production workflows ensuring every project meets the highest standards of quality and creativity.",
-      "image": "images/team/tehseen.png",
+      "name": "Akash Hussian",
+      "role": "Co Founder",
+      "bio": "Co-founded the studio and works alongside the chairman on brand direction, client relationships and creative strategy.",
+      "image": "images/team/Akash Hussian.jpeg",
       "facebook": "#",
       "instagram": "#",
       "sortOrder": 2
     },
     {
-      "name": "Tashfeen Bin Riaz",
-      "role": "Photographer",
-      "bio": "Talented photographer with a keen eye for capturing stunning visuals and unforgettable moments.",
-      "image": "images/team/Tashfeen Bin Riaz.png",
+      "name": "Kashif Zayan",
+      "role": "Drone Operator",
+      "bio": "Flies and maintains the aerial fleet, capturing smooth cinematic establishing shots for films, events and commercial work.",
+      "image": "images/team/Kashif Zayan.jpeg",
       "facebook": "#",
       "instagram": "#",
       "sortOrder": 3
     },
     {
-      "name": "Hussain",
-      "role": "Media Head",
-      "bio": "Leads media strategy and content creation, delivering impactful visual stories across all platforms.",
-      "image": "images/team/Hussain.jpg",
+      "name": "Saqib Gull",
+      "role": "Cameraman",
+      "bio": "Behind the camera on set, handling shot composition, camera movement and the practical craft of every production.",
+      "image": "images/team/Saqib Gull.jpeg",
       "facebook": "#",
       "instagram": "#",
       "sortOrder": 4
+    },
+    {
+      "name": "Hussain",
+      "role": "Marketing Manager",
+      "bio": "Runs marketing and content distribution, keeping projects visible and the studio connected with its audience.",
+      "image": "images/team/Hussain.jpg",
+      "facebook": "#",
+      "instagram": "#",
+      "sortOrder": 5
     }
   ],
   "settings": {

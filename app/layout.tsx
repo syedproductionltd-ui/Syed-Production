@@ -97,10 +97,9 @@ const organizationSchema = {
     email: 'contact@syedproductions.com',
   },
   sameAs: [
-    'https://www.facebook.com/syedproductions',
-    'https://www.instagram.com/syedproductions',
-    'https://www.youtube.com/syedproductions',
-  ],
+    settings.socialLinks.facebook,
+    settings.socialLinks.instagram,
+  ].filter((url): url is string => Boolean(url && url.trim())),
 };
 
 const breadcrumbSchema = {

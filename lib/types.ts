@@ -102,7 +102,7 @@ export interface SiteSettings {
   };
 }
 
-export type SocialNetwork = 'facebook' | 'instagram' | 'whatsapp' | 'youtube' | 'tiktok';
+export type SocialNetwork = 'facebook' | 'instagram' | 'whatsapp' | 'tiktok';
 
 export interface ContactDetails {
   email: string;

@@ -7,7 +7,6 @@ const networkLabels: Record<SocialNetwork, string> = {
   facebook: 'Facebook',
   instagram: 'Instagram',
   whatsapp: 'WhatsApp',
-  youtube: 'YouTube',
 };
 
 /**

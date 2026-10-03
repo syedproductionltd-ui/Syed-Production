@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { reviews } from '@/lib/data';
+import { reviews, assetUrl } from '@/lib/data';
 import SectionHeader from '@/components/SectionHeader';
 import Stars from '@/components/Stars';
 
@@ -116,7 +116,7 @@ export default function ReviewsSection() {
               {reviews.map((rev) => (
                 <div className="review-card" key={`${rev.name}-${rev.city}`}>
                   <div className="review-card-header">
-                    <img className="review-avatar" src={`/${rev.avatar}`} alt={rev.name} loading="lazy" />
+                    <img className="review-avatar" src={assetUrl(rev.avatar)} alt={rev.name} loading="lazy" />
                     <div>
                       <div className="review-author">{rev.name}</div>
                       <div className="review-meta">

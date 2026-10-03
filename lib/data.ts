@@ -47,3 +47,15 @@ export function videoFilterKey(tag: string): string {
 export const videoFilters = Array.from(
   new Map(videos.map((v) => [videoFilterKey(v.tag), v.tag]))
 ).map(([key, label]) => ({ key, label }));
+
+/**
+ * Resolves an image path from the data to a usable src.
+ *
+ * Most records hold a root-relative path such as "images/team/Hussain.jpg",
+ * but the review avatars hold absolute Unsplash URLs. Prefixing those with "/"
+ * produced "/https://images.unsplash.com/...", which resolves to nothing, so
+ * the review avatars rendered as broken images.
+ */
+export function assetUrl(value: string): string {
+  return /^https?:\/\//i.test(value) ? value : `/${value}`;
+}

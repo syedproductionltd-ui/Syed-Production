@@ -11,27 +11,35 @@ const networkLabels: Record<SocialNetwork, string> = {
 };
 
 /**
- * Social hrefs come from settings. Most are empty placeholders today, so fall
- * back to '#' — DeadLinkGuard neutralises the navigation.
+ * Social hrefs come from settings. Networks with no URL yet fall back to '#',
+ * which DeadLinkGuard neutralises.
  */
 function socialHref(network: SocialNetwork): string {
   const value = settings.socialLinks[network];
-  return value && value.trim() ? value : '#';
+  return value && value.trim() ? value : '';
 }
 
 export function SocialLinks({ size = 20 }: { size?: number }) {
   return (
     <div className="social-links">
-      {socialNetworks.map((network) => (
-        <a
-          key={network}
-          href={socialHref(network)}
-          className="social-link"
-          aria-label={networkLabels[network]}
-        >
-          <SocialIcon network={network} size={size} />
-        </a>
-      ))}
+      {socialNetworks.map((network) => {
+        const href = socialHref(network);
+        const external = href !== '';
+        return (
+          <a
+            key={network}
+            href={href || '#'}
+            className="social-link"
+            aria-label={networkLabels[network]}
+            aria-disabled={external ? undefined : true}
+            {...(external
+              ? { target: '_blank', rel: 'noopener noreferrer' }
+              : {})}
+          >
+            <SocialIcon network={network} size={size} />
+          </a>
+        );
+      })}
     </div>
   );
 }

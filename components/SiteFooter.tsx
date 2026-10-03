@@ -110,7 +110,7 @@ export default function SiteFooter({ isHome = false }: { isHome?: boolean }) {
           <div className="footer-brand">
             <Link href={isHome ? '#hero' : '/'} className="nav-logo">
               <img
-                src="/images/Syed-production.webp"
+                src="/images/Syed-production.png"
                 alt={brandName}
                 className="logo-img"
               />

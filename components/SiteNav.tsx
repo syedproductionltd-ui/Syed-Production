@@ -43,7 +43,7 @@ export default function SiteNav() {
         <Link href="/" className="nav-logo" aria-label={`${brandName} Home`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/Syed-production.webp"
+            src="/images/Syed-production.png"
             alt={brandName}
             className="logo-img"
           />

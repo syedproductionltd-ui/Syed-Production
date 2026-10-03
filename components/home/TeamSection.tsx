@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { teamMembers } from '@/lib/data';
+import { teamMembers, thumbSrcSet, thumbUrl } from '@/lib/data';
 import { useScrollLock } from '@/lib/useScrollLock';
 import type { TeamMember } from '@/lib/types';
 import SectionHeader from '@/components/SectionHeader';
@@ -67,7 +67,12 @@ function TeamPopup({
         <button className="team-popup-close" onClick={onClose} aria-label="Close profile">
           &times;
         </button>
-        <img className="team-popup-img" src={`/${shown.image}`} alt={shown.name} />
+        <img
+          className="team-popup-img"
+          src={thumbUrl(shown.image)}
+          alt={shown.name}
+          decoding="async"
+        />
         <div className="team-popup-body">
           <h2 className="team-popup-name" id="teamPopupName">
             {shown.name}
@@ -99,9 +104,12 @@ export default function TeamSection() {
             >
               <div className="team-card-img">
                 <img
-                  src={`/${m.image}`}
+                  src={thumbUrl(m.image)}
+                  srcSet={thumbSrcSet(m.image)}
+                  sizes="(max-width: 640px) 45vw, 22vw"
                   alt={`${m.name} — ${m.role} at Syed Production`}
                   loading="lazy"
+                  decoding="async"
                   itemProp="image"
                 />
               </div>

@@ -81,7 +81,7 @@ export const metadata: Metadata = {
     images: ['/images/og-image.jpg'],
   },
   icons: {
-    icon: [{ url: '/images/Syed-production.webp', type: 'image/png' }],
+    icon: [{ url: '/images/Syed-production.png', type: 'image/png' }],
   },
 };
 

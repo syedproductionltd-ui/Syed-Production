@@ -41,7 +41,7 @@ export const organizationSchema = {
   '@type': 'Organization',
   name: settings.branding.companyName,
   url: siteUrl,
-  logo: `${siteUrl}/images/Syed-production.webp`,
+  logo: `${siteUrl}/images/Syed-production.png`,
   image: `${siteUrl}/images/og-image.jpg`,
   description:
     'Professional film, photography, videography, and event coverage',

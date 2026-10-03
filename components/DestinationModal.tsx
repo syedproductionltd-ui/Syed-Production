@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useScrollLock } from '@/lib/useScrollLock';
 import type { Destination } from '@/lib/types';
+import { thumbSrcSet, thumbUrl } from '@/lib/data';
 import Stars from './Stars';
 
 /**
@@ -72,7 +73,15 @@ export default function DestinationModal({
         <button className="modal-close" onClick={onClose} aria-label="Close modal">
           &times;
         </button>
-        <img className="modal-image" src={`/${shown.image}`} alt={shown.name} loading="lazy" />
+        <img
+          className="modal-image"
+          src={thumbUrl(shown.image)}
+          srcSet={thumbSrcSet(shown.image)}
+          sizes="(max-width: 768px) 92vw, 60vw"
+          alt={shown.name}
+          loading="lazy"
+          decoding="async"
+        />
         <div className="modal-body">
           <h3 className="modal-title" id="modalTitle">
             {shown.name}

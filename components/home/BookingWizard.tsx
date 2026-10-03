@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useState } from 'react';
-import { bookingDestinations } from '@/lib/data';
+import { bookingDestinations, thumbSrcSet, thumbUrl } from '@/lib/data';
 import type { Destination } from '@/lib/types';
 import { whatsappUrl } from '@/lib/whatsapp';
 import SectionHeader from '@/components/SectionHeader';
@@ -120,7 +120,14 @@ export default function BookingWizard({
                       }
                     }}
                   >
-                    <img src={`/${d.image}`} alt={d.name} loading="lazy" />
+                    <img
+                      src={thumbUrl(d.image)}
+                      srcSet={thumbSrcSet(d.image)}
+                      sizes="(max-width: 640px) 45vw, 20vw"
+                      alt={d.name}
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <h4>{d.name}</h4>
                     <p>{d.tier}</p>
                   </div>

@@ -608,12 +608,12 @@
   ],
   "settings": {
     "branding": {
-      "logoUrl": "images/Syed-production.webp",
+      "logoUrl": "images/Syed-production.png",
       "logoSize": 100,
       "logoBorderRadius": 50,
       "companyName": "Syed Production",
       "companyShortName": "Syed Production",
-      "faviconUrl": "images/Syed-production.webp",
+      "faviconUrl": "images/Syed-production.png",
       "faviconBorderRadius": 50
     },
     "hero": {

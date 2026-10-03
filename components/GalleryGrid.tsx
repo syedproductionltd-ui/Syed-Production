@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { GalleryImage } from '@/lib/types';
+import { assetUrl, thumbUrl } from '@/lib/data';
 import Lightbox, { type LightboxItem } from './Lightbox';
 
 /**
@@ -31,7 +32,7 @@ export default function GalleryGrid({
   const observer = useRef<IntersectionObserver | null>(null);
 
   const items = useMemo<LightboxItem[]>(
-    () => images.map((img) => ({ src: `/${img.imageUrl}`, alt: img.altText })),
+    () => images.map((img) => ({ src: assetUrl(img.imageUrl), alt: img.altText })),
     [images]
   );
 
@@ -90,7 +91,7 @@ export default function GalleryGrid({
           <div
             key={img.imageUrl}
             className={`gallery-item${img.hidden && !expanded ? ' gallery-hidden' : ''}`}
-            data-bg-src={`/${img.imageUrl}`}
+            data-bg-src={thumbUrl(img.imageUrl)}
             role="button"
             tabIndex={0}
             aria-label={`View photo ${i + 1}`}

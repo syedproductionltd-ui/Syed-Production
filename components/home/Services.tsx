@@ -2,10 +2,12 @@
 
 import { useCallback, useState } from 'react';
 import {
-  destinationsByCategory,
-  featuredDestinations,
-  serviceCategories,
-} from '@/lib/data';
+destinationsByCategory,
+    featuredDestinations,
+    serviceCategories,
+    thumbSrcSet,
+    thumbUrl,
+  } from '@/lib/data';
 import type { Destination } from '@/lib/types';
 import SectionHeader from '@/components/SectionHeader';
 import DestinationModal from '@/components/DestinationModal';
@@ -32,7 +34,14 @@ function ServiceCard({
   return (
     <div className="service-card" role="listitem" data-id={dest.id} onClick={onOpen}>
       <div className="service-card-img">
-        <img src={`/${dest.image}`} alt={dest.name} loading="lazy" />
+        <img
+          src={thumbUrl(dest.image)}
+          srcSet={thumbSrcSet(dest.image)}
+          sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
+          alt={dest.name}
+          loading="lazy"
+          decoding="async"
+        />
         <span className="service-card-badge">{dest.category}</span>
         {dest.featured && <span className="service-card-top-badge">Top Pick</span>}
         <button
@@ -106,7 +115,14 @@ export function FeaturedServices({ onOpen }: { onOpen: (id: number) => void }) {
                 }
               }}
             >
-              <img src={`/${dest.image}`} alt={dest.name} loading="lazy" />
+              <img
+                src={thumbUrl(dest.image)}
+                srcSet={thumbSrcSet(dest.image)}
+                sizes="(max-width: 768px) 92vw, 46vw"
+                alt={dest.name}
+                loading="lazy"
+                decoding="async"
+              />
               <div className="featured-overlay">
                 <span className="featured-tag">Featured Service</span>
                 <h3 className="featured-name">{dest.name}</h3>

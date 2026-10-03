@@ -3,12 +3,22 @@
 import { useEffect, useRef, useState } from 'react';
 import { settings } from '@/lib/data';
 
-const SLIDES = [
-  '/images/DSC00557.webp',
-  '/images/hero-background/DSC09876.webp',
-];
+const FIRST_SLIDE = '/images/DSC00557.webp';
+
+const SLIDES = [FIRST_SLIDE, '/images/hero-background/DSC09876.webp'];
 
 const ROTATE_MS = 6000;
+
+/** Warms the remaining slides once the browser is idle. */
+function prefetchRest(mark: (i: number) => () => void) {
+  SLIDES.slice(1).forEach((src, n) => {
+    const i = n + 1;
+    const img = new Image();
+    img.onload = mark(i);
+    img.onerror = mark(i);
+    img.src = src;
+  });
+}
 
 export default function Hero() {
   const [active, setActive] = useState(0);
@@ -27,26 +37,37 @@ export default function Hero() {
     return () => clearTimeout(t);
   }, [preloaderDone]);
 
-  // Preload each background so the slide is painted before it is shown.
+  // Preload the first slide only. The hero is the LCP element, so pulling the
+  // second slide up front only competes with it for bandwidth. Later slides are
+  // prefetched during idle time, ready well before the 6s rotation reaches them.
   useEffect(() => {
     let cancelled = false;
-    SLIDES.forEach((src, i) => {
-      const img = new Image();
-      const mark = () => {
-        if (cancelled) return;
-        setLoaded((prev) => (prev[i] ? prev : { ...prev, [i]: true }));
-        // The preloader lifts as soon as the first slide is ready, or after a
-        // 5s fallback in case the image never resolves.
-        if (i === 0) setPreloaderDone(true);
-      };
-      img.onload = mark;
-      img.onerror = mark;
-      img.src = src;
-    });
+    const mark = (i: number) => () => {
+      if (cancelled) return;
+      setLoaded((prev) => (prev[i] ? prev : { ...prev, [i]: true }));
+      // The preloader lifts as soon as the first slide is ready, or after a
+      // 5s fallback in case the image never resolves.
+      if (i === 0) setPreloaderDone(true);
+    };
+
+    const first = new Image();
+    first.onload = mark(0);
+    first.onerror = mark(0);
+    first.src = FIRST_SLIDE;
+
+    let idle: number;
+    if (typeof window.requestIdleCallback === 'function') {
+      idle = window.requestIdleCallback(() => prefetchRest(mark));
+    } else {
+      idle = window.setTimeout(() => prefetchRest(mark), 1200);
+    }
+
     const fallback = setTimeout(() => setPreloaderDone(true), 5000);
     return () => {
       cancelled = true;
       clearTimeout(fallback);
+      if (typeof window.cancelIdleCallback === 'function') window.cancelIdleCallback(idle);
+      else clearTimeout(idle);
     };
   }, []);
 

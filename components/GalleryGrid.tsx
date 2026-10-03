@@ -29,11 +29,21 @@ export default function GalleryGrid({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const gridRef = useRef<HTMLDivElement | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
 
   const items = useMemo<LightboxItem[]>(
     () => images.map((img) => ({ src: assetUrl(img.imageUrl), alt: img.altText })),
     [images]
+  );
+
+  /** Tiles still waiting for a background, scoped to this grid only. */
+  const pendingTiles = useCallback(
+    () =>
+      Array.from(
+        gridRef.current?.querySelectorAll<HTMLElement>('.gallery-item[data-bg-src]') ?? []
+      ),
+    []
   );
 
   const paint = useCallback((el: HTMLElement) => {
@@ -45,15 +55,24 @@ export default function GalleryGrid({
     observer.current?.unobserve(el);
   }, []);
 
+  /**
+   * Re-arms whenever `expanded` flips, not just on mount.
+   *
+   * A collapsed tile is `display: none`, so it has no box and the observer
+   * never reports it as intersecting. Arming once on mount left those tiles
+   * holding their `data-bg-src` forever, so revealing them on "See More" showed
+   * empty placeholders that never painted as they were scrolled into view.
+   */
   useEffect(() => {
-    const pending = () =>
-      document.querySelectorAll<HTMLElement>('.gallery-item[data-bg-src]');
+    const pending = pendingTiles();
+    if (!pending.length) return;
 
     if (!('IntersectionObserver' in window)) {
-      pending().forEach(paint);
+      pending.forEach(paint);
       return;
     }
 
+    observer.current?.disconnect();
     observer.current = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -62,28 +81,31 @@ export default function GalleryGrid({
       },
       { rootMargin: '500px 0px' }
     );
+    pending.forEach((el) => observer.current?.observe(el));
 
-    pending().forEach((el) => observer.current?.observe(el));
-    return () => observer.current?.disconnect();
-  }, [paint]);
-
-  const toggle = useCallback(() => {
-    setExpanded((prev) => {
-      if (!prev) {
-        // Newly revealed tiles are not observed yet, so paint them directly.
-        requestAnimationFrame(() => {
-          document
-            .querySelectorAll<HTMLElement>('.gallery-item[data-bg-src]')
-            .forEach(paint);
-        });
+    // Paint what is already on screen straight away instead of waiting a frame
+    // for the observer to report it.
+    const raf = requestAnimationFrame(() => {
+      for (const el of pending) {
+        if (!el.isConnected || !el.dataset.bgSrc) continue;
+        const box = el.getBoundingClientRect();
+        if (box.bottom > -500 && box.top < window.innerHeight + 500) paint(el);
       }
-      return !prev;
     });
-  }, [paint]);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      observer.current?.disconnect();
+      observer.current = null;
+    };
+  }, [expanded, paint, pendingTiles]);
+
+  const toggle = useCallback(() => setExpanded((prev) => !prev), []);
 
   return (
     <>
       <div
+        ref={gridRef}
         className={`gallery-grid${reveal ? ' reveal-up' : ''}${expanded ? ' expanded' : ''}`}
         id="galleryGrid"
       >

@@ -1848,6 +1848,26 @@ input, select, textarea {
   transform: scale(1.03);
 }
 
+/* Terminal state for a thumbnail that failed to load. Without this the tile
+   keeps the placeholder tint and is indistinguishable from one still loading. */
+.gallery-item.is-failed {
+  background-image: none !important;
+}
+
+.gallery-item.is-failed::before {
+  content: 'Photo unavailable';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2);
+  text-align: center;
+  font-size: var(--fs-xs);
+  color: var(--clr-gray-400);
+  pointer-events: none;
+}
+
 .gallery-item:first-child {
   grid-row: span 2;
 }
@@ -2924,6 +2944,38 @@ input, select, textarea {
   border-radius: var(--radius-sm);
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
   transition: transform var(--transition-base);
+}
+
+.lightbox-loading,
+.lightbox-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--clr-gray-400);
+  font-size: var(--fs-sm);
+  text-align: center;
+}
+
+.lightbox-spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-top-color: var(--clr-primary);
+  animation: lightbox-spin 0.7s linear infinite;
+}
+
+@keyframes lightbox-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-spinner {
+    animation-duration: 2.4s;
+  }
 }
 
 .lightbox-close {

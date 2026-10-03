@@ -46,13 +46,28 @@ export default function GalleryGrid({
     []
   );
 
+  /**
+   * Swaps the placeholder tint for the thumbnail only once the bytes arrive.
+   *
+   * A CSS background raises no load/error events, so assigning
+   * `backgroundImage` directly makes a failed fetch look identical to a pending
+   * one: a tile that stays empty forever with nothing to distinguish "still
+   * loading" from "will never load". Probing through `Image` first gives us both
+   * outcomes - `is-loaded` paints the photo, `is-failed` settles the tile as
+   * unavailable instead of leaving it looking pending.
+   */
   const paint = useCallback((el: HTMLElement) => {
     const src = el.dataset.bgSrc;
     if (!src) return;
-    el.style.backgroundImage = `url('${src}')`;
-    el.classList.add('loaded');
     delete el.dataset.bgSrc;
     observer.current?.unobserve(el);
+    const probe = new Image();
+    probe.onload = () => {
+      el.style.backgroundImage = `url("${src}")`;
+      el.classList.add('is-loaded');
+    };
+    probe.onerror = () => el.classList.add('is-failed');
+    probe.src = src;
   }, []);
 
   /**

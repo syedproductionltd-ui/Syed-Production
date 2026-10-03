@@ -42,7 +42,7 @@ export const organizationSchema = {
   name: settings.branding.companyName,
   url: siteUrl,
   logo: `${siteUrl}/images/Syed-production.webp`,
-  image: `${siteUrl}/images/DSC00557.webp`,
+  image: `${siteUrl}/images/og-image.jpg`,
   description:
     'Professional film, photography, videography, and event coverage',
   foundingDate: '2020',

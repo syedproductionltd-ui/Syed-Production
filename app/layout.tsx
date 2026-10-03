@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     description,
     images: [
       {
-        url: '/images/DSC00557.webp',
+        url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Syed Production',
@@ -78,10 +78,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Syed Production — Film, Photography & Videography',
     description,
-    images: ['/images/DSC00557.webp'],
+    images: ['/images/og-image.jpg'],
   },
   icons: {
-    icon: [{ url: '/images/Syed-production.webp', type: 'image/webp' }],
+    icon: [{ url: '/images/Syed-production.webp', type: 'image/png' }],
   },
 };
 
@@ -105,7 +105,7 @@ export default function RootLayout({
           rel="preload"
           as="image"
           type="image/webp"
-          href="/images/DSC00557.webp"
+          href="/images/og-image.jpg"
           fetchPriority="high"
         />
         <JsonLd data={organizationSchema} />

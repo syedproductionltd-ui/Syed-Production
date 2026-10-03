@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     url: `${siteUrl}/gallery`,
     title: 'Gallery | Syed Production',
     description,
-    images: [{ url: '/images/DSC00557.webp', width: 1200, height: 630, alt: 'Syed Production gallery' }],
+    images: [{ url: '/images/og-image.jpg', width: 1200, height: 630, alt: 'Syed Production gallery' }],
   },
 };
 

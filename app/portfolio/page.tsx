@@ -3,6 +3,8 @@ import { galleryImages } from '@/lib/data';
 import { siteUrl } from '@/lib/whatsapp';
 import GalleryGrid from '@/components/GalleryGrid';
 import SiteFooter from '@/components/SiteFooter';
+import JsonLd from '@/components/JsonLd';
+import { pageBreadcrumb } from '@/lib/seo';
 
 const description =
   'Browse the Syed Productions portfolio — cinematic wedding films, corporate videos, event coverage and photography from Lahore, Pakistan.';
@@ -23,6 +25,7 @@ export const metadata: Metadata = {
 export default function PortfolioPage() {
   return (
     <>
+      <JsonLd data={pageBreadcrumb('Our Portfolio', '/portfolio')} />
       <section className="page-hero">
         <div className="container">
           <h1 className="page-hero-title">Our Portfolio</h1>

@@ -3,6 +3,8 @@ import { settings } from '@/lib/data';
 import { siteUrl, whatsappUrl } from '@/lib/whatsapp';
 import SocialIcon, { socialNetworks } from '@/components/SocialIcon';
 import SiteFooter from '@/components/SiteFooter';
+import JsonLd from '@/components/JsonLd';
+import { pageBreadcrumb } from '@/lib/seo';
 
 const description =
   'Contact Syed Productions in Lahore, Pakistan. Message us on WhatsApp or email syed.production.ltd@gmail.com — we reply to every project enquiry within 24 hours.';
@@ -27,6 +29,7 @@ export default function ContactPage() {
 
   return (
     <>
+      <JsonLd data={pageBreadcrumb('Contact Us', '/contact')} />
       <section className="page-hero">
         <div className="container">
           <h1 className="page-hero-title">Contact Us</h1>

@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { siteUrl } from '@/lib/whatsapp';
 import ReviewsPageBody from '@/components/ReviewsPageBody';
 import SiteFooter from '@/components/SiteFooter';
+import JsonLd from '@/components/JsonLd';
+import { pageBreadcrumb } from '@/lib/seo';
 
 const description =
   'Read client reviews of Syed Productions — feedback on wedding films, corporate videos, event coverage and photography from clients across Pakistan.';
@@ -22,6 +24,7 @@ export const metadata: Metadata = {
 export default function ReviewsPage() {
   return (
     <>
+      <JsonLd data={pageBreadcrumb('Client Reviews', '/reviews')} />
       <section className="page-hero">
         <div className="container">
           <h1 className="page-hero-title">Client Reviews</h1>

@@ -1,13 +1,16 @@
 import type { Metadata } from 'next';
 import './styles.css';
-import { settings } from '@/lib/data';
 import { siteUrl } from '@/lib/whatsapp';
+import { organizationSchema, websiteSchema } from '@/lib/seo';
 import SiteNav from '@/components/SiteNav';
 import DarkModeScript from '@/components/DarkModeScript';
 import DeadLinkGuard from '@/components/DeadLinkGuard';
+import JsonLd from '@/components/JsonLd';
 
+// Trimmed to sit inside the ~155 character window Google renders, so the
+// strongest claim is the part that actually shows up in results.
 const description =
-  'Syed Productions — Professional film, photography, videography, and event coverage. Meet our creative team including Tashfeen Bin Riaz, Burhan Uddin Shah, Tehseen Abbas, and Hussain. Bringing your vision to life with cinematic storytelling and creative media production.';
+  'Syed Productions is a film, photography and videography studio in Lahore, Pakistan, covering weddings, corporate video, events and creative campaigns.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -34,6 +37,8 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Syed Productions Team' }],
   creator: 'Syed Productions',
+  publisher: 'Syed Productions',
+  applicationName: 'Syed Productions',
   robots: {
     index: true,
     follow: true,
@@ -45,17 +50,13 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
     },
   },
-  alternates: {
-    canonical: '/',
-    languages: { en: '/' },
-  },
   openGraph: {
     type: 'website',
     url: siteUrl,
-    title: 'Syed Productions — Film, Photography & Videography',
-    description:
-      'Professional film, photography, videography, and event coverage. Creative team including Tashfeen Bin Riaz, Burhan, Tehseen, and Hussain.',
     siteName: 'Syed Productions',
+    locale: 'en_US',
+    title: 'Syed Productions — Film, Photography & Videography',
+    description,
     images: [
       {
         url: '/images/DSC00557.webp',
@@ -82,35 +83,6 @@ export const viewport = {
   themeColor: '#0b1f17',
 };
 
-const organizationSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: settings.branding.companyName,
-  url: siteUrl,
-  logo: `${siteUrl}/images/Syed-production.webp`,
-  description:
-    'Professional film, photography, videography, and event coverage',
-  foundingDate: '2020',
-  contactPoint: {
-    '@type': 'ContactPoint',
-    contactType: 'Customer Service',
-    email: 'contact@syedproductions.com',
-  },
-  sameAs: [
-    settings.socialLinks.facebook,
-    settings.socialLinks.instagram,
-  ].filter((url): url is string => Boolean(url && url.trim())),
-};
-
-const breadcrumbSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
-    { '@type': 'ListItem', position: 2, name: 'Team', item: `${siteUrl}#team` },
-  ],
-};
-
 export default function RootLayout({
   children,
 }: {
@@ -128,14 +100,8 @@ export default function RootLayout({
           href="/images/DSC00557.webp"
           fetchPriority="high"
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-        />
+        <JsonLd data={organizationSchema} />
+        <JsonLd data={websiteSchema} />
       </head>
       <body>
         <SiteNav />

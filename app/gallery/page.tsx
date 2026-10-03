@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { siteUrl } from '@/lib/whatsapp';
 import GalleryTabs from '@/components/GalleryTabs';
 import SiteFooter from '@/components/SiteFooter';
+import JsonLd from '@/components/JsonLd';
+import { pageBreadcrumb } from '@/lib/seo';
 
 const description =
   'Photo and video gallery from Syed Productions — wedding films, travel cinematography, commercials and client stories from Lahore, Pakistan.';
@@ -22,6 +24,7 @@ export const metadata: Metadata = {
 export default function GalleryPage() {
   return (
     <>
+      <JsonLd data={pageBreadcrumb('Gallery', '/gallery')} />
       <section className="page-hero">
         <div className="container">
           <h1 className="page-hero-title">Gallery</h1>

@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { siteUrl } from '@/lib/whatsapp';
 import BookingWizard from '@/components/home/BookingWizard';
 import SiteFooter from '@/components/SiteFooter';
+import JsonLd from '@/components/JsonLd';
+import { pageBreadcrumb } from '@/lib/seo';
 
 const description =
   'Book your production with Syed Productions. Choose a service, pick your dates, and send the brief straight to our WhatsApp — we reply within 24 hours.';
@@ -22,6 +24,7 @@ export const metadata: Metadata = {
 export default function BookingPage() {
   return (
     <>
+      <JsonLd data={pageBreadcrumb('Book Your Production', '/booking')} />
       <section className="page-hero">
         <div className="container">
           <h1 className="page-hero-title">Book Your Production</h1>

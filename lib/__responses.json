@@ -1,0 +1,55 @@
+{
+  "aiResponses": {
+    "wedding": [
+      "For your wedding, I recommend our **Cinematic Wedding Film** package! Multi-camera coverage, drone shots, and a highlight reel your guests will love.",
+      "Our **Premium Wedding Package** includes full-day coverage, same-day edit, and a beautifully crafted 10-minute cinematic film."
+    ],
+    "corporate": [
+      "For corporate needs, our **Corporate Video Production** service delivers professional brand films, training videos, and promotional content.",
+      "We offer **Corporate Event Coverage** with multi-camera setups, live streaming, and quick-turnaround highlight reels."
+    ],
+    "music": [
+      "Our **Music Video Production** team brings creative direction, cinematic visuals, and professional color grading to every project.",
+      "From concept to final cut, we create **stunning music videos** with choreography coordination, location scouting, and VFX."
+    ],
+    "event": [
+      "For events, our **Full Coverage Package** includes multi-camera recording, drone footage, and a polished highlight film.",
+      "We specialize in **corporate events, conferences, and galas** — capturing every key moment with professional quality."
+    ],
+    "documentary": [
+      "Our **Documentary Filmmaking** service tells your story with depth — from research and interviews to narration and post-production.",
+      "We produce **compelling documentaries** for NGOs, brands, and personal projects with cinematic storytelling techniques."
+    ],
+    "photography": [
+      "Our **Photography Services** cover portraits, products, events, and fashion — with professional lighting and retouching.",
+      "From **product photography** to **fashion shoots**, our team delivers magazine-quality images for every need."
+    ],
+    "commercial": [
+      "Our **Commercial Production** service creates TV ads, social media campaigns, and branded content that converts.",
+      "We produce **high-impact commercials** with creative scripting, professional talent, and broadcast-quality finishing."
+    ],
+    "branding": [
+      "Our **Brand Identity** service includes logo design, style guides, and visual branding across all your media.",
+      "From **logo creation** to full brand packages, we build visual identities that stand out in the market."
+    ],
+    "default": [
+      "I have some great production recommendations based on your project needs! Let me create a personalized estimate."
+    ]
+  },
+  "chatResponses": {
+    "hello": "Assalam o Alaikum! Welcome to Syed Productions. Tell me about your project or click Plan My Project!",
+    "hi": "Welcome! What kind of production service are you looking for?",
+    "salam": "Walaikum Assalam! Welcome to Syed Productions. How can I help with your project?",
+    "help": "I can help you plan your production project! Set your preferences on the left panel, or ask me about our services like wedding films, corporate videos, or photography.",
+    "wedding": "Our wedding film packages include multi-camera coverage, drone shots, same-day edits, and cinematic highlight reels. We cover events across Pakistan!",
+    "corporate": "We produce professional corporate videos — brand films, training videos, event coverage, and promotional content with broadcast-quality finishing.",
+    "photography": "Our photography services cover portraits, products, events, fashion, and real estate — with professional lighting, retouching, and fast delivery.",
+    "music": "We create stunning music videos from concept to final cut — creative direction, choreography, location scouting, and professional color grading.",
+    "price": "For pricing details, please contact us on WhatsApp or fill out the booking form — we\\u0027ll get back to you with a custom quote!",
+    "budget": "We offer packages for every scale of project. Contact us to discuss your needs and we\\u0027ll provide a tailored quote!",
+    "editing": "Our post-production services include video editing, color grading, motion graphics, VFX, and sound design — all done in-house.",
+    "branding": "Our branding services include logo design, visual identity, brand guidelines, and social media assets — everything to establish your brand.",
+    "event": "We cover all types of events — corporate conferences, product launches, galas, concerts, and private celebrations with multi-camera setups.",
+    "default": "That sounds like an exciting project! Set your preferences and click Plan My Project for a personalized production estimate. You can also ask me about specific services like wedding films, corporate videos, or photography!"
+  }
+}

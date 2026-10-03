@@ -77,9 +77,51 @@
     return context.querySelector(selector);
   }
 
-  function $$(selector, context = document) {
+  function $$ (selector, context = document) {
     return [...context.querySelectorAll(selector)];
   }
+
+  /* --------------------------------------------------------
+     SCROLL LOCK
+     Overlays used to set body.style.overflow. That locks the wrong element
+     (the root scroller is <html>, not <body>) and, on mobile, it restored
+     the page to a different offset. Lock the root instead and remember the
+     offset so the page is exactly where the user left it. Reference-counted
+     because lightbox/reels/modal can overlap.
+  -------------------------------------------------------- */
+  let scrollLockCount = 0;
+  let scrollLockY = 0;
+
+  function lockScroll() {
+    if (scrollLockCount === 0) {
+      scrollLockY = window.scrollY;
+      document.documentElement.style.top = `-${scrollLockY}px`;
+      document.documentElement.classList.add('scroll-locked');
+    }
+    scrollLockCount++;
+  }
+
+  function unlockScroll() {
+    if (scrollLockCount === 0) return;
+    scrollLockCount--;
+    if (scrollLockCount > 0) return;
+
+    document.documentElement.classList.remove('scroll-locked');
+    document.documentElement.style.top = '';
+    // html has scroll-behavior: smooth, which would animate the restore.
+    const root = document.documentElement;
+    const prev = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    window.scrollTo(0, scrollLockY);
+    root.style.scrollBehavior = prev;
+  }
+
+  // Dead `href="#"` links (footer placeholders, social icons) otherwise
+  // smooth-scroll the whole page back to the top when tapped.
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest && e.target.closest('a[href="#"]');
+    if (link) e.preventDefault();
+  });
 
   const CONFIG = window.SITE_CONFIG || {};
 
@@ -376,14 +418,14 @@
 
     modal.hidden = false;
     requestAnimationFrame(() => modal.classList.add('open'));
-    document.body.style.overflow = 'hidden';
+    lockScroll();
   }
 
   function closeModal() {
     modal.classList.remove('open');
     setTimeout(() => {
       modal.hidden = true;
-      document.body.style.overflow = '';
+      unlockScroll();
     }, 300);
   }
 
@@ -909,7 +951,7 @@
     lightboxCounter.textContent = `${index + 1} / ${galleryItems.length}`;
     lightbox.hidden = false;
     requestAnimationFrame(() => lightbox.classList.add('open'));
-    document.body.style.overflow = 'hidden';
+    lockScroll();
   }
 
   function closeLightbox() {
@@ -917,7 +959,7 @@
     setTimeout(() => {
       lightbox.hidden = true;
       lightboxImg.src = '';
-      document.body.style.overflow = '';
+      unlockScroll();
     }, 300);
   }
 
@@ -1055,14 +1097,14 @@
     // Force reflow then animate in
     void overlay.offsetWidth;
     overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    lockScroll();
   }
 
   function closeTeamPopup() {
     const overlay = $('#teamPopup');
     if (!overlay) return;
     overlay.classList.remove('open');
-    document.body.style.overflow = '';
+    unlockScroll();
     setTimeout(() => { overlay.hidden = true; }, 300);
   }
 
@@ -1231,7 +1273,7 @@
 
     reelsViewer.hidden = false;
     requestAnimationFrame(() => reelsViewer.classList.add('open'));
-    document.body.style.overflow = 'hidden';
+    lockScroll();
     updateMuteBtn();
 
     const targetSlide = reelsTrack.children[startIndex];
@@ -1310,7 +1352,7 @@
     setTimeout(() => {
       reelsViewer.hidden = true;
       reelsTrack.innerHTML = '';
-      document.body.style.overflow = '';
+      unlockScroll();
     }, 300);
   }
 

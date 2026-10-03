@@ -207,17 +207,44 @@
       }
       return el.getAttribute('data-bg-src') || '';
     }
+    /* SCROLL LOCK — locks the root scroller, not body, and restores the
+       exact scroll offset on close. */
+    var _lockCount = 0, _lockY = 0;
+    function lockScroll(){
+      if(_lockCount === 0){
+        _lockY = window.scrollY;
+        document.documentElement.style.top = '-' + _lockY + 'px';
+        document.documentElement.classList.add('scroll-locked');
+      }
+      _lockCount++;
+    }
+    function unlockScroll(){
+      if(_lockCount === 0) return;
+      _lockCount--;
+      if(_lockCount > 0) return;
+      var root = document.documentElement;
+      root.classList.remove('scroll-locked');
+      root.style.top = '';
+      var prev = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';
+      window.scrollTo(0, _lockY);
+      root.style.scrollBehavior = prev;
+    }
+    // Dead `href="#"` links would otherwise smooth-scroll the page to the top.
+    document.addEventListener('click', function(e){
+      if(e.target.closest && e.target.closest('a[href="#"]')) e.preventDefault();
+    });
     function openLightbox(i){
       lightboxIndex = i;
       lightboxImg.src = getGalleryImageUrl(galleryItems[i]);
       lightboxCounter.textContent = (i+1)+' / '+galleryItems.length;
       lightbox.hidden = false;
       requestAnimationFrame(function(){ lightbox.classList.add('open'); });
-      document.body.style.overflow = 'hidden';
+      lockScroll();
     }
     function closeLightbox(){
       lightbox.classList.remove('open');
-      setTimeout(function(){ lightbox.hidden=true; lightboxImg.src=''; document.body.style.overflow=''; }, 300);
+      setTimeout(function(){ lightbox.hidden=true; lightboxImg.src=''; unlockScroll(); }, 300);
     }
     function lightboxNav(dir){
       lightboxIndex = (lightboxIndex+dir+galleryItems.length)%galleryItems.length;

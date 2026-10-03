@@ -94,7 +94,28 @@ body {
   color: var(--clr-gray-800);
   background: var(--clr-white);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+}
+
+/* `clip` instead of `hidden`: when one axis is `hidden` and the other is
+   `visible`, the browser silently promotes `visible` to `auto`, which turns
+   <body> into a second scroll container nested inside the root scroller.
+   That phantom scroller is what caused the page to drift on its own on
+   mobile, and it is why overlay scroll-locking via body.style.overflow
+   never worked. `clip` clips without creating a scroll container. */
+html,
+body {
+  overflow-x: clip;
+}
+
+/* Overlay scroll lock. Applied to the root scroller, not body. JS sets
+   `top` to the negative scroll offset so the page underneath does not move,
+   then restores the exact offset on unlock. */
+html.scroll-locked {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
+  overflow: hidden;
 }
 
 img {

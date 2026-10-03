@@ -100,7 +100,7 @@ export default function TeamSection() {
               <div className="team-card-img">
                 <img
                   src={`/${m.image}`}
-                  alt={`${m.name} — ${m.role} at Syed Productions`}
+                  alt={`${m.name} — ${m.role} at Syed Production`}
                   loading="lazy"
                   itemProp="image"
                 />
@@ -116,7 +116,7 @@ export default function TeamSection() {
                   {m.bio}
                 </p>
                 <div itemProp="affiliation" itemScope itemType="https://schema.org/Organization">
-                  <meta itemProp="name" content="Syed Productions" />
+                  <meta itemProp="name" content="Syed Production" />
                 </div>
                 <button
                   className="team-card-btn"

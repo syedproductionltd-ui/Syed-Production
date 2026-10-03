@@ -10,17 +10,24 @@ import JsonLd from '@/components/JsonLd';
 // Trimmed to sit inside the ~155 character window Google renders, so the
 // strongest claim is the part that actually shows up in results.
 const description =
-  'Syed Productions is a film, photography and videography studio in Lahore, Pakistan, covering weddings, corporate video, events and creative campaigns.';
+  'Syed Production is a film, photography and videography studio in Lahore, Pakistan, covering weddings, corporate video, events and creative campaigns.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Syed Productions — Film, Photography & Videography',
-    template: '%s | Syed Productions',
+    default: 'Syed Production — Film, Photography & Videography',
+    template: '%s | Syed Production',
   },
   description,
   keywords: [
+    'Syed Production',
+    // The trading name is singular, but the domain is syedproductions.com, so
+    // both spellings need to be searchable. The plural is carried here and by
+    // the domain itself; the singular is what appears in the title, headings
+    // and body copy.
     'Syed Productions',
+    'syedproductions',
+    'syed production',
     'film production',
     'photography',
     'videography',
@@ -35,10 +42,10 @@ export const metadata: Metadata = {
     'Pakistani media',
     'cinematic storytelling',
   ],
-  authors: [{ name: 'Syed Productions Team' }],
-  creator: 'Syed Productions',
-  publisher: 'Syed Productions',
-  applicationName: 'Syed Productions',
+  authors: [{ name: 'Syed Production Team' }],
+  creator: 'Syed Production',
+  publisher: 'Syed Production',
+  applicationName: 'Syed Production',
   robots: {
     index: true,
     follow: true,
@@ -53,22 +60,22 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: siteUrl,
-    siteName: 'Syed Productions',
+    siteName: 'Syed Production',
     locale: 'en_US',
-    title: 'Syed Productions — Film, Photography & Videography',
+    title: 'Syed Production — Film, Photography & Videography',
     description,
     images: [
       {
         url: '/images/DSC00557.webp',
         width: 1200,
         height: 630,
-        alt: 'Syed Productions',
+        alt: 'Syed Production',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Syed Productions — Film, Photography & Videography',
+    title: 'Syed Production — Film, Photography & Videography',
     description,
     images: ['/images/DSC00557.webp'],
   },

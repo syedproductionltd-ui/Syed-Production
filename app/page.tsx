@@ -17,11 +17,11 @@ export default function HomePage() {
         data={{
           '@context': 'https://schema.org',
           '@type': 'WebPage',
-          name: 'Syed Productions — Film, Photography & Videography',
+          name: 'Syed Production — Film, Photography & Videography',
           description:
-            'Syed Productions is a film, photography and videography studio in Lahore, Pakistan, covering weddings, corporate video, events and creative campaigns.',
-          isPartOf: { '@type': 'WebSite', name: 'Syed Productions' },
-          about: { '@type': 'Organization', name: 'Syed Productions' },
+            'Syed Production is a film, photography and videography studio in Lahore, Pakistan, covering weddings, corporate video, events and creative campaigns.',
+          isPartOf: { '@type': 'WebSite', name: 'Syed Production' },
+          about: { '@type': 'Organization', name: 'Syed Production' },
         }}
       />
       <HomeSections />

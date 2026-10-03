@@ -6,7 +6,7 @@ import JsonLd from '@/components/JsonLd';
 import { pageBreadcrumb } from '@/lib/seo';
 
 const description =
-  'Book your production with Syed Productions. Choose a service, pick your dates, and send the brief straight to our WhatsApp — we reply within 24 hours.';
+  'Book your production with Syed Production. Choose a service, pick your dates, and send the brief straight to our WhatsApp — we reply within 24 hours.';
 
 export const metadata: Metadata = {
   title: 'Book Your Production',
@@ -15,9 +15,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: `${siteUrl}/booking`,
-    title: 'Book Your Production | Syed Productions',
+    title: 'Book Your Production | Syed Production',
     description,
-    images: [{ url: '/images/DSC00557.webp', width: 1200, height: 630, alt: 'Book with Syed Productions' }],
+    images: [{ url: '/images/DSC00557.webp', width: 1200, height: 630, alt: 'Book with Syed Production' }],
   },
 };
 

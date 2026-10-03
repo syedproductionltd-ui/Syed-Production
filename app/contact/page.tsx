@@ -7,7 +7,7 @@ import JsonLd from '@/components/JsonLd';
 import { pageBreadcrumb } from '@/lib/seo';
 
 const description =
-  'Contact Syed Productions in Lahore, Pakistan. Message us on WhatsApp or email syed.production.ltd@gmail.com — we reply to every project enquiry within 24 hours.';
+  'Contact Syed Production in Lahore, Pakistan. Message us on WhatsApp or email syed.production.ltd@gmail.com — we reply to every project enquiry within 24 hours.';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
@@ -16,13 +16,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: `${siteUrl}/contact`,
-    title: 'Contact Us | Syed Productions',
+    title: 'Contact Us | Syed Production',
     description,
-    images: [{ url: '/images/DSC00557.webp', width: 1200, height: 630, alt: 'Contact Syed Productions' }],
+    images: [{ url: '/images/DSC00557.webp', width: 1200, height: 630, alt: 'Contact Syed Production' }],
   },
 };
 
-const CONTACT_MESSAGE = "Hello! I'd like to discuss a project with Syed Productions.";
+const CONTACT_MESSAGE = "Hello! I'd like to discuss a project with Syed Production.";
 
 export default function ContactPage() {
   const info = settings.contactInfo;

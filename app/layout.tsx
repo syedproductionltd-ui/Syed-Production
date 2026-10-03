@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     'videography',
     'media production',
     'creative professionals',
-    'Burhan Uddin Shah',
+    'Syed Burhan Uddin Shah',
     'Akash Hussian',
     'Kashif Zayan',
     'Saqib Gull',

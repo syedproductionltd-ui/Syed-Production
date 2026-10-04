@@ -2887,16 +2887,6 @@ input, select, textarea {
   border: 1px solid var(--clr-gray-200);
 }
 
-.modal-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-}
-
-.modal-actions .btn {
-  margin: 0;
-}
-
 .modal-footer {
   display: flex;
   align-items: center;

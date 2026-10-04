@@ -1,13 +1,7 @@
 'use client';
 
-import { Fragment, useEffect, useMemo, useState } from 'react';
-import {
-  bookingDestinations,
-  destinations,
-  formatPrice,
-  thumbSrcSet,
-  thumbUrl,
-} from '@/lib/data';
+import { Fragment, useState } from 'react';
+import { bookingDestinations, formatPrice, thumbSrcSet, thumbUrl } from '@/lib/data';
 import type { Destination } from '@/lib/types';
 import { whatsappUrl } from '@/lib/whatsapp';
 import SectionHeader from '@/components/SectionHeader';
@@ -27,12 +21,9 @@ const dayCount = (start: string, end: string) =>
 export default function BookingWizard({
   bare = false,
   reveal = false,
-  preselectId = null,
 }: {
   bare?: boolean;
   reveal?: boolean;
-  /** Service carried over from a card's "Book Now". See HomeSections. */
-  preselectId?: number | null;
 }) {
   const [step, setStep] = useState(1);
   const [destination, setDestination] = useState<Destination | null>(null);
@@ -43,39 +34,6 @@ export default function BookingWizard({
 
   const days = startDate && endDate ? dayCount(startDate, endDate) : 0;
   const minToday = today();
-
-  /**
-   * Picks up the service the customer came from.
-   *
-   * "Book Now" on a service card used to close the modal and scroll here,
-   * dropping them at step 1 with nothing selected - they had just chosen a
-   * service and were immediately asked to choose it again. Preselect it and
-   * move straight to the dates, the only step left that needs their input.
-   *
-   * Looks the service up in the full list rather than bookingDestinations,
-   * because the wizard's own shortlist is only the first six and most cards
-   * open services that fall outside it.
-   */
-  useEffect(() => {
-    if (preselectId === null) return;
-    const match = destinations.find((d) => d.id === preselectId);
-    if (!match) return;
-    setDestination(match);
-    setStep(2);
-  }, [preselectId]);
-
-  /**
-   * Step 1's shortlist plus the carried service when it is not already on it,
-   * so a preselected choice outside the six is still visible and highlighted if
-   * the customer steps back.
-   */
-  const options = useMemo(() => {
-    if (!destination) return bookingDestinations;
-    if (bookingDestinations.some((d) => d.id === destination.id)) {
-      return bookingDestinations;
-    }
-    return [destination, ...bookingDestinations];
-  }, [destination]);
 
   function submit() {
     if (!destination) return;
@@ -149,7 +107,7 @@ export default function BookingWizard({
             <div className={`wizard-panel${step === 1 ? ' active' : ''}`} role="tabpanel">
               <h3>Select a service</h3>
               <div className="booking-services" id="bookingDestinations">
-                {options.map((d) => (
+                {bookingDestinations.map((d) => (
                   <div
                     key={d.id}
                     className={`booking-service-card${destination?.id === d.id ? ' selected' : ''}`}

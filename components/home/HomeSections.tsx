@@ -20,12 +20,20 @@ import Newsletter from '@/components/home/Newsletter';
  */
 export default function HomeSections() {
   const [openId, setOpenId] = useState<number | null>(null);
+  /**
+   * Service handed to the booking wizard when a card's "Book Now" is used.
+   * Held here because the modal and the wizard are siblings, and the modal only
+   * knows the id of what it is showing.
+   */
+  const [bookingId, setBookingId] = useState<number | null>(null);
   const openService = useCallback((id: number) => setOpenId(id), []);
   const close = useCallback(() => setOpenId(null), []);
 
   const destination = openId === null ? null : (destinations.find((d) => d.id === openId) ?? null);
 
   function scrollToBooking() {
+    // Read the id before close(), which clears openId.
+    if (destination) setBookingId(destination.id);
     close();
     document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth' });
   }
@@ -40,7 +48,7 @@ export default function HomeSections() {
       <FeaturedServices onOpen={openService} />
       <ServicesGrid onOpen={openService} />
       <ProjectPlanner />
-      <BookingWizard reveal />
+      <BookingWizard reveal preselectId={bookingId} />
       <Newsletter />
 
       <DestinationModal

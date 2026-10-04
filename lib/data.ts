@@ -34,6 +34,16 @@ export function destinationsByCategory(category: string) {
   return destinations.filter((d) => d.category === category);
 }
 
+/**
+ * Base prices are stored as whole PKR (150000 -> "PKR 150,000"). en-US grouping
+ * is pinned because the runtime default locale decides the thousands separator,
+ * which would otherwise change the WhatsApp message text depending on the
+ * visitor's device.
+ */
+export function formatPrice(value: number): string {
+  return `PKR ${value.toLocaleString('en-US')}`;
+}
+
 /** Normalised filter key for a video's tag, e.g. "Client Story" -> "client-story". */
 export function videoFilterKey(tag: string): string {
   return tag.toLowerCase().replace(/\s+/g, '-');

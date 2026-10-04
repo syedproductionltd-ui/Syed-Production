@@ -1876,10 +1876,6 @@ input, select, textarea {
   display: none;
 }
 
-.gallery-grid.expanded .gallery-hidden {
-  display: block;
-}
-
 .gallery-see-more {
   text-align: center;
   margin-top: var(--space-6);

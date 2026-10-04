@@ -6,6 +6,12 @@ import { usePathname } from 'next/navigation';
 /**
  * Adds `.revealed` to every `.reveal-up` element as it scrolls into view.
  * One shared observer for the whole page rather than one per element.
+ *
+ * Constraint: `.revealed` is added imperatively, so React has no record of it.
+ * Any component that renders a `reveal-up` element must keep its className
+ * static - a state-dependent class would make React rewrite the `class`
+ * attribute on re-render and silently erase `.revealed`, leaving the element
+ * stuck at the `.reveal-up` opacity of 0.
  */
 export default function RevealObserver() {
   const pathname = usePathname();

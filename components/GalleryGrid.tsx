@@ -121,7 +121,20 @@ export default function GalleryGrid({
     <>
       <div
         ref={gridRef}
-        className={`gallery-grid${reveal ? ' reveal-up' : ''}${expanded ? ' expanded' : ''}`}
+        // No state-dependent classes on this element.
+        //
+        // `reveal-up` starts at `opacity: 0` and is only brought back by
+        // `.revealed`, which RevealObserver adds imperatively via classList.
+        // React does not know about that class, so any render that changes the
+        // className prop rewrites the whole `class` attribute and silently drops
+        // `.revealed`. Appending `expanded` here therefore un-revealed the entire
+        // grid on "See More": opacity 0, so the photos went invisible while still
+        // occupying layout and still taking clicks - which read as blank tiles
+        // even though their thumbnails had loaded fine.
+        //
+        // Expansion is driven per tile instead (the `gallery-hidden` class
+        // below), which keeps this className constant for the component's life.
+        className={`gallery-grid${reveal ? ' reveal-up' : ''}`}
         id="galleryGrid"
       >
         {images.map((img, i) => (

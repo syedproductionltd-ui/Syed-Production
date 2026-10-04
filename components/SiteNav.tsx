@@ -7,6 +7,7 @@ import DarkModeToggle from './DarkModeToggle';
 import { brandName } from '@/lib/whatsapp';
 
 const LINKS = [
+  { href: '/', label: 'Home' },
   { href: '/portfolio', label: 'Portfolio' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/booking', label: 'Book Now' },

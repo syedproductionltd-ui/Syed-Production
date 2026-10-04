@@ -18,10 +18,14 @@ export default function DestinationModal({
   destination,
   onClose,
   onBook,
+  onPlan,
 }: {
   destination: Destination | null;
   onClose: () => void;
-  onBook: () => void;
+  /** Opens WhatsApp with this service's deal. */
+  onBook: (service: Destination) => void;
+  /** Hands this service to the booking wizard and scrolls to it. */
+  onPlan: (service: Destination) => void;
 }) {
   const [shown, setShown] = useState<Destination | null>(null);
   const [open, setOpen] = useState(false);
@@ -101,9 +105,20 @@ export default function DestinationModal({
             ))}
           </div>
           <div className="modal-footer">
-            <button className="btn btn-primary modal-book-btn" onClick={onBook}>
-              Book Now
-            </button>
+            <div className="modal-actions">
+              <button
+                className="btn btn-primary modal-book-btn"
+                onClick={() => onBook(shown)}
+              >
+                Book Now
+              </button>
+              <button
+                className="btn btn-outline modal-plan-btn"
+                onClick={() => onPlan(shown)}
+              >
+                Use booking form
+              </button>
+            </div>
           </div>
         </div>
       </div>

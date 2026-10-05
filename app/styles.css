@@ -394,12 +394,12 @@ input, select, textarea {
   background: var(--clr-gray-800);
 }
 
-.nav-toggle.active {
-  background-color: #000;
+.nav-toggle.active .hamburger-line {
+  background: var(--clr-gray-900);
 }
 
 .nav-toggle.active .hamburger-line:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
+  transform: translateY(7px) rotate(45deg);
 }
 
 .nav-toggle.active .hamburger-line:nth-child(2) {
@@ -407,7 +407,7 @@ input, select, textarea {
 }
 
 .nav-toggle.active .hamburger-line:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 /* ============================================================

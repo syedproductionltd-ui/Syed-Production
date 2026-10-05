@@ -53,7 +53,7 @@ export default function SiteNav() {
         </Link>
 
         <button
-          className="nav-toggle"
+          className={`nav-toggle${open ? ' active' : ''}`}
           onClick={() => setOpen((v) => !v)}
           aria-label="Toggle navigation menu"
           aria-expanded={open}

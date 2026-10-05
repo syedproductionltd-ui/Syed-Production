@@ -300,10 +300,12 @@ input, select, textarea {
   z-index: 1001;
 }
 
-/* Brand name text */
+/* Brand name text. Inherits so it follows .nav-logo — a hard-coded #fff here
+   outranked `.navbar.scrolled .nav-logo` and left the name white on the
+   opaque light pill (and on every sub-page, which starts scrolled). */
 .brand-swap-a, .brand-swap-b {
   font-family: 'Times New Roman', Times, serif;
-  color: #fff;
+  color: inherit;
 }
 
 .logo-img {

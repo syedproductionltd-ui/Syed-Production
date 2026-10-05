@@ -296,6 +296,7 @@ input, select, textarea {
   font-weight: 700;
   color: var(--clr-white);
   transition: color var(--transition-base);
+  position: relative;
   z-index: 1001;
 }
 
@@ -378,8 +379,17 @@ input, select, textarea {
   display: none;
   flex-direction: column;
   gap: 5px;
+  /* relative so the z-index above actually lifts it clear of the mobile
+     drawer, which is drawn over the right half of the navbar. */
+  position: relative;
   z-index: 1001;
   padding: var(--space-2);
+}
+
+/* Mobile drawer backdrop. Hidden outside the mobile breakpoint, where it would
+   otherwise sit in the flex row as an empty button. */
+.nav-overlay {
+  display: none;
 }
 
 .hamburger-line {
@@ -3080,44 +3090,196 @@ input, select, textarea {
     display: flex;
   }
 
-  .nav-links {
+  /* Keep the logo and the close button above the backdrop. */
+  .nav-container {
+    position: relative;
+    z-index: 1002;
+  }
+
+  /* --- Dimmed backdrop (tap to close) --- */
+  .nav-overlay {
     position: fixed;
-    top: 0;
-    right: -100%;
-    width: 280px;
-    height: 100vh;
-    background: var(--clr-white);
+    inset: 0;
+    z-index: 999;
+    border: 0;
+    padding: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    background: rgba(11, 38, 24, 0.45);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-base), visibility 0s linear
+      var(--transition-base);
+  }
+
+  .nav-overlay.open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--transition-base), visibility 0s;
+  }
+
+  /* --- Slide-in drawer ---
+     A card that hugs its content and hangs just below the navbar pill, rather
+     than a full-height panel. `position: absolute` against .nav-container so
+     `top: 100%` tracks the pill's real height without a hard-coded offset. */
+  .nav-links {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: var(--space-6);
+    width: min(320px, calc(100vw - var(--space-6) * 2));
+    max-height: calc(100vh - var(--nav-height) - var(--space-16));
+    max-height: calc(100dvh - var(--nav-height) - var(--space-16));
+    background: linear-gradient(
+      180deg,
+      var(--clr-white) 0%,
+      var(--clr-gray-50) 70%,
+      var(--clr-gray-100) 100%
+    );
     flex-direction: column;
-    padding: calc(var(--nav-height) + var(--space-8)) var(--space-6) var(--space-8);
+    align-items: stretch;
+    padding: var(--space-4) var(--space-3);
     gap: var(--space-2);
-    box-shadow: var(--shadow-xl);
-    transition: right var(--transition-base);
+    border: 1px solid var(--clr-gray-200);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 18px 44px rgba(11, 38, 24, 0.18);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform-origin: top right;
+    transform: translateY(-10px) scale(0.96);
+    opacity: 0;
+    visibility: hidden;
+    /* visibility is delayed on the way out so the drawer stays visible while
+       it animates away, and flips immediately on the way in. */
+    transition: transform var(--transition-base),
+      opacity var(--transition-fast), visibility 0s linear var(--transition-base);
     z-index: 1000;
   }
 
   .nav-links.open {
-    right: 0;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    transition: transform var(--transition-base), opacity var(--transition-fast),
+      visibility 0s;
   }
+
+  /* Staggered entrance so the drawer feels built, not pasted in. */
+  .nav-links > li {
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .nav-links.open > li {
+    opacity: 1;
+    transform: none;
+  }
+
+  .nav-links.open > li:nth-child(1) { transition-delay: 0.05s; }
+  .nav-links.open > li:nth-child(2) { transition-delay: 0.09s; }
+  .nav-links.open > li:nth-child(3) { transition-delay: 0.13s; }
+  .nav-links.open > li:nth-child(4) { transition-delay: 0.17s; }
+  .nav-links.open > li:nth-child(5) { transition-delay: 0.21s; }
+  .nav-links.open > li:nth-child(6) { transition-delay: 0.25s; }
+  .nav-links.open > li:nth-child(7) { transition-delay: 0.29s; }
 
   .nav-links .nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
     color: var(--clr-gray-700);
     padding: var(--space-3) var(--space-4);
-    font-size: var(--fs-base);
-    border-radius: var(--radius-sm);
+    font-size: var(--fs-md);
+    font-family: var(--ff-heading);
+    letter-spacing: 0.02em;
+    border-radius: var(--radius-md);
     width: 100%;
+    transition: background var(--transition-fast), color var(--transition-fast);
   }
 
-  .nav-links .nav-link:hover {
-    background: var(--clr-gray-50);
+  /* Accent bar that slides in from the left on hover / current page. */
+  .nav-links .nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 3px;
+    height: 0;
+    border-radius: 0 3px 3px 0;
+    background: var(--clr-primary);
+    transform: translateY(-50%);
+    transition: height var(--transition-fast);
+  }
+
+  .nav-links .nav-link:hover,
+  .nav-links .nav-link:focus-visible {
+    background: var(--clr-gray-100);
+    color: var(--clr-primary);
+  }
+
+  .nav-links .nav-link:hover::before,
+  .nav-links .nav-link:focus-visible::before,
+  .nav-links .nav-link[aria-current='page']::before {
+    height: 60%;
+  }
+
+  .nav-links .nav-link[aria-current='page'] {
+    background: rgba(45, 106, 79, 0.08);
     color: var(--clr-primary);
   }
 
   .nav-links .nav-link--cta {
-    background: var(--clr-primary);
-    color: var(--clr-white);
-    text-align: center;
     margin-top: var(--space-4);
+    padding: var(--space-4);
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--fs-sm);
+    background: linear-gradient(
+      135deg,
+      var(--clr-primary) 0%,
+      var(--clr-primary-dark) 100%
+    );
+    color: var(--clr-white);
     border: none;
+    box-shadow: 0 10px 24px rgba(45, 106, 79, 0.28);
+  }
+
+  .nav-links .nav-link--cta::before {
+    display: none;
+  }
+
+  .nav-links .nav-link--cta:hover,
+  .nav-links .nav-link--cta:focus-visible {
+    background: linear-gradient(
+      135deg,
+      var(--clr-primary-dark) 0%,
+      var(--clr-navy-deep) 100%
+    );
+    /* The desktop CTA hover carries `!important` so it can beat the scrolled
+       navbar rule; mirror that here or the mobile CTA goes green-on-green. */
+    color: var(--clr-white) !important;
+    box-shadow: 0 14px 30px rgba(45, 106, 79, 0.34);
+  }
+
+  .nav-links .nav-link--cta[aria-current='page'] {
+    background: linear-gradient(
+      135deg,
+      var(--clr-primary-dark) 0%,
+      var(--clr-navy-deep) 100%
+    );
+    color: var(--clr-white) !important;
+  }
+
+  /* Separator above the theme toggle. */
+  .nav-links > li:has(.dark-mode-toggle) {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--clr-gray-200);
   }
 
   .hero-title {
@@ -3549,8 +3711,18 @@ select:focus-visible {
 
 /* --- Mobile Nav Drawer --- */
 @media (max-width: 768px) {
+  .dark-mode .nav-overlay {
+    background: rgba(2, 10, 6, 0.6);
+  }
+
   .dark-mode .nav-links {
-    background: var(--clr-gray-50);
+    background: linear-gradient(
+      180deg,
+      var(--clr-gray-50) 0%,
+      var(--clr-gray-100) 100%
+    );
+    border-color: var(--clr-gray-200);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
   }
 
   .dark-mode .nav-links .nav-link {
@@ -3562,9 +3734,32 @@ select:focus-visible {
     color: var(--clr-primary);
   }
 
-  .dark-mode .nav-links .nav-link--cta {
-    background: var(--clr-primary);
-    color: #fff;
+  .dark-mode .nav-links .nav-link[aria-current='page'] {
+    background: rgba(64, 184, 138, 0.12);
+    color: var(--clr-primary);
+  }
+
+  .dark-mode .nav-links > li:has(.dark-mode-toggle) {
+    border-top-color: var(--clr-gray-200);
+  }
+
+  .dark-mode .nav-links .nav-link--cta,
+  .dark-mode .nav-links .nav-link--cta:hover,
+  .dark-mode .nav-links .nav-link--cta[aria-current='page'] {
+    background: linear-gradient(
+      135deg,
+      var(--clr-primary) 0%,
+      var(--clr-primary-dark) 100%
+    );
+    color: #fff !important;
+  }
+
+  .dark-mode .nav-links .nav-link--cta:hover {
+    background: linear-gradient(
+      135deg,
+      var(--clr-primary-light) 0%,
+      var(--clr-primary) 100%
+    );
   }
 
   /* The drawer has a light panel background, so the toggle needs the dark
@@ -3852,6 +4047,10 @@ select:focus-visible {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    /* The nav drawer hides itself with a delayed `visibility` step so it stays
+       on screen while sliding out. Kill the delay too, otherwise it lingers
+       as an invisible click blocker. */
+    transition-delay: 0s !important;
   }
 
   html {

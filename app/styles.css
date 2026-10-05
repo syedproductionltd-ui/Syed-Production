@@ -3567,6 +3567,31 @@ select:focus-visible {
     color: #fff;
   }
 
+  /* The drawer has a light panel background, so the toggle needs the dark
+     treatment here — the navbar default paints it white. */
+  .nav-links .dark-mode-toggle {
+    margin-top: 9px;
+    background: var(--clr-gray-100);
+    border-color: var(--clr-gray-200);
+    color: var(--clr-gray-900);
+  }
+
+  .nav-links .dark-mode-toggle:hover {
+    background: var(--clr-gray-200);
+    color: var(--clr-gray-900);
+  }
+
+  .dark-mode .nav-links .dark-mode-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .dark-mode .nav-links .dark-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+  }
+
   .dark-mode .hamburger-line {
     background: rgba(255, 255, 255, 0.85);
   }

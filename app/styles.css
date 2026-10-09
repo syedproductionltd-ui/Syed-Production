@@ -270,20 +270,19 @@ input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* Opaque, not glass. The bar carries black text in light mode, and 25% white
+     over the dark hero photography cannot carry black. No backdrop-filter
+     either — it would re-composite on every scroll frame, and it would also make
+     this element the containing block for the absolutely positioned drawer. */
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(15, 23, 42, 0.06);
   border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
   transition: background var(--transition-base), box-shadow var(--transition-base);
 }
 
 .navbar.scrolled .nav-container {
-  /* Opaque instead of backdrop-filter. A sticky element with a backdrop blur
-     must re-composite the blurred backdrop on every scroll frame, which is a
-     major cause of laggy scrolling on low-power GPUs. */
   background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
   box-shadow: var(--shadow-md);
 }
 
@@ -294,7 +293,7 @@ input, select, textarea {
   font-family: var(--ff-heading);
   font-size: var(--fs-xl);
   font-weight: 700;
-  color: var(--clr-white);
+  color: var(--clr-gray-900);
   transition: color var(--transition-base);
   position: relative;
   z-index: 1001;
@@ -330,7 +329,7 @@ input, select, textarea {
   font-family: var(--ff-heading);
   font-size: var(--fs-sm);
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--clr-gray-900);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
@@ -338,40 +337,23 @@ input, select, textarea {
 
 .nav-link:hover,
 .nav-link:focus-visible {
-  color: var(--clr-white);
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.navbar.scrolled .nav-link {
-  color: var(--clr-gray-600);
-}
-
-.navbar.scrolled .nav-link:hover,
-.navbar.scrolled .nav-link:focus-visible {
   color: var(--clr-primary);
-  background: rgba(0, 119, 182, 0.08);
+  background: rgba(45, 106, 79, 0.08);
 }
+
+/* .nav-link is gray-900 at rest in both the transparent and scrolled states, so
+   the bar needs no per-state colour override — it inverts with the dark-mode
+   palette on its own. */
 
 .nav-link--cta {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: var(--clr-primary);
+  color: var(--clr-white);
+  border: 1px solid var(--clr-primary);
   border-radius: var(--radius-xl);
   padding: var(--space-2) var(--space-5);
 }
 
 .nav-link--cta:hover {
-  background: var(--clr-white);
-  color: var(--clr-primary) !important;
-}
-
-.navbar.scrolled .nav-link--cta {
-  background: var(--clr-primary);
-  color: var(--clr-white);
-  border-color: var(--clr-primary);
-}
-
-.navbar.scrolled .nav-link--cta:hover {
   background: var(--clr-primary-dark);
   color: var(--clr-white) !important;
 }
@@ -397,7 +379,7 @@ input, select, textarea {
 .hamburger-line {
   width: 24px;
   height: 2px;
-  background: var(--clr-white);
+  background: var(--clr-gray-800);
   border-radius: 2px;
   transition: all var(--transition-base);
 }
@@ -3193,7 +3175,7 @@ input, select, textarea {
     position: relative;
     display: flex;
     align-items: center;
-    color: var(--clr-gray-700);
+    color: var(--clr-gray-900);
     padding: var(--space-3) var(--space-4);
     font-size: var(--fs-md);
     font-family: var(--ff-heading);
@@ -3559,7 +3541,8 @@ select:focus-visible {
 
 /* --- Navigation Overrides --- */
 .dark-mode .nav-container {
-  background: rgba(18, 24, 32, 0.4);
+  background: rgba(18, 24, 32, 0.9);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .dark-mode .navbar.scrolled .nav-container {
@@ -3728,7 +3711,7 @@ select:focus-visible {
   }
 
   .dark-mode .nav-links .nav-link {
-    color: var(--clr-gray-700);
+    color: var(--clr-gray-900);
   }
 
   .dark-mode .nav-links .nav-link:hover {

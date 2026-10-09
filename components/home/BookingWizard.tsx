@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useState } from 'react';
-import { bookingDestinations, formatPrice, thumbSrcSet, thumbUrl } from '@/lib/data';
+import { bookingDestinations, thumbSrcSet, thumbUrl } from '@/lib/data';
 import type { Destination } from '@/lib/types';
 import { whatsappUrl } from '@/lib/whatsapp';
 import SectionHeader from '@/components/SectionHeader';
@@ -45,7 +45,6 @@ export default function BookingWizard({
       `Reference: ${ref}`,
       `Service: ${destination.name}`,
       `Package: ${destination.tier}`,
-      `Starting price: ${formatPrice(destination.price)}`,
       `Start date: ${startDate || 'Flexible'}`,
       `End date: ${endDate || 'Flexible'}`,
     ];
@@ -224,10 +223,6 @@ export default function BookingWizard({
                     <div className="review-line">
                       <span className="label">Package</span>
                       <span>{destination.tier}</span>
-                    </div>
-                    <div className="review-line">
-                      <span className="label">Starting price</span>
-                      <span>{formatPrice(destination.price)}</span>
                     </div>
                     <div className="review-line">
                       <span className="label">Dates</span>

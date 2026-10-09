@@ -7,9 +7,11 @@ import DarkModeToggle from './DarkModeToggle';
 import { useScrollLock } from '@/lib/useScrollLock';
 import { brandName } from '@/lib/whatsapp';
 
-const LINKS = [
+type NavLink = { href: string; label: string; cta?: boolean; pdf?: boolean };
+
+const LINKS: NavLink[] = [
   { href: '/', label: 'Home' },
-  { href: '/portfolio', label: 'Portfolio' },
+  { href: '/company-profile.pdf', label: 'Portfolio', pdf: true },
   { href: '/gallery', label: 'Gallery' },
   { href: '/booking', label: 'Book Now' },
   { href: '/reviews', label: 'Reviews' },
@@ -94,14 +96,26 @@ export default function SiteNav() {
         <ul className={`nav-links${open ? ' open' : ''}`} role="list">
           {LINKS.map((link) => (
             <li key={link.href}>
-              <Link
-                href={link.href}
-                className={`nav-link${link.cta ? ' nav-link--cta' : ''}`}
-                aria-current={pathname === link.href ? 'page' : undefined}
-                onClick={() => setOpen(false)}
-              >
-                {link.label}
-              </Link>
+              {link.pdf ? (
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`nav-link${link.cta ? ' nav-link--cta' : ''}`}
+                  onClick={() => setOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  href={link.href}
+                  className={`nav-link${link.cta ? ' nav-link--cta' : ''}`}
+                  aria-current={pathname === link.href ? 'page' : undefined}
+                  onClick={() => setOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              )}
             </li>
           ))}
           <li>

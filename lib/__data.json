@@ -337,10 +337,40 @@
   ],
   "gallery": [
     {
+      "imageUrl": "images/gallery/IMG_0196.JPG",
+      "altText": "Bridal portrait in maroon lehenga against red drapery",
+      "hidden": false,
+      "sortOrder": 1
+    },
+    {
+      "imageUrl": "images/gallery/IMG_2628.JPG",
+      "altText": "Bridal portrait in gold lehenga against red studio backdrop",
+      "hidden": false,
+      "sortOrder": 2
+    },
+    {
+      "imageUrl": "images/gallery/IMG_4066.JPG",
+      "altText": "Portrait in pink attire among yellow wildflowers",
+      "hidden": false,
+      "sortOrder": 3
+    },
+    {
+      "imageUrl": "images/gallery/IMG_8099.JPG",
+      "altText": "Bridal portrait with pink dupatta by carved wooden door",
+      "hidden": false,
+      "sortOrder": 4
+    },
+    {
+      "imageUrl": "images/gallery/IMG_8383.JPG",
+      "altText": "Bridal portrait holding peach dupatta in rustic courtyard",
+      "hidden": false,
+      "sortOrder": 5
+    },
+    {
       "imageUrl": "images/gallery/016A5232.JPG",
       "altText": "Syed Production shoot",
       "hidden": false,
-      "sortOrder": 1
+      "sortOrder": 6
     },
     {
       "imageUrl": "images/gallery/016A5554.JPG",

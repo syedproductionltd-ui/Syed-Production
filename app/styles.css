@@ -308,11 +308,14 @@ input, select, textarea {
 }
 
 .logo-img {
-  width: 100px;
-  height: 100px;
-  max-height: calc(var(--nav-height) - 4px);
+  /* Square logo sized to the inner nav height (min-height minus vertical
+     padding) so it never spills past the rounded pill and gets clipped. */
+  --logo-size: calc(var(--nav-height) - 12px);
+  width: var(--logo-size);
+  height: var(--logo-size);
   border-radius: 50%;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .navbar.scrolled .nav-logo {
@@ -2681,6 +2684,10 @@ input, select, textarea {
 .footer-brand .nav-logo {
   color: var(--clr-white);
   margin-bottom: var(--space-4);
+}
+
+.footer-brand .logo-img {
+  --logo-size: 72px;
 }
 
 .footer-brand > p {

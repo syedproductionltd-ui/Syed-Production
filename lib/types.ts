@@ -42,6 +42,18 @@ export interface GalleryImage {
   sortOrder: number;
 }
 
+export interface GalleryImageItem {
+  imageUrl: string;
+  altText: string;
+  hidden: boolean;
+}
+
+export interface GalleryPost {
+  id: string;
+  title: string;
+  images: GalleryImageItem[];
+}
+
 export interface TeamMember {
   name: string;
   role: string;

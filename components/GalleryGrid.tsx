@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { GalleryImage } from '@/lib/types';
-import { assetUrl, thumbUrl } from '@/lib/data';
-import Lightbox, { type LightboxItem } from './Lightbox';
+import { assetUrl, thumbUrl, galleryPosts } from '@/lib/data';
+import Lightbox from './Lightbox';
 
 /**
  * Masonry-ish gallery grid with a lightbox.
@@ -28,14 +28,19 @@ export default function GalleryGrid({
   reveal?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openCoords, setOpenCoords] = useState<{ postIndex: number; imageIndex: number } | null>(null);
   const gridRef = useRef<HTMLDivElement | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const items = useMemo<LightboxItem[]>(
-    () => images.map((img) => ({ src: assetUrl(img.imageUrl), alt: img.altText })),
-    [images]
-  );
+  const imageToPostMap = useMemo(() => {
+    const map: { postIndex: number; imageIndex: number }[] = [];
+    galleryPosts.forEach((post, pIdx) => {
+      post.images.forEach((_, imgIdx) => {
+        map.push({ postIndex: pIdx, imageIndex: imgIdx });
+      });
+    });
+    return map;
+  }, []);
 
   /** Tiles still waiting for a background, scoped to this grid only. */
   const pendingTiles = useCallback(
@@ -48,13 +53,6 @@ export default function GalleryGrid({
 
   /**
    * Swaps the placeholder tint for the thumbnail only once the bytes arrive.
-   *
-   * A CSS background raises no load/error events, so assigning
-   * `backgroundImage` directly makes a failed fetch look identical to a pending
-   * one: a tile that stays empty forever with nothing to distinguish "still
-   * loading" from "will never load". Probing through `Image` first gives us both
-   * outcomes - `is-loaded` paints the photo, `is-failed` settles the tile as
-   * unavailable instead of leaving it looking pending.
    */
   const paint = useCallback((el: HTMLElement) => {
     const src = el.dataset.bgSrc;
@@ -70,14 +68,6 @@ export default function GalleryGrid({
     probe.src = src;
   }, []);
 
-  /**
-   * Re-arms whenever `expanded` flips, not just on mount.
-   *
-   * A collapsed tile is `display: none`, so it has no box and the observer
-   * never reports it as intersecting. Arming once on mount left those tiles
-   * holding their `data-bg-src` forever, so revealing them on "See More" showed
-   * empty placeholders that never painted as they were scrolled into view.
-   */
   useEffect(() => {
     const pending = pendingTiles();
     if (!pending.length) return;
@@ -98,8 +88,6 @@ export default function GalleryGrid({
     );
     pending.forEach((el) => observer.current?.observe(el));
 
-    // Paint what is already on screen straight away instead of waiting a frame
-    // for the observer to report it.
     const raf = requestAnimationFrame(() => {
       for (const el of pending) {
         if (!el.isConnected || !el.dataset.bgSrc) continue;
@@ -121,39 +109,29 @@ export default function GalleryGrid({
     <>
       <div
         ref={gridRef}
-        // No state-dependent classes on this element.
-        //
-        // `reveal-up` starts at `opacity: 0` and is only brought back by
-        // `.revealed`, which RevealObserver adds imperatively via classList.
-        // React does not know about that class, so any render that changes the
-        // className prop rewrites the whole `class` attribute and silently drops
-        // `.revealed`. Appending `expanded` here therefore un-revealed the entire
-        // grid on "See More": opacity 0, so the photos went invisible while still
-        // occupying layout and still taking clicks - which read as blank tiles
-        // even though their thumbnails had loaded fine.
-        //
-        // Expansion is driven per tile instead (the `gallery-hidden` class
-        // below), which keeps this className constant for the component's life.
         className={`gallery-grid${reveal ? ' reveal-up' : ''}`}
         id="galleryGrid"
       >
-        {images.map((img, i) => (
-          <div
-            key={img.imageUrl}
-            className={`gallery-item${img.hidden && !expanded ? ' gallery-hidden' : ''}`}
-            data-bg-src={thumbUrl(img.imageUrl)}
-            role="button"
-            tabIndex={0}
-            aria-label={`View photo ${i + 1}`}
-            onClick={() => setOpenIndex(i)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                setOpenIndex(i);
-              }
-            }}
-          />
-        ))}
+        {images.map((img, i) => {
+          const coords = imageToPostMap[i] || { postIndex: 0, imageIndex: 0 };
+          return (
+            <div
+              key={img.imageUrl}
+              className={`gallery-item${img.hidden && !expanded ? ' gallery-hidden' : ''}`}
+              data-bg-src={thumbUrl(img.imageUrl)}
+              role="button"
+              tabIndex={0}
+              aria-label={`View photo ${i + 1}`}
+              onClick={() => setOpenCoords(coords)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setOpenCoords(coords);
+                }
+              }}
+            />
+          );
+        })}
       </div>
 
       {collapsible && (
@@ -179,7 +157,7 @@ export default function GalleryGrid({
         </div>
       )}
 
-      <Lightbox items={items} openIndex={openIndex} onClose={() => setOpenIndex(null)} />
+      <Lightbox posts={galleryPosts} openCoords={openCoords} onClose={() => setOpenCoords(null)} />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import type { SiteData } from './types';
+import type { SiteData, GalleryPost } from './types';
 import rawConfig from './__config.json';
 import rawData from './__data.json';
 
@@ -8,7 +8,115 @@ export const siteData = rawData as SiteData;
 export const destinations = siteData.destinations;
 export const reviews = siteData.reviews;
 export const videos = siteData.videos;
-export const galleryImages = siteData.gallery;
+
+export const galleryPosts: GalleryPost[] = [
+  {
+    id: 'bridal-portraits',
+    title: 'Bridal Portraits Collection',
+    images: [
+      { imageUrl: 'images/gallery/IMG_0196.JPG', altText: 'Bridal portrait in maroon lehenga against red drapery', hidden: false },
+      { imageUrl: 'images/gallery/IMG_2628.JPG', altText: 'Bridal portrait in gold lehenga against red studio backdrop', hidden: false },
+      { imageUrl: 'images/gallery/IMG_4066.JPG', altText: 'Portrait in pink attire among yellow wildflowers', hidden: false },
+      { imageUrl: 'images/gallery/IMG_8099.JPG', altText: 'Bridal portrait with pink dupatta by carved wooden door', hidden: false },
+      { imageUrl: 'images/gallery/IMG_8383.JPG', altText: 'Bridal portrait holding peach dupatta in rustic courtyard', hidden: false },
+    ],
+  },
+  {
+    id: 'studio-session-1',
+    title: 'Studio Production Session A',
+    images: [
+      { imageUrl: 'images/gallery/016A5232.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/016A5554.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/016A5694.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/016A6854.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/016A7255.JPG', altText: 'Syed Production shoot', hidden: false },
+    ],
+  },
+  {
+    id: 'studio-session-2',
+    title: 'Studio Production Session B',
+    images: [
+      { imageUrl: 'images/gallery/016A7313.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/016A7354.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/016A7448.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/016A7491.JPG', altText: 'Syed Production shoot', hidden: false },
+    ],
+  },
+  {
+    id: 'cinematic-event-1',
+    title: 'Cinematic Event Series A',
+    images: [
+      { imageUrl: 'images/gallery/3C4A5309.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/3C4A5429.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/DSC00440.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/DSC00488.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/DSC00518.JPG', altText: 'Syed Production shoot', hidden: false },
+    ],
+  },
+  {
+    id: 'cinematic-event-2',
+    title: 'Cinematic Event Series B',
+    images: [
+      { imageUrl: 'images/gallery/DSC00542.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/DSC00546.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/DSC00579.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/DSC01185.JPG', altText: 'Syed Production shoot', hidden: false },
+      { imageUrl: 'images/gallery/DSC01270.JPG', altText: 'Syed Production shoot', hidden: false },
+    ],
+  },
+  {
+    id: 'cinematic-event-3',
+    title: 'Cinematic Event Series C',
+    images: [
+      { imageUrl: 'images/gallery/DSC01310.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/DSC01418.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/DSC01916.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/DSC02039.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/DSC02069.JPG', altText: 'Syed Production shoot', hidden: true },
+    ],
+  },
+  {
+    id: 'cinematic-event-4',
+    title: 'Cinematic Event Series D',
+    images: [
+      { imageUrl: 'images/gallery/DSC02160.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/DSC02194.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/DSC02227.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/DSC02309.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/DSC02367.JPG', altText: 'Syed Production shoot', hidden: true },
+    ],
+  },
+  {
+    id: 'cinematic-event-5',
+    title: 'Cinematic Event Series E',
+    images: [
+      { imageUrl: 'images/gallery/DSC02419.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/DSC04563.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/DSC09472.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/DSC09537.JPG', altText: 'Syed Production shoot', hidden: true },
+    ],
+  },
+  {
+    id: 'editorial-collection',
+    title: 'Editorial & Commercial Collection',
+    images: [
+      { imageUrl: 'images/gallery/IMG_1266.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/IMG_4983.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/M4M05012.JPG', altText: 'Syed Production shoot', hidden: true },
+      { imageUrl: 'images/gallery/M4M05048.JPG', altText: 'Syed Production shoot', hidden: true },
+    ],
+  },
+];
+
+export const galleryImages = galleryPosts.flatMap((post, postIdx) =>
+  post.images.map((img, imgIdx) => ({
+    imageUrl: img.imageUrl,
+    altText: img.altText,
+    hidden: img.hidden,
+    sortOrder: postIdx * 100 + imgIdx + 1,
+  }))
+);
+
 export const teamMembers = siteData.team;
 export const settings = siteData.settings;
 

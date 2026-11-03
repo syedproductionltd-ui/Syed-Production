@@ -11,6 +11,7 @@ type NavLink = { href: string; label: string; cta?: boolean; pdf?: boolean };
 
 const LINKS: NavLink[] = [
   { href: '/', label: 'Home' },
+  { href: '/profile', label: 'Company Profile' },
   { href: '/company-profile.pdf', label: 'Portfolio', pdf: true },
   { href: '/gallery', label: 'Gallery' },
   { href: '/booking', label: 'Book Now' },

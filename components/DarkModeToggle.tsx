@@ -19,7 +19,7 @@ export function setDarkMode(enabled: boolean) {
 }
 
 export default function DarkModeToggle() {
-  const [enabled, setEnabled] = useState(true);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     setEnabled(isDarkMode());

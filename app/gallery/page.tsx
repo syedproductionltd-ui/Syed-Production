@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { siteUrl } from '@/lib/whatsapp';
+import { siteUrl } from '@/utils/whatsapp';
 import GalleryTabs from '@/components/GalleryTabs';
 import SiteFooter from '@/components/SiteFooter';
 import JsonLd from '@/components/JsonLd';
-import { pageBreadcrumb } from '@/lib/seo';
+import { pageBreadcrumb } from '@/utils/seo';
 
 const description =
   'Photo and video gallery from Syed Production — wedding films, travel cinematography, commercials and client stories from Lahore, Pakistan.';

@@ -7,27 +7,35 @@ import Stars from '@/components/Stars';
 
 const GAP = 24;
 
-function perView() {
-  if (typeof window === 'undefined') return 3;
-  if (window.innerWidth <= 768) return 1;
-  if (window.innerWidth <= 1024) return 2;
+function perViewFromWidth(width: number) {
+  if (width <= 768) return 1;
+  if (width <= 1024) return 2;
   return 3;
 }
 
 export default function ReviewsSection() {
   const [index, setIndex] = useState(0);
   const [mobile, setMobile] = useState(false);
+  // SSR + first client paint use 3 so server/client markup match; resized after mount.
+  const [cols, setCols] = useState(3);
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const maxIndex = Math.max(0, reviews.length - perView());
+  const maxIndex = Math.max(0, reviews.length - cols);
 
   // Desktop positions the track with a transform; mobile scrolls it natively so
   // touch swiping works without any pointer handling.
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
-    const sync = () => setMobile(mq.matches);
+    const sync = () => {
+      setMobile(mq.matches);
+      setCols(perViewFromWidth(window.innerWidth));
+    };
     sync();
     mq.addEventListener('change', sync);
-    return () => mq.removeEventListener('change', sync);
+    window.addEventListener('resize', sync);
+    return () => {
+      mq.removeEventListener('change', sync);
+      window.removeEventListener('resize', sync);
+    };
   }, []);
 
   useEffect(() => {

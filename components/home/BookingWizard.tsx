@@ -2,8 +2,8 @@
 
 import { Fragment, useState } from 'react';
 import { bookingDestinations, thumbSrcSet, thumbUrl } from '@/lib/data';
-import type { Destination } from '@/lib/types';
-import { whatsappUrl } from '@/lib/whatsapp';
+import type { Destination } from '@/types';
+import { whatsappUrl } from '@/utils/whatsapp';
 import SectionHeader from '@/components/SectionHeader';
 
 const TOTAL_STEPS = 5;

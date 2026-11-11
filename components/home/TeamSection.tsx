@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { teamMembers, thumbSrcSet, thumbUrl } from '@/lib/data';
-import { useScrollLock } from '@/lib/useScrollLock';
-import type { TeamMember } from '@/lib/types';
+import { useScrollLock } from '@/hooks/useScrollLock';
+import type { TeamMember } from '@/types';
 import SectionHeader from '@/components/SectionHeader';
 
 function TeamPopup({

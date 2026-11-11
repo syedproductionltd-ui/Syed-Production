@@ -1,4 +1,4 @@
-import { whatsappUrl } from '@/lib/whatsapp';
+import { whatsappUrl } from '@/utils/whatsapp';
 
 export default function Newsletter() {
   return (

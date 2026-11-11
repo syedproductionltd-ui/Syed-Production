@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { videos } from '@/lib/data';
-import { getVideoEmbed } from '@/lib/video';
+import { getVideoEmbed } from '@/utils/video';
 import SectionHeader from '@/components/SectionHeader';
 import ReelsViewer from './ReelsViewer';
 

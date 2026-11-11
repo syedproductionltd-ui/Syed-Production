@@ -1,4 +1,4 @@
-import type { SiteData, GalleryPost } from './types';
+import type { SiteData, GalleryPost } from '@/types';
 import rawConfig from './__config.json';
 import rawData from './__data.json';
 
@@ -175,7 +175,10 @@ export const videoFilters = Array.from(
  * "/images/team/Syed" and the browser requests a file that does not exist.
  */
 function encodePath(rel: string): string {
-  return `/${rel.split('/').map(encodeURIComponent).join('/')}`;
+  // Leading slashes must be stripped first: otherwise "/uploads/x" becomes
+  // "//uploads/x" (protocol-relative) and the browser requests the wrong host.
+  const cleaned = rel.replace(/^\/+/, '');
+  return `/${cleaned.split('/').map(encodeURIComponent).join('/')}`;
 }
 
 /**
@@ -206,11 +209,16 @@ const DERIVATIVES: Record<string, number[] | undefined> = {
 };
 
 function derivatives(rel: string): { url: string; w: number }[] {
-  const dir = rel.split('/')[1];
+  // Only static `images/<folder>/…` assets have pre-generated WebP siblings.
+  // Paths like `/uploads/gallery/…` must fall through to the original file.
+  const cleaned = rel.replace(/^\/+/, '');
+  const parts = cleaned.split('/');
+  if (parts[0] !== 'images' || parts.length < 3) return [];
+  const dir = parts[1];
   if (dir === undefined) return [];
   const widths = DERIVATIVES[dir];
   if (!widths) return [];
-  const stem = rel.replace(/\.[^./]+$/, '');
+  const stem = cleaned.replace(/\.[^./]+$/, '');
   return widths.map((w) => ({ url: `${encodePath(stem)}@${w}.webp`, w }));
 }
 

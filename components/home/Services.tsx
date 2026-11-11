@@ -8,7 +8,7 @@ destinationsByCategory,
     thumbSrcSet,
     thumbUrl,
   } from '@/lib/data';
-import type { Destination } from '@/lib/types';
+import type { Destination } from '@/types';
 import SectionHeader from '@/components/SectionHeader';
 import DestinationModal from '@/components/DestinationModal';
 import Stars from '@/components/Stars';
@@ -101,7 +101,7 @@ export function FeaturedServices({ onOpen }: { onOpen: (id: number) => void }) {
       <div className="container">
         <SectionHeader section="featuredServices" />
         <div className="featured-grid reveal-up" id="topDestGrid">
-          {featuredDestinations.map((dest) => (
+          {featuredDestinations.map((dest, i) => (
             <div
               key={dest.id}
               className="featured-card"
@@ -120,7 +120,8 @@ export function FeaturedServices({ onOpen }: { onOpen: (id: number) => void }) {
                 srcSet={thumbSrcSet(dest.image)}
                 sizes="(max-width: 768px) 92vw, 46vw"
                 alt={dest.name}
-                loading="lazy"
+                loading={i < 2 ? 'eager' : 'lazy'}
+                fetchPriority={i < 2 ? 'high' : 'auto'}
                 decoding="async"
               />
               <div className="featured-overlay">

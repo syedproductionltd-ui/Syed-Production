@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { settings } from '@/lib/data';
-import { siteUrl, whatsappUrl } from '@/lib/whatsapp';
+import { siteUrl, whatsappUrl } from '@/utils/whatsapp';
 import SocialIcon, { socialNetworks } from '@/components/SocialIcon';
 import SiteFooter from '@/components/SiteFooter';
 import JsonLd from '@/components/JsonLd';
-import { pageBreadcrumb } from '@/lib/seo';
+import { pageBreadcrumb } from '@/utils/seo';
 
 const description =
   'Contact Syed Production in Lahore, Pakistan. Message us on WhatsApp or email syed.production.ltd@gmail.com — we reply to every project enquiry within 24 hours.';

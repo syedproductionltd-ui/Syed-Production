@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
-import { galleryImages } from '@/lib/data';
-import { siteUrl } from '@/lib/whatsapp';
+import { galleryPosts } from '@/lib/data';
+import { siteUrl } from '@/utils/whatsapp';
 import GalleryGrid from '@/components/GalleryGrid';
 import SiteFooter from '@/components/SiteFooter';
 import JsonLd from '@/components/JsonLd';
-import { pageBreadcrumb } from '@/lib/seo';
+import { pageBreadcrumb } from '@/utils/seo';
 
 const description =
   'Browse the Syed Production portfolio — cinematic wedding films, corporate videos, event coverage and photography from Lahore, Pakistan.';
@@ -37,7 +37,7 @@ export default function PortfolioPage() {
 
       <div className="section">
         <div className="container">
-          <GalleryGrid images={galleryImages} />
+          <GalleryGrid posts={galleryPosts} />
         </div>
       </div>
 

@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
-import './styles.css';
-import { siteUrl } from '@/lib/whatsapp';
-import { organizationSchema, websiteSchema } from '@/lib/seo';
+import '@/styles/globals.css';
+import { siteUrl } from '@/utils/whatsapp';
+import { organizationSchema, websiteSchema } from '@/utils/seo';
 import SiteNav from '@/components/SiteNav';
 import DarkModeScript from '@/components/DarkModeScript';
 import DeadLinkGuard from '@/components/DeadLinkGuard';
 import JsonLd from '@/components/JsonLd';
+import SplashScreen from '@/components/SplashScreen';
 
 // Trimmed to sit inside the ~155 character window Google renders, so the
 // strongest claim is the part that actually shows up in results.
@@ -100,6 +101,24 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <DarkModeScript />
+        <style dangerouslySetInnerHTML={{ __html: `
+          #splash-screen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background-color: #0b0b0b !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            z-index: 2147483647 !important;
+            opacity: 1 !important;
+          }
+          .splash-content {
+            text-align: center;
+          }
+        ` }} />
         {/* Preload the LCP image before the stylesheet is applied. */}
         <link
           rel="preload"
@@ -112,6 +131,7 @@ export default function RootLayout({
         <JsonLd data={websiteSchema} />
       </head>
       <body>
+        <SplashScreen />
         <SiteNav />
         <main>{children}</main>
         <DeadLinkGuard />

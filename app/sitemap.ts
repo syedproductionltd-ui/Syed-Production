@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { siteUrl } from '@/lib/whatsapp';
+import { siteUrl } from '@/utils/whatsapp';
 
 export const dynamic = 'force-static';
 

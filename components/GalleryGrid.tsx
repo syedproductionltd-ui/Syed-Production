@@ -1,45 +1,94 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { GalleryImage } from '@/lib/types';
-import { assetUrl, thumbUrl, galleryPosts } from '@/lib/data';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { GalleryPost } from '@/types';
+import { thumbUrl, galleryPosts as staticGalleryPosts } from '@/lib/data';
 import Lightbox from './Lightbox';
+
+function sameImageUrl(a?: string, b?: string): boolean {
+  if (!a || !b) return false;
+  return a.replace(/^\/+/, '') === b.replace(/^\/+/, '');
+}
+
+function coverIndexForPost(post: GalleryPost): number {
+  if (!post.coverImage || !post.images?.length) return 0;
+  const idx = post.images.findIndex((img) => sameImageUrl(img.imageUrl, post.coverImage));
+  return idx >= 0 ? idx : 0;
+}
+
+function resolveInitial(posts?: GalleryPost[]): GalleryPost[] {
+  return posts?.length ? posts : staticGalleryPosts;
+}
 
 /**
  * Masonry-ish gallery grid with a lightbox.
  *
  * Tiles paint their background-image only when near the viewport:
- * background-image cannot take loading="lazy", and painting all 37 photos up
+ * background-image cannot take loading="lazy", and painting all photos up
  * front makes scrolling stutter on low-power phones. Grid rows are a fixed
- * 200px in CSS, so nothing shifts height when a tile paints — which is what
- * keeps the browser from re-anchoring the scroll.
+ * 200px in CSS, so nothing shifts height when a tile paints.
  *
- * `collapsible` reproduces the home page's "See More": tiles flagged hidden in
+ * Initial paint always uses server/static posts so the section is never blank
+ * while a background refresh runs.
+ *
+ * `collapsible` reproduces the home page's "See More": posts flagged hidden in
  * the data stay collapsed until the button is pressed.
  */
 export default function GalleryGrid({
-  images,
+  posts: initialPosts,
   collapsible = false,
   reveal = false,
 }: {
-  images: GalleryImage[];
+  posts?: GalleryPost[];
   collapsible?: boolean;
   /** Adds .reveal-up so the grid fades in on scroll, as on the home page. */
   reveal?: boolean;
 }) {
+  const [posts, setPosts] = useState<GalleryPost[]>(() => resolveInitial(initialPosts));
   const [expanded, setExpanded] = useState(false);
   const [openCoords, setOpenCoords] = useState<{ postIndex: number; imageIndex: number } | null>(null);
   const gridRef = useRef<HTMLDivElement | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const imageToPostMap = useMemo(() => {
-    const map: { postIndex: number; imageIndex: number }[] = [];
-    galleryPosts.forEach((post, pIdx) => {
-      post.images.forEach((_, imgIdx) => {
-        map.push({ postIndex: pIdx, imageIndex: imgIdx });
+  // Keep in sync when the server passes fresh props (e.g. after navigation).
+  useEffect(() => {
+    if (initialPosts?.length) setPosts(initialPosts);
+  }, [initialPosts]);
+
+  // Soft refresh from the API; never clear existing tiles while waiting.
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/gallery')
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (data.success && data.posts && data.posts.length > 0) {
+          const mapped: GalleryPost[] = data.posts.map((p: {
+            id: string;
+            title: string;
+            category?: string;
+            coverImage?: string;
+            images: Array<{ imageUrl: string; altText?: string; hidden?: boolean }>;
+          }) => ({
+            id: p.id,
+            title: p.title,
+            category: p.category,
+            coverImage: p.coverImage,
+            images: p.images.map((img, imgIdx: number) => ({
+              imageUrl: img.imageUrl,
+              altText: img.altText || p.title,
+              hidden: img.hidden !== undefined ? img.hidden : imgIdx >= 5,
+            })),
+          }));
+          setPosts(mapped);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to refresh gallery posts:', err);
       });
-    });
-    return map;
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   /** Tiles still waiting for a background, scoped to this grid only. */
@@ -63,6 +112,7 @@ export default function GalleryGrid({
     probe.onload = () => {
       el.style.backgroundImage = `url("${src}")`;
       el.classList.add('is-loaded');
+      el.classList.remove('is-failed');
     };
     probe.onerror = () => el.classList.add('is-failed');
     probe.src = src;
@@ -101,7 +151,8 @@ export default function GalleryGrid({
       observer.current?.disconnect();
       observer.current = null;
     };
-  }, [expanded, paint, pendingTiles]);
+    // Re-run when posts change so new/remounted tiles (cover updates) get painted.
+  }, [expanded, posts, paint, pendingTiles]);
 
   const toggle = useCallback(() => setExpanded((prev) => !prev), []);
 
@@ -112,29 +163,41 @@ export default function GalleryGrid({
         className={`gallery-grid${reveal ? ' reveal-up' : ''}`}
         id="galleryGrid"
       >
-        {images.map((img, i) => {
-          const coords = imageToPostMap[i] || { postIndex: 0, imageIndex: 0 };
+        {posts.map((post, postIndex) => {
+          const coverImageUrl = post.coverImage || post.images[0]?.imageUrl;
+          if (!coverImageUrl) return null;
+          const coverSrc = thumbUrl(coverImageUrl);
+          const initialImageIdx = coverIndexForPost(post);
+          const isHidden = (post.images[0]?.hidden ?? false) && !expanded;
           return (
             <div
-              key={img.imageUrl}
-              className={`gallery-item${img.hidden && !expanded ? ' gallery-hidden' : ''}`}
-              data-bg-src={thumbUrl(img.imageUrl)}
+              key={`${post.id}-${coverSrc}`}
+              className={`gallery-item${isHidden ? ' gallery-hidden' : ''}`}
+              data-bg-src={coverSrc}
               role="button"
               tabIndex={0}
-              aria-label={`View photo ${i + 1}`}
-              onClick={() => setOpenCoords(coords)}
+              aria-label={`View post: ${post.title}`}
+              onClick={() => setOpenCoords({ postIndex, imageIndex: initialImageIdx })}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
-                  setOpenCoords(coords);
+                  setOpenCoords({ postIndex, imageIndex: initialImageIdx });
                 }
               }}
-            />
+            >
+              {post.images.length > 1 && (
+                <div className="gallery-item-badge" aria-label={`${post.images.length} photos in post`}>
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                    <path d="M16 1H4C2.9 1 2 1.9 2 3v12h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                  </svg>
+                </div>
+              )}
+            </div>
           );
         })}
       </div>
 
-      {collapsible && (
+      {collapsible && posts.length > 5 && (
         <div className={`gallery-see-more${reveal ? ' reveal-up' : ''}`}>
           <button
             className="btn btn-outline gallery-toggle-btn"
@@ -157,7 +220,7 @@ export default function GalleryGrid({
         </div>
       )}
 
-      <Lightbox posts={galleryPosts} openCoords={openCoords} onClose={() => setOpenCoords(null)} />
+      <Lightbox posts={posts} openCoords={openCoords} onClose={() => setOpenCoords(null)} />
     </>
   );
 }

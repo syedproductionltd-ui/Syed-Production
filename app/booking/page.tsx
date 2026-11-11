@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { siteUrl } from '@/lib/whatsapp';
+import { siteUrl } from '@/utils/whatsapp';
 import BookingWizard from '@/components/home/BookingWizard';
 import SiteFooter from '@/components/SiteFooter';
 import JsonLd from '@/components/JsonLd';
-import { pageBreadcrumb } from '@/lib/seo';
+import { pageBreadcrumb } from '@/utils/seo';
 
 const description =
   'Book your production with Syed Production. Choose a service, pick your dates, and send the brief straight to our WhatsApp — we reply within 24 hours.';

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { siteUrl } from '@/lib/whatsapp';
+import { siteUrl } from '@/utils/whatsapp';
 import ReviewsPageBody from '@/components/ReviewsPageBody';
 import SiteFooter from '@/components/SiteFooter';
 import JsonLd from '@/components/JsonLd';
-import { pageBreadcrumb } from '@/lib/seo';
+import { pageBreadcrumb } from '@/utils/seo';
 
 const description =
   'Read client reviews of Syed Production — feedback on wedding films, corporate videos, event coverage and photography from clients across Pakistan.';

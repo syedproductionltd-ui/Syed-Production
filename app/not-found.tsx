@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { brandName } from '@/lib/whatsapp';
+import { brandName } from '@/utils/whatsapp';
 import SiteFooter from '@/components/SiteFooter';
 
 export const metadata: Metadata = {

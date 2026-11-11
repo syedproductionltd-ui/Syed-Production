@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { videos } from '@/lib/data';
-import { getVideoEmbed } from '@/lib/video';
-import { useScrollLock } from '@/lib/useScrollLock';
-import type { Video } from '@/lib/types';
+import { getVideoEmbed } from '@/utils/video';
+import { useScrollLock } from '@/hooks/useScrollLock';
+import type { Video } from '@/types';
 
 /**
  * Fullscreen vertical video viewer.

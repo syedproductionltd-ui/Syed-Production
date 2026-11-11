@@ -155,11 +155,21 @@ input, select, textarea {
   padding: var(--space-24) 0;
 }
 
-/* --- Reveal Animations --- */
+/* --- Reveal Animations ---
+   Fail-safe: content is visible by default. JS may opt into hide-until-reveal
+   via `html.reveal-js`; if JS fails or React strips `.revealed`, content stays
+   readable because the hide rule only applies under that class. */
 .reveal-up {
-  opacity: 0;
-  transform: translateY(30px);
+  opacity: 1;
+  transform: translateY(0);
   transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-js .reveal-up:not(.revealed) {
+    opacity: 0;
+    transform: translateY(30px);
+  }
 }
 
 .reveal-up.revealed {
@@ -671,6 +681,8 @@ input, select, textarea {
   border-radius: var(--radius-lg);
   overflow: hidden;
   height: 420px;
+  aspect-ratio: 4 / 5;
+  background: var(--clr-gray-200, #e5e7eb);
   cursor: pointer;
   box-shadow: var(--shadow-lg);
   transition: all var(--transition-base);
@@ -886,7 +898,9 @@ input, select, textarea {
 .service-card-img {
   position: relative;
   height: 200px;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
+  background: var(--clr-gray-200, #e5e7eb);
 }
 
 .service-card-img img {
@@ -1822,10 +1836,30 @@ input, select, textarea {
   background-position: center;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all var(--transition-base);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
   position: relative;
   overflow: hidden;
-  
+}
+
+.gallery-item:not(.is-loaded):not(.is-failed)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: gallery-skeleton 1.2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes gallery-skeleton {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
 .gallery-item::after {
@@ -1843,6 +1877,22 @@ input, select, textarea {
 
 .gallery-item:hover {
   transform: scale(1.03);
+}
+
+.gallery-item-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+  z-index: 2;
 }
 
 /* Terminal state for a thumbnail that failed to load. Without this the tile
@@ -4093,5 +4143,154 @@ select:focus-visible {
 
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* ============================================================
+   COMPANY PROFILE RESPONSIVE GRIDS
+   ============================================================ */
+.intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+.services-grid-profile {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.values-grid-profile {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+.project-grid-profile {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.process-grid-profile {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.ceo-wrap {
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+  gap: 55px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .intro-grid,
+  .ceo-wrap {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+  .services-grid-profile,
+  .project-grid-profile,
+  .process-grid-profile {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .values-grid-profile {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .services-grid-profile,
+  .project-grid-profile,
+  .process-grid-profile,
+  .values-grid-profile {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   SYED PRODUCTION — CINEMATIC SPLASH SCREEN
+   ============================================================ */
+#splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0b0b0b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2147483647;
+  opacity: 1;
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splash-content {
+  text-align: center;
+  transform: translateY(15px);
+  opacity: 0;
+  animation: contentIntro 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.1s;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splash-logo {
+  display: block;
+  margin: 0 auto 16px auto;
+  max-width: 30vw;
+  width: 120px;
+  height: auto;
+}
+
+.splash-title {
+  font-family: 'Times New Roman', Times, serif, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 16px 0 12px 0;
+  letter-spacing: 6px;
+  text-shadow: 0 15px 35px rgba(255, 255, 255, 0.1);
+}
+
+.splash-slogan {
+  font-family: 'Times New Roman', Times, serif, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.95rem;
+  color: #888888;
+  margin: 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+@keyframes contentIntro {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#splash-screen.text-exiting .splash-content {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+#splash-screen.bg-exiting {
+  opacity: 0;
+}
+
+#splash-screen.hidden {
+  visibility: hidden;
+  pointer-events: none;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .splash-title {
+    font-size: 2rem;
+    letter-spacing: 4px;
+  }
+  .splash-slogan {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
   }
 }

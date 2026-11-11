@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useScrollLock } from '@/lib/useScrollLock';
-import type { Destination } from '@/lib/types';
+import { useScrollLock } from '@/hooks/useScrollLock';
+import type { Destination } from '@/types';
 import { thumbSrcSet, thumbUrl } from '@/lib/data';
 import Stars from './Stars';
 

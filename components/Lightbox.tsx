@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState, useRef } from 'react';
-import { useScrollLock } from '@/lib/useScrollLock';
-import type { GalleryPost } from '@/lib/types';
+import { useScrollLock } from '@/hooks/useScrollLock';
+import type { GalleryPost } from '@/types';
 import { assetUrl } from '@/lib/data';
 
 export default function Lightbox({

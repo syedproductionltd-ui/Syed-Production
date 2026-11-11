@@ -3,14 +3,22 @@ import HomeSections from '@/components/home/HomeSections';
 import RevealObserver from '@/components/RevealObserver';
 import SiteFooter from '@/components/SiteFooter';
 import JsonLd from '@/components/JsonLd';
+import { getPublishedGalleryPosts } from '@/utils/gallery';
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
 };
 
-export default function HomePage() {
+/** Soft-refresh home data periodically; gallery still falls back to static seeds. */
+export const revalidate = 60;
+
+export default async function HomePage() {
+  const galleryPosts = await getPublishedGalleryPosts();
+
   return (
     <>
+      {/* LCP: hero uses a CSS background, so preload the first slide explicitly. */}
+      <link rel="preload" as="image" href="/images/IMG_8245.JPG.jpeg" fetchPriority="high" />
       <RevealObserver />
       {/* Home is the breadcrumb root, so no BreadcrumbList here. */}
       <JsonLd
@@ -24,7 +32,7 @@ export default function HomePage() {
           about: { '@type': 'Organization', name: 'Syed Production' },
         }}
       />
-      <HomeSections />
+      <HomeSections galleryPosts={galleryPosts} />
       <SiteFooter isHome />
     </>
   );

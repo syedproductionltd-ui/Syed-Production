@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { settings } from '@/lib/data';
-import { brandName } from '@/lib/whatsapp';
+import { brandName } from '@/utils/whatsapp';
 import SocialIcon, { socialNetworks, type SocialNetwork } from './SocialIcon';
 
 const networkLabels: Record<SocialNetwork, string> = {

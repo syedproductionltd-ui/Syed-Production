@@ -2,8 +2,8 @@
 
 import { useCallback, useState } from 'react';
 import { destinations } from '@/lib/data';
-import type { Destination } from '@/lib/types';
-import { serviceEnquiry, whatsappUrl } from '@/lib/whatsapp';
+import type { Destination, GalleryPost } from '@/types';
+import { serviceEnquiry, whatsappUrl } from '@/utils/whatsapp';
 import Hero from '@/components/home/Hero';
 import PhotoGallery from '@/components/home/PhotoGallery';
 import VideoShowcase from '@/components/home/VideoShowcase';
@@ -19,8 +19,11 @@ import Newsletter from '@/components/home/Newsletter';
  * Owns the one piece of state shared across sections: which service is being
  * previewed. Featured cards, the service grid and the modal all live here so
  * the modal can be a single instance.
+ *
+ * Gallery posts are fetched on the server and passed in so the photo section
+ * SSR's real tiles instead of an empty client-only fetch.
  */
-export default function HomeSections() {
+export default function HomeSections({ galleryPosts }: { galleryPosts: GalleryPost[] }) {
   const [openId, setOpenId] = useState<number | null>(null);
   const openService = useCallback((id: number) => setOpenId(id), []);
   const close = useCallback(() => setOpenId(null), []);
@@ -42,7 +45,7 @@ export default function HomeSections() {
   return (
     <>
       <Hero />
-      <PhotoGallery />
+      <PhotoGallery posts={galleryPosts} />
       <VideoShowcase />
       <ReviewsSection />
       <TeamSection />

@@ -1,5 +1,5 @@
-import { settings } from './data';
-import { siteUrl } from './whatsapp';
+import { settings } from '@/lib/data';
+import { siteUrl } from '@/utils/whatsapp';
 
 /**
  * Page-level structured data helpers.
@@ -34,7 +34,7 @@ export function pageBreadcrumb(name: string, path: string) {
 
 const [locality, country = ''] = settings.contact.address
   .split(',')
-  .map((part) => part.trim());
+  .map((part: string) => part.trim());
 
 export const organizationSchema = {
   '@context': 'https://schema.org',

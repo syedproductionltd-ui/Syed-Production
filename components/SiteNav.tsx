@@ -3,16 +3,14 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import DarkModeToggle from './DarkModeToggle';
-import { useScrollLock } from '@/lib/useScrollLock';
-import { brandName } from '@/lib/whatsapp';
+import { useScrollLock } from '@/hooks/useScrollLock';
+import { brandName } from '@/utils/whatsapp';
 
-type NavLink = { href: string; label: string; cta?: boolean; pdf?: boolean };
+type NavLink = { href: string; label: string; cta?: boolean; external?: boolean };
 
 const LINKS: NavLink[] = [
   { href: '/', label: 'Home' },
-  { href: '/profile', label: 'Company Profile' },
-  { href: '/company-profile.pdf', label: 'Portfolio', pdf: true },
+  { href: '/profile', label: 'Profile' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/booking', label: 'Book Now' },
   { href: '/reviews', label: 'Reviews' },
@@ -24,6 +22,10 @@ export default function SiteNav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(pathname !== '/');
   const { lock, unlock } = useScrollLock();
+
+  if (pathname?.startsWith('/admin')) {
+    return null;
+  }
 
   // Only add the sticky treatment once the user leaves the hero. On the home
   // page the navbar starts transparent, so seed from the route and let the
@@ -97,7 +99,7 @@ export default function SiteNav() {
         <ul className={`nav-links${open ? ' open' : ''}`} role="list">
           {LINKS.map((link) => (
             <li key={link.href}>
-              {link.pdf ? (
+              {link.external ? (
                 <a
                   href={link.href}
                   target="_blank"
@@ -119,9 +121,6 @@ export default function SiteNav() {
               )}
             </li>
           ))}
-          <li>
-            <DarkModeToggle />
-          </li>
         </ul>
       </div>
 

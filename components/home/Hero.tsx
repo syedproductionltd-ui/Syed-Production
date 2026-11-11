@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { settings } from '@/lib/data';
 
-const FIRST_SLIDE = '/images/DSC00557.webp';
+const FIRST_SLIDE = '/images/IMG_8245.JPG.jpeg';
 
-const SLIDES = [FIRST_SLIDE, '/images/hero-background/DSC09876.webp'];
+const SLIDES = [FIRST_SLIDE];
 
 const ROTATE_MS = 6000;
 

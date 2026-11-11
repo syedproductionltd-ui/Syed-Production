@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { galleryImages } from '@/lib/data';
+import { galleryPosts } from '@/lib/data';
 import GalleryGrid from '@/components/GalleryGrid';
 import { VideoGrid } from '@/components/home/VideoShowcase';
 
@@ -41,7 +41,7 @@ export default function GalleryTabs() {
         role="tabpanel"
         hidden={active !== 'photos'}
       >
-        <GalleryGrid images={galleryImages} />
+        <GalleryGrid posts={galleryPosts} />
       </div>
 
       <div

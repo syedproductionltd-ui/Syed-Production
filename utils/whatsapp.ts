@@ -1,5 +1,5 @@
-import { siteConfig, settings } from './data';
-import type { Destination } from './types';
+import { siteConfig, settings } from '@/lib/data';
+import type { Destination } from '@/types';
 
 /** Digits-only WhatsApp number in international format, e.g. 923555551555 */
 function waNumber(): string {

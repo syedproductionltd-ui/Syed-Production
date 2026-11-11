@@ -51,6 +51,8 @@ export interface GalleryImageItem {
 export interface GalleryPost {
   id: string;
   title: string;
+  category?: string;
+  coverImage?: string;
   images: GalleryImageItem[];
 }
 

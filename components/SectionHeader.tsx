@@ -1,5 +1,5 @@
 import { settings } from '@/lib/data';
-import type { SiteSettings } from '@/lib/types';
+import type { SiteSettings } from '@/types';
 
 type HeaderKey = keyof SiteSettings['sectionHeaders'];
 

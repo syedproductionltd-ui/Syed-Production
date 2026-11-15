@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteFooter from '@/components/SiteFooter';
+import TeamSection from '@/components/home/TeamSection';
 import JsonLd from '@/components/JsonLd';
 import { pageBreadcrumb } from '@/utils/seo';
 import { siteUrl } from '@/utils/whatsapp';
@@ -119,32 +120,26 @@ const PROJECTS = [
   },
 ];
 
-const GALLERY_IMAGES = [
-  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80',
-  'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=900&q=80',
-];
-
-const TEAM_MEMBERS = [
-  { name: 'Saeed Akbar', qual: 'MS / M.Phil', desig: 'HR Manager' },
-  { name: 'Riaz', qual: 'MS / M.Phil', desig: 'Admin Manager' },
-  { name: 'Sheraman', qual: 'BS', desig: 'Project Manager' },
-  { name: 'Hasnain', qual: 'BS', desig: 'Operations Manager' },
-  { name: 'Arsalan', qual: 'BS', desig: 'Graphic Designer' },
-  { name: 'Sohail', qual: 'BS', desig: 'Creative Director' },
-  { name: 'Israr', qual: 'BA', desig: 'Technician' },
-  { name: 'Mehran', qual: 'BS', desig: 'Technician' },
-  { name: 'Akash', qual: 'BS', desig: 'Helper-Videographer' },
-  { name: 'Shehryar', qual: 'BS', desig: 'Helper-Cinematographer' },
-  { name: 'Waqar', qual: 'Diploma', desig: 'Helper-Photographer' },
-  { name: 'Deedar', qual: 'FSc', desig: 'Helper-Editor' },
-  { name: 'Mujeeba', qual: 'FSc', desig: 'Helper-Lighting' },
-  { name: 'Hasnain', qual: 'FSc', desig: 'Helper-Videographer' },
-  { name: 'Asim', qual: 'FSc', desig: 'Helper-Video Editor' },
+const PROJECT_IMAGES = [
+  '/images/projects/seven-days-frozen-fairy-tale.jpg',
+  '/images/projects/frozen-khalti-lake-festival-season-6.jpeg',
+  '/images/projects/hpl-season-14.jpeg',
+  '/images/projects/shan-e-tajalli-mega-event.jpeg',
+  '/images/projects/it-dept-independence-day-gb.jpeg',
+  '/images/projects/sco-gb-liberation-day-song.jpeg',
+  '/images/projects/women-convention-akrsp.jpeg',
+  '/images/projects/fatima-fertilizer-company.jpeg',
+  '/images/projects/kashrote-youth-summit.jpeg',
+  '/images/projects/js-bank-commercial-coverage.jpeg',
+  '/images/projects/trade-mylist.jpeg',
+  '/images/projects/hashoo-foundation-activity-coverage.jpeg',
+  '/images/projects/sco-project-coverage.jpeg',
+  '/images/projects/amna-wazir-clothing-brand.png',
+  '/images/projects/karakorum-expedition.jpeg',
+  '/images/projects/binary-hub.jpeg',
+  '/images/projects/telenor-franchise-gb.jpeg',
+  '/images/projects/mobile-mart-product-shoots.jpeg',
+  '/images/projects/araya-international-diagnostic-centre.png',
 ];
 
 export default function CompanyProfilePage() {
@@ -169,7 +164,7 @@ export default function CompanyProfilePage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 loading="lazy"
-                src="/images/IMG_8276.JPG.jpeg"
+                src="/images/IMG_7239.JPG"
                 alt="Professional film production camera on set"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
@@ -284,13 +279,13 @@ export default function CompanyProfilePage() {
             <div className="project-grid project-grid-profile">
               {PROJECTS.map((p, idx) => (
                 <article key={idx} className="project" style={{ background: 'white', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 18px rgba(27, 67, 50, 0.08)', border: '1px solid rgba(45, 106, 79, 0.08)' }}>
-                  <div className="project-image" style={{ height: '205px', position: 'relative', overflow: 'hidden', background: 'var(--clr-gray-200)' }}>
+                  <div className="project-image" style={{ height: '205px', position: 'relative', overflow: 'hidden', background: '#fff' }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       loading="lazy"
-                      src={GALLERY_IMAGES[idx % GALLERY_IMAGES.length]}
+                      src={PROJECT_IMAGES[idx]}
                       alt={p.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '22px' }}
                     />
                     <span className="project-tag" style={{ position: 'absolute', top: '14px', left: '14px', background: 'rgba(11, 38, 24, 0.9)', color: 'white', borderRadius: '999px', padding: '6px 10px', fontSize: '10px', letterSpacing: '0.08em', textTransform: 'uppercase', border: '1px solid rgba(212, 160, 60, 0.4)' }}>
                       {p.status}
@@ -344,7 +339,7 @@ export default function CompanyProfilePage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
                <img
                  loading="lazy"
-                 src="/images/team/Syed Burhan Uddin Shah@480.webp"
+                 src="/images/team/IMG_8545.PNG"
                  alt="Syed Burhan Uddin Shah"
                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                />
@@ -364,39 +359,7 @@ export default function CompanyProfilePage() {
         </section>
 
         {/* Team Section */}
-        <section className="section" id="team">
-          <div className="container">
-            <div className="section-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '25px', marginBottom: '42px' }}>
-              <div>
-                <div className="eyebrow" style={{ color: 'var(--clr-accent)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase' }}>The people behind the work</div>
-                <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', letterSpacing: '-0.02em', marginTop: '12px', color: 'var(--clr-primary-dark)' }}>Our team</h2>
-              </div>
-              <p style={{ maxWidth: '430px', color: 'var(--clr-gray-500)', margin: 0, lineHeight: '1.6' }}>
-                A multidisciplinary team supporting planning, creative direction, operations and production delivery.
-              </p>
-            </div>
-            <div style={{ overflowX: 'auto' }}>
-              <table className="team-table" style={{ width: '100%', borderCollapse: 'collapse', background: 'white', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 4px 18px rgba(27, 67, 50, 0.08)', border: '1px solid rgba(45, 106, 79, 0.1)' }}>
-                <thead>
-                  <tr style={{ background: 'var(--clr-primary-dark)', color: 'white' }}>
-                    <th style={{ textAlign: 'left', padding: '15px 18px', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Name</th>
-                    <th style={{ textAlign: 'left', padding: '15px 18px', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Qualification</th>
-                    <th style={{ textAlign: 'left', padding: '15px 18px', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Designation</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {TEAM_MEMBERS.map((m, idx) => (
-                    <tr key={idx} style={{ background: idx % 2 === 1 ? 'rgba(244, 241, 222, 0.45)' : 'transparent' }}>
-                      <td style={{ padding: '15px 18px', borderBottom: '1px solid var(--clr-gray-200)', fontSize: '13px' }}>{m.name}</td>
-                      <td style={{ padding: '15px 18px', borderBottom: '1px solid var(--clr-gray-200)', fontSize: '13px' }}>{m.qual}</td>
-                      <td style={{ padding: '15px 18px', borderBottom: '1px solid var(--clr-gray-200)', fontSize: '13px' }}>{m.desig}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+        <TeamSection />
 
         {/* Contact Section */}
         <section className="section contact-section" id="contact" style={{ background: 'var(--clr-navy-deep)', color: 'white' }}>

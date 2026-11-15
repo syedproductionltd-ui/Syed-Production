@@ -8,7 +8,6 @@ import Hero from '@/components/home/Hero';
 import PhotoGallery from '@/components/home/PhotoGallery';
 import VideoShowcase from '@/components/home/VideoShowcase';
 import ReviewsSection from '@/components/home/ReviewsSection';
-import TeamSection from '@/components/home/TeamSection';
 import { FeaturedServices, ServicesGrid } from '@/components/home/Services';
 import DestinationModal from '@/components/DestinationModal';
 import ProjectPlanner from '@/components/home/ProjectPlanner';
@@ -48,7 +47,6 @@ export default function HomeSections({ galleryPosts }: { galleryPosts: GalleryPo
       <PhotoGallery posts={galleryPosts} />
       <VideoShowcase />
       <ReviewsSection />
-      <TeamSection />
       <FeaturedServices onOpen={openService} />
       <ServicesGrid onOpen={openService} />
       <ProjectPlanner />

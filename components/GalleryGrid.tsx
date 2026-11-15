@@ -20,6 +20,11 @@ function resolveInitial(posts?: GalleryPost[]): GalleryPost[] {
   return posts?.length ? posts : staticGalleryPosts;
 }
 
+/** Rows shown before the See More button expands the grid. */
+const COLLAPSED_ROWS = 3;
+/** Desktop column count, used until the grid has been measured. */
+const DEFAULT_COLUMNS = 4;
+
 /**
  * Masonry-ish gallery grid with a lightbox.
  *
@@ -31,8 +36,8 @@ function resolveInitial(posts?: GalleryPost[]): GalleryPost[] {
  * Initial paint always uses server/static posts so the section is never blank
  * while a background refresh runs.
  *
- * `collapsible` reproduces the home page's "See More": posts flagged hidden in
- * the data stay collapsed until the button is pressed.
+ * `collapsible` reproduces the home page's "See More": the grid starts at three
+ * rows and reveals the remaining posts on demand.
  */
 export default function GalleryGrid({
   posts: initialPosts,
@@ -46,6 +51,9 @@ export default function GalleryGrid({
 }) {
   const [posts, setPosts] = useState<GalleryPost[]>(() => resolveInitial(initialPosts));
   const [expanded, setExpanded] = useState(false);
+  const [visibleLimit, setVisibleLimit] = useState(
+    () => DEFAULT_COLUMNS * COLLAPSED_ROWS - 1
+  );
   const [openCoords, setOpenCoords] = useState<{ postIndex: number; imageIndex: number } | null>(null);
   const gridRef = useRef<HTMLDivElement | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
@@ -54,6 +62,28 @@ export default function GalleryGrid({
   useEffect(() => {
     if (initialPosts?.length) setPosts(initialPosts);
   }, [initialPosts]);
+
+  /**
+   * Keep the collapsed grid at exactly three rows on every breakpoint. The
+   * first tile is double-height, so a three-row block holds one fewer tile
+   * than `columns * COLLAPSED_ROWS`.
+   */
+  useEffect(() => {
+    if (!collapsible) return;
+    const el = gridRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      const columns = getComputedStyle(el).gridTemplateColumns
+        .split(' ')
+        .filter(Boolean).length;
+      setVisibleLimit(columns * COLLAPSED_ROWS - 1);
+    };
+
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [collapsible]);
 
   // Soft refresh from the API; never clear existing tiles while waiting.
   useEffect(() => {
@@ -156,23 +186,28 @@ export default function GalleryGrid({
 
   const toggle = useCallback(() => setExpanded((prev) => !prev), []);
 
+  const tileCount = posts.filter(
+    (post) => post.coverImage || post.images[0]?.imageUrl
+  ).length;
+  const canExpand = collapsible && tileCount > visibleLimit;
+
   return (
     <>
       <div
         ref={gridRef}
         className={`gallery-grid${reveal ? ' reveal-up' : ''}`}
         id="galleryGrid"
+        data-collapsed={collapsible && !expanded ? 'true' : undefined}
       >
         {posts.map((post, postIndex) => {
           const coverImageUrl = post.coverImage || post.images[0]?.imageUrl;
           if (!coverImageUrl) return null;
           const coverSrc = thumbUrl(coverImageUrl);
           const initialImageIdx = coverIndexForPost(post);
-          const isHidden = (post.images[0]?.hidden ?? false) && !expanded;
           return (
             <div
               key={`${post.id}-${coverSrc}`}
-              className={`gallery-item${isHidden ? ' gallery-hidden' : ''}`}
+              className="gallery-item"
               data-bg-src={coverSrc}
               role="button"
               tabIndex={0}
@@ -197,7 +232,7 @@ export default function GalleryGrid({
         })}
       </div>
 
-      {collapsible && posts.length > 5 && (
+      {collapsible && canExpand && (
         <div className={`gallery-see-more${reveal ? ' reveal-up' : ''}`}>
           <button
             className="btn btn-outline gallery-toggle-btn"

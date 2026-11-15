@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { settings } from '@/lib/data';
 import { siteUrl, whatsappUrl } from '@/utils/whatsapp';
 import SocialIcon, { socialNetworks } from '@/components/SocialIcon';
+import ContactForm from '@/components/ContactForm';
 import SiteFooter from '@/components/SiteFooter';
 import JsonLd from '@/components/JsonLd';
 import { pageBreadcrumb } from '@/utils/seo';
@@ -118,32 +119,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="contact-newsletter-card">
-              <h2>Prefer to Chat?</h2>
-              <p>
-                Message us on WhatsApp for a fast reply, or send us an email with
-                your project details and we&apos;ll come back to you within 24
-                hours.
-              </p>
-              <a
-                href={whatsappUrl(CONTACT_MESSAGE)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-link btn btn-primary"
-                aria-label="WhatsApp"
-                style={{
-                  display: 'inline-flex',
-                  width: 'auto',
-                  height: 'auto',
-                  padding: '0.85rem 2rem',
-                  borderRadius: 'var(--radius-md)',
-                  fontSize: '0.95rem',
-                  fontWeight: 600,
-                }}
-              >
-                Message us on WhatsApp
-              </a>
-            </div>
+            <ContactForm />
           </div>
         </div>
       </div>

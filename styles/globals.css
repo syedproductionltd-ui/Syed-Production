@@ -280,11 +280,9 @@ input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* Opaque, not glass. The bar carries black text in light mode, and 25% white
-     over the dark hero photography cannot carry black. No backdrop-filter
-     either — it would re-composite on every scroll frame, and it would also make
-     this element the containing block for the absolutely positioned drawer. */
-  background: rgba(255, 255, 255, 0.92);
+  background: none;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
   border: 1px solid rgba(15, 23, 42, 0.06);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
@@ -292,7 +290,7 @@ input, select, textarea {
 }
 
 .navbar.scrolled .nav-container {
-  background: rgba(255, 255, 255, 0.97);
+  background: none;
   box-shadow: var(--shadow-md);
 }
 
@@ -1666,6 +1664,55 @@ input, select, textarea {
   background: var(--clr-white);
 }
 
+.reviews-cta {
+  margin-top: var(--space-8);
+  text-align: center;
+}
+
+.reviews-faq {
+  background: var(--clr-gray-50);
+}
+
+.faq-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background: var(--clr-white);
+  border: 1px solid var(--clr-gray-100);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-sm);
+}
+
+.faq-item h3 {
+  margin-bottom: var(--space-3);
+  font-family: var(--ff-heading);
+  font-size: var(--fs-lg);
+  line-height: 1.35;
+  color: var(--clr-navy-deep);
+}
+
+.faq-item p {
+  margin: 0;
+  color: var(--clr-gray-500);
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .faq-list {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-item {
+    padding: var(--space-6);
+  }
+}
+
 .reviews-carousel {
   position: relative;
   display: flex;
@@ -1829,6 +1876,12 @@ input, select, textarea {
   gap: var(--space-3);
 }
 
+/* Collapsed grid: exactly three rows. The first tile spans two rows, so a
+   full three-row block holds 11 tiles at four columns. */
+.gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 12) {
+  display: none;
+}
+
 .gallery-item {
   /* placeholder tint shown until the lazy background paints */
   background-color: var(--clr-gray-800, #1f2937);
@@ -1917,10 +1970,6 @@ input, select, textarea {
 
 .gallery-item:first-child {
   grid-row: span 2;
-}
-
-.gallery-hidden {
-  display: none;
 }
 
 .gallery-see-more {
@@ -3424,6 +3473,10 @@ input, select, textarea {
     grid-auto-rows: 150px;
   }
 
+  .gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 9) {
+    display: none;
+  }
+
   .date-picker-group {
     flex-direction: column;
     align-items: center;
@@ -3525,6 +3578,10 @@ input, select, textarea {
   .gallery-grid {
     grid-template-columns: 1fr 1fr;
     grid-auto-rows: 120px;
+  }
+
+  .gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 6) {
+    display: none;
   }
 
   .trust-badges {
@@ -3912,6 +3969,13 @@ select:focus-visible {
   margin: 0 auto;
 }
 
+.page-hero-tag {
+  margin-bottom: var(--space-4);
+  color: var(--clr-accent-light);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
 /* ============================================================
    PAGE CONTENT LOADER (sub-pages loading state)
    ============================================================ */
@@ -4019,14 +4083,16 @@ select:focus-visible {
 }
 
 .contact-info-card,
-.contact-newsletter-card {
+.contact-newsletter-card,
+.contact-form-card {
   background: var(--clr-gray-50);
   border-radius: var(--radius-lg);
   padding: var(--space-8);
 }
 
 .contact-info-card h2,
-.contact-newsletter-card h2 {
+.contact-newsletter-card h2,
+.contact-form-card h2 {
   font-family: var(--ff-heading);
   font-size: var(--fs-xl);
   font-weight: 700;
@@ -4088,6 +4154,136 @@ select:focus-visible {
 .contact-newsletter-card p {
   color: var(--clr-gray-600);
   margin-bottom: var(--space-6);
+}
+
+.contact-form-intro {
+  color: var(--clr-gray-600);
+  line-height: 1.6;
+  margin-bottom: var(--space-6);
+}
+
+.contact-form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.contact-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.contact-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.contact-form-field label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--clr-gray-700);
+}
+
+.contact-form-field input,
+.contact-form-field select,
+.contact-form-field textarea {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--clr-gray-200);
+  border-radius: var(--radius-md);
+  background: var(--clr-white);
+  color: var(--clr-gray-900);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.contact-form-field input::placeholder,
+.contact-form-field textarea::placeholder {
+  color: var(--clr-gray-400);
+}
+
+.contact-form-field input:focus,
+.contact-form-field select:focus,
+.contact-form-field textarea:focus {
+  outline: none;
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.12);
+}
+
+.contact-form-field input[aria-invalid='true'],
+.contact-form-field select[aria-invalid='true'],
+.contact-form-field textarea[aria-invalid='true'] {
+  border-color: #ef4444;
+}
+
+.contact-form-field textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.contact-form-error {
+  color: #ef4444;
+  font-size: var(--fs-sm);
+}
+
+.contact-form-status {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  margin-bottom: var(--space-4);
+}
+
+.contact-form-status--error {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.contact-form-status--success {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.contact-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.contact-form-note {
+  color: var(--clr-gray-500);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .contact-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form-card {
+    padding: var(--space-6);
+  }
+}
+
+.dark-mode .contact-form-field input:focus,
+.dark-mode .contact-form-field select:focus,
+.dark-mode .contact-form-field textarea:focus {
+  box-shadow: 0 0 0 3px rgba(64, 184, 138, 0.2);
+}
+
+.dark-mode .contact-form-status--error {
+  background: rgba(248, 113, 113, 0.12);
+  color: #fca5a5;
+}
+
+.dark-mode .contact-form-status--success {
+  background: rgba(52, 211, 153, 0.12);
+  color: #6ee7b7;
 }
 
 .contact-newsletter-form {

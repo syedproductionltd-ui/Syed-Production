@@ -36,6 +36,12 @@ const [locality, country = ''] = settings.contact.address
   .split(',')
   .map((part: string) => part.trim());
 
+const serviceAreas = [
+  { '@type': 'City', name: 'Islamabad' },
+  { '@type': 'City', name: 'Lahore' },
+  { '@type': 'Country', name: 'Pakistan' },
+];
+
 export const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -53,6 +59,7 @@ export const organizationSchema = {
     addressLocality: locality,
     ...(country ? { addressCountry: country === 'Pakistan' ? 'PK' : country } : {}),
   },
+  areaServed: serviceAreas,
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'Customer Service',
@@ -64,6 +71,56 @@ export const organizationSchema = {
     settings.socialLinks.instagram,
   ].filter((url): url is string => Boolean(url && url.trim())),
 };
+
+export const reviewsServiceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: settings.branding.companyName,
+  url: `${siteUrl}/reviews`,
+  logo: `${siteUrl}/images/Syed-production.png`,
+  image: `${siteUrl}/images/og-image.jpg`,
+  description:
+    'Syed Productions is a professional film, photography and video production company based in Lahore and serving clients in Islamabad, Lahore and across Pakistan.',
+  telephone: settings.contact.phone,
+  email: settings.contact.email,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: locality,
+    ...(country ? { addressCountry: country === 'Pakistan' ? 'PK' : country } : {}),
+  },
+  areaServed: serviceAreas,
+  serviceType: [
+    'Wedding Film Production',
+    'Corporate Video Production',
+    'Event Coverage',
+    'Commercial Photography',
+    'Film and Media Production',
+  ],
+  sameAs: [
+    settings.socialLinks.facebook,
+    settings.socialLinks.instagram,
+  ].filter((url): url is string => Boolean(url && url.trim())),
+};
+
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+export function faqSchema(faqs: FaqItem[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+}
 
 export const websiteSchema = {
   '@context': 'https://schema.org',

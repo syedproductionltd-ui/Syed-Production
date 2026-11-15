@@ -45,7 +45,8 @@ export function SocialLinks({ size = 20 }: { size?: number }) {
 
 const HOME_COMPANY_LINKS = [
   { href: '#', label: 'About Us' },
-  { href: '#', label: 'Our Team' },
+  { href: '/profile#team', label: 'Our Team' },
+  { href: '/reviews', label: 'Client Reviews' },
   { href: '#', label: 'Portfolio' },
   { href: '#', label: 'Careers' },
   { href: '#', label: 'Partners' },
@@ -56,12 +57,13 @@ const HOME_SUPPORT_LINKS = [
   { href: '#', label: 'Reschedule Booking' },
   { href: '#', label: 'Privacy Policy' },
   { href: '#', label: 'Terms of Service' },
-  { href: '#', label: 'FAQ' },
+  { href: '/reviews#reviews-faq', label: 'FAQ' },
 ];
 
 const INNER_COMPANY_LINKS = [
   { href: '/', label: 'About Us' },
-  { href: '/#team', label: 'Our Team' },
+  { href: '/profile#team', label: 'Our Team' },
+  { href: '/reviews', label: 'Client Reviews' },
   { href: '/portfolio', label: 'Portfolio' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -71,7 +73,7 @@ const INNER_SUPPORT_LINKS = [
   { href: '/booking', label: 'Reschedule Booking' },
   { href: '#', label: 'Privacy Policy' },
   { href: '#', label: 'Terms of Service' },
-  { href: '#', label: 'FAQ' },
+  { href: '/reviews#reviews-faq', label: 'FAQ' },
 ];
 
 const TRUST_BADGES = [

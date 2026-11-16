@@ -130,14 +130,20 @@ export default function Lightbox({
     setPhotoState('loading');
     const probe = new Image();
     probe.onload = () => {
+      probe.onload = null;
+      probe.onerror = null;
       if (!cancelled) setPhotoState('ready');
     };
     probe.onerror = () => {
+      probe.onload = null;
+      probe.onerror = null;
       if (!cancelled) setPhotoState('error');
     };
     probe.src = currentSrc;
     return () => {
       cancelled = true;
+      probe.onload = null;
+      probe.onerror = null;
     };
   }, [isOpen, currentSrc]);
 

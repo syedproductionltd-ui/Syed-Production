@@ -338,12 +338,16 @@ input, select, textarea {
 
 .nav-link {
   font-family: var(--ff-heading);
-  font-size: var(--fs-sm);
+  font-size: 17px;
   font-weight: 500;
-  color: var(--clr-gray-900);
+  color: #fff;
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
-  transition: all var(--transition-fast);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.navbar.scrolled .nav-link {
+  color: var(--clr-gray-900);
 }
 
 .nav-link:hover,
@@ -352,9 +356,7 @@ input, select, textarea {
   background: rgba(45, 106, 79, 0.08);
 }
 
-/* .nav-link is gray-900 at rest in both the transparent and scrolled states, so
-   the bar needs no per-state colour override — it inverts with the dark-mode
-   palette on its own. */
+/* Base nav links are white over the hero; scrolled/mobile/dark contexts override below. */
 
 .nav-link--cta {
   background: var(--clr-primary);
@@ -427,24 +429,25 @@ input, select, textarea {
   justify-content: center;
   overflow: hidden;
   width: 100%;
+  background-color: #0b1f17;
   -webkit-background-size: cover;
 }
 
 .hero-carousel {
   position: absolute;
   inset: 0;
+  background-color: #0b1f17;
 }
 
 .hero-slide {
   position: absolute;
   inset: 0;
+  background-color: #0b1f17;
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: scroll;
-  opacity: 0;
-  transition: opacity 1.5s ease;
-  will-change: opacity;
+  opacity: 1;
 }
 
 /* Only enable parallax on devices that support it properly (not iOS) */
@@ -454,22 +457,8 @@ input, select, textarea {
   }
 }
 
-.hero-slide.active.loaded {
+.hero-slide.active {
   opacity: 1;
-}
-
-/* Hero Preloader — seamless dark cover that fades once first image loads */
-.hero-preloader {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  background: #0a0a0a;
-  transition: opacity 0.8s ease;
-}
-
-.hero-preloader.done {
-  opacity: 0;
-  pointer-events: none;
 }
 
 .hero-overlay {

@@ -18,7 +18,7 @@ export default async function HomePage() {
   return (
     <>
       {/* LCP: hero uses a CSS background, so preload the first slide explicitly. */}
-      <link rel="preload" as="image" href="/images/IMG_8245.JPG.jpeg" fetchPriority="high" />
+      <link rel="preload" as="image" href="/images/IMG_8245.webp" fetchPriority="high" />
       <RevealObserver />
       {/* Home is the breadcrumb root, so no BreadcrumbList here. */}
       <JsonLd

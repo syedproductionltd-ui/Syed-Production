@@ -87,6 +87,7 @@ export default function GalleryGrid({
 
   // Soft refresh from the API; never clear existing tiles while waiting.
   useEffect(() => {
+    if (initialPosts?.length) return;
     let cancelled = false;
     fetch('/api/gallery')
       .then((res) => res.json())
@@ -104,7 +105,7 @@ export default function GalleryGrid({
             title: p.title,
             category: p.category,
             coverImage: p.coverImage,
-            images: p.images.map((img, imgIdx: number) => ({
+            images: (p.images || []).map((img, imgIdx: number) => ({
               imageUrl: img.imageUrl,
               altText: img.altText || p.title,
               hidden: img.hidden !== undefined ? img.hidden : imgIdx >= 5,
@@ -113,13 +114,13 @@ export default function GalleryGrid({
           setPosts(mapped);
         }
       })
-      .catch((err) => {
-        console.error('Failed to refresh gallery posts:', err);
+      .catch(() => {
+        /* keep static/SSR fallback */
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [initialPosts]);
 
   /** Tiles still waiting for a background, scoped to this grid only. */
   const pendingTiles = useCallback(
@@ -140,11 +141,18 @@ export default function GalleryGrid({
     observer.current?.unobserve(el);
     const probe = new Image();
     probe.onload = () => {
+      probe.onload = null;
+      probe.onerror = null;
+      if (!el.isConnected) return;
       el.style.backgroundImage = `url("${src}")`;
       el.classList.add('is-loaded');
       el.classList.remove('is-failed');
     };
-    probe.onerror = () => el.classList.add('is-failed');
+    probe.onerror = () => {
+      probe.onload = null;
+      probe.onerror = null;
+      if (el.isConnected) el.classList.add('is-failed');
+    };
     probe.src = src;
   }, []);
 

@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
 interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
@@ -11,7 +9,6 @@ declare global {
   var mongooseCache: MongooseCache | undefined;
 }
 
-/** Dev/serverless-safe connection cache across hot reloads and warm invocations. */
 const cached: MongooseCache = global.mongooseCache || { conn: null, promise: null };
 
 if (!global.mongooseCache) {
@@ -19,8 +16,9 @@ if (!global.mongooseCache) {
 }
 
 export async function connectDB() {
-  if (!MONGODB_URI) {
-    throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    return null;
   }
 
   if (cached.conn) {
@@ -28,13 +26,13 @@ export async function connectDB() {
   }
 
   if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-    };
-
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongooseInstance) => {
-      return mongooseInstance;
-    });
+    cached.promise = mongoose
+      .connect(uri, {
+        bufferCommands: false,
+        serverSelectionTimeoutMS: 5000,
+        maxPoolSize: 5,
+      })
+      .then((mongooseInstance) => mongooseInstance);
   }
 
   try {

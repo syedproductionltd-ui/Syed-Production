@@ -100,10 +100,10 @@ export function VideoGrid({ reveal = false }: { reveal?: boolean }) {
             >
               {embed.type === 'youtube' && embed.videoId ? (
                 <iframe
-                  src={`https://www.youtube.com/embed/${embed.videoId}?autoplay=1&mute=1&loop=1&playlist=${embed.videoId}&controls=0&showinfo=0&modestbranding=1`}
+                  src={`https://www.youtube.com/embed/${embed.videoId}?mute=1&controls=0&showinfo=0&modestbranding=1&rel=0`}
                   title={v.title}
                   frameBorder="0"
-                  allow="autoplay; encrypted-media"
+                  allow="encrypted-media; picture-in-picture"
                   loading="lazy"
                 />
               ) : embed.type === 'instagram' ? (
@@ -111,15 +111,15 @@ export function VideoGrid({ reveal = false }: { reveal?: boolean }) {
                   src={embed.embedUrl}
                   title={v.title}
                   frameBorder="0"
-                  allow="autoplay; encrypted-media"
+                  allow="encrypted-media"
                   loading="lazy"
                 />
               ) : embed.type === 'facebook' ? (
                 <iframe
-                  src={`${embed.embedUrl}&mute=1`}
+                  src={embed.embedUrl}
                   title={v.title}
                   frameBorder="0"
-                  allow="autoplay; encrypted-media"
+                  allow="encrypted-media"
                   loading="lazy"
                 />
               ) : (
@@ -179,5 +179,5 @@ function VideoPreview({ src, title }: { src: string; title: string }) {
     return () => io.disconnect();
   }, []);
 
-  return <video ref={ref} muted loop playsInline preload="metadata" src={src} title={title} />;
+  return <video ref={ref} muted loop playsInline preload="none" src={src} title={title} />;
 }

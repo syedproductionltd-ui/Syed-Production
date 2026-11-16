@@ -37,5 +37,7 @@ const GalleryPostSchema = new Schema(
   }
 );
 
+GalleryPostSchema.index({ isPublished: 1, createdAt: -1 });
+
 export const GalleryPostModel: Model<IGalleryPostDocument> =
   mongoose.models.GalleryPost || mongoose.model<IGalleryPostDocument>('GalleryPost', GalleryPostSchema);

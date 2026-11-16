@@ -3,9 +3,11 @@ import { connectDB } from '@/lib/db';
 import { GalleryPostModel } from '@/models/GalleryPost';
 
 function isAdmin(req: NextRequest): boolean {
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) return false;
   const adminCookie = req.cookies.get('syed_admin_session');
   const authHeader = req.headers.get('authorization');
-  return adminCookie?.value === 'authenticated' || authHeader === `Bearer ${process.env.ADMIN_PASSWORD}`;
+  return adminCookie?.value === adminPassword || authHeader === `Bearer ${adminPassword}`;
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -14,7 +16,11 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 
   try {
-    await connectDB();
+    const conn = await connectDB();
+    if (!conn) {
+      return NextResponse.json({ success: false, error: 'Database unavailable' }, { status: 503 });
+    }
+
     const { id } = await params;
     const body = await req.json();
     const { title, category, coverImage, images, isPublished } = body;
@@ -38,7 +44,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
           altText: img.altText || post.title,
           hidden: Boolean(img.hidden),
         };
-      });
+      }) as any;
     }
 
     if (coverImage) {
@@ -49,11 +55,9 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     await post.save();
-
     return NextResponse.json({ success: true, post });
-  } catch (error: any) {
-    console.error('Error updating gallery post:', error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ success: false, error: 'Unable to update gallery post' }, { status: 500 });
   }
 }
 
@@ -63,17 +67,19 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   }
 
   try {
-    await connectDB();
-    const { id } = await params;
+    const conn = await connectDB();
+    if (!conn) {
+      return NextResponse.json({ success: false, error: 'Database unavailable' }, { status: 503 });
+    }
 
+    const { id } = await params;
     const deleted = await GalleryPostModel.findOneAndDelete({ id });
     if (!deleted) {
       return NextResponse.json({ success: false, error: 'Gallery post not found' }, { status: 404 });
     }
 
     return NextResponse.json({ success: true, message: 'Post deleted successfully' });
-  } catch (error: any) {
-    console.error('Error deleting gallery post:', error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ success: false, error: 'Unable to delete gallery post' }, { status: 500 });
   }
 }

@@ -10,7 +10,7 @@ function mapPost(p: {
   coverImage?: string;
   images: Array<{ imageUrl: string; altText?: string; hidden?: boolean } | string>;
 }): GalleryPost {
-  const images = p.images.map((img, imgIdx) => {
+  const images = (p.images || []).map((img, imgIdx) => {
     if (typeof img === 'string') {
       return { imageUrl: img, altText: p.title, hidden: imgIdx >= 5 };
     }
@@ -34,17 +34,19 @@ function mapPost(p: {
  * Published gallery posts for public pages. Falls back to static seeds when
  * Mongo is unavailable or empty so SSR never renders a blank grid.
  */
-export async function getPublishedGalleryPosts(): Promise<GalleryPost[]> {
+export async function getPublishedGalleryPosts(limit = 60): Promise<GalleryPost[]> {
   try {
-    await connectDB();
+    const conn = await connectDB();
+    if (!conn) return staticGalleryPosts;
+
     const posts = await GalleryPostModel.find({ isPublished: true })
       .sort({ createdAt: -1 })
+      .limit(limit)
       .lean();
 
     if (!posts.length) return staticGalleryPosts;
     return posts.map((p) => mapPost(p as Parameters<typeof mapPost>[0]));
-  } catch (err) {
-    console.error('getPublishedGalleryPosts failed, using static seeds:', err);
+  } catch {
     return staticGalleryPosts;
   }
 }

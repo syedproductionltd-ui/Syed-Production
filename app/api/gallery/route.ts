@@ -1,62 +1,51 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { connectDB } from '@/lib/db';
 import { GalleryPostModel } from '@/models/GalleryPost';
-import { galleryPosts as initialPosts } from '@/lib/data';
+import { galleryPosts as staticGalleryPosts } from '@/lib/data';
 
-/** Public GET is cacheable; admin/mutating handlers still hit the DB live. */
 export const revalidate = 60;
 
 function isAdmin(req: NextRequest): boolean {
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) return false;
   const adminCookie = req.cookies.get('syed_admin_session');
   const authHeader = req.headers.get('authorization');
-  return adminCookie?.value === 'authenticated' || authHeader === `Bearer ${process.env.ADMIN_PASSWORD}`;
+  return adminCookie?.value === adminPassword || authHeader === `Bearer ${adminPassword}`;
 }
 
 export async function GET(req: NextRequest) {
   try {
-    await connectDB();
     const { searchParams } = new URL(req.url);
     const includeUnpublished = searchParams.get('admin') === 'true';
+    const limit = Math.min(Math.max(Number(searchParams.get('limit')) || 60, 1), 200);
 
     if (includeUnpublished && !isAdmin(req)) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
-    let query = includeUnpublished ? {} : { isPublished: true };
-    let posts = await GalleryPostModel.find(query).sort({ createdAt: -1 }).lean();
-
-    // If database is empty, seed initial data from lib/data.ts
-    if (posts.length === 0) {
-      const seedData = initialPosts.map((p, idx) => ({
-        id: p.id || `post-${Date.now()}-${idx}`,
-        title: p.title,
-        category: p.title.toLowerCase().includes('wedding') ? 'Wedding' : p.title.toLowerCase().includes('studio') ? 'Studio' : p.title.toLowerCase().includes('editorial') ? 'Editorial' : 'Cinematic',
-        coverImage: p.images[0]?.imageUrl || '',
-        images: p.images.map((img) => ({
-          imageUrl: img.imageUrl,
-          altText: img.altText || p.title,
-          hidden: img.hidden || false,
-        })),
-        isPublished: true,
-      }));
-
-      await GalleryPostModel.insertMany(seedData);
-      posts = await GalleryPostModel.find(query).sort({ createdAt: -1 }).lean();
+    const conn = await connectDB();
+    if (!conn) {
+      const posts = includeUnpublished ? [] : staticGalleryPosts.slice(0, limit);
+      const res = NextResponse.json({ success: true, posts, source: 'static' });
+      res.headers.set('Cache-Control', includeUnpublished ? 'no-store' : 'public, s-maxage=60, stale-while-revalidate=300');
+      return res;
     }
 
-    const res = NextResponse.json({ success: true, posts });
-    if (!includeUnpublished) {
-      res.headers.set(
-        'Cache-Control',
-        'public, s-maxage=60, stale-while-revalidate=300'
-      );
-    } else {
-      res.headers.set('Cache-Control', 'no-store');
-    }
+    const query = includeUnpublished ? {} : { isPublished: true };
+    const posts = await GalleryPostModel.find(query)
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .lean();
+
+    const result = posts.length || includeUnpublished ? posts : staticGalleryPosts.slice(0, limit);
+    const res = NextResponse.json({ success: true, posts: result });
+    res.headers.set(
+      'Cache-Control',
+      includeUnpublished ? 'no-store' : 'public, s-maxage=60, stale-while-revalidate=300'
+    );
     return res;
-  } catch (error: any) {
-    console.error('Error fetching gallery posts:', error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ success: false, error: 'Unable to fetch gallery posts' }, { status: 500 });
   }
 }
 
@@ -66,11 +55,15 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    await connectDB();
+    const conn = await connectDB();
+    if (!conn) {
+      return NextResponse.json({ success: false, error: 'Database unavailable' }, { status: 503 });
+    }
+
     const body = await req.json();
     const { title, category, coverImage, images, isPublished } = body;
 
-    if (!title || !images || images.length === 0) {
+    if (!title || !Array.isArray(images) || images.length === 0) {
       return NextResponse.json({ success: false, error: 'Title and at least one image are required' }, { status: 400 });
     }
 
@@ -98,8 +91,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, post: newPost });
-  } catch (error: any) {
-    console.error('Error creating gallery post:', error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ success: false, error: 'Unable to create gallery post' }, { status: 500 });
   }
 }

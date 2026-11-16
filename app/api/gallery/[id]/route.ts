@@ -34,28 +34,40 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       return NextResponse.json({ success: false, error: 'Gallery post not found' }, { status: 404 });
     }
 
-    if (title) post.title = title;
-    if (category) post.category = category;
+    if (typeof title === 'string') post.title = title;
+    if (typeof category === 'string') post.category = category;
     if (isPublished !== undefined) post.isPublished = isPublished;
 
     if (images && Array.isArray(images) && images.length > 0) {
-      post.images = images.map((img: any) => {
-        if (typeof img === 'string') {
-          return { imageUrl: img, altText: post.title, hidden: false };
-        }
-        return {
+      const titleForAlt = typeof title === 'string' ? title : post.title;
+      post.images = (images as any[])
+        .map((img: any, idx: number) => {
+          if (typeof img === 'string') {
+            return { imageUrl: img, altText: titleForAlt, hidden: false, sortOrder: idx + 1, _idx: idx };
+          }
+          const so = typeof img.sortOrder === 'number' && Number.isFinite(img.sortOrder) ? img.sortOrder : idx + 1;
+          return {
+            imageUrl: img.imageUrl,
+            altText: img.altText || titleForAlt,
+            hidden: Boolean(img.hidden),
+            sortOrder: so,
+            _idx: idx,
+          };
+        })
+        .sort((a, b) => (a.sortOrder - b.sortOrder) || (a._idx - b._idx))
+        .map((img, idx) => ({
           imageUrl: img.imageUrl,
-          altText: img.altText || post.title,
-          hidden: Boolean(img.hidden),
-        };
-      }) as any;
+          altText: img.altText,
+          hidden: img.hidden,
+          sortOrder: idx + 1,
+        })) as any;
     }
 
-    if (coverImage) {
+    const imgs = (post.images as any[]) || [];
+    if (coverImage && imgs.some((i) => i.imageUrl === coverImage)) {
       post.coverImage = coverImage;
-    } else if (post.images.length > 0) {
-      const firstImg = post.images[0] as any;
-      post.coverImage = firstImg.imageUrl || firstImg;
+    } else if (imgs.length > 0) {
+      post.coverImage = imgs[0].imageUrl || imgs[0];
     }
 
     await post.save();

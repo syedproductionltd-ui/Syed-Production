@@ -3,23 +3,39 @@ import { GalleryPostModel } from '@/models/GalleryPost';
 import { galleryPosts as staticGalleryPosts } from '@/lib/data';
 import type { GalleryPost } from '@/types';
 
+type RawImage = { imageUrl: string; altText?: string; hidden?: boolean; sortOrder?: number } | string;
+
+function normalizeImages(images: RawImage[] = [], fallbackTitle = '') {
+  const mapped = images.map((img, idx) => {
+    if (typeof img === 'string') {
+      return { imageUrl: img, altText: fallbackTitle, hidden: idx >= 5, sortOrder: idx + 1, _idx: idx };
+    }
+    const so = typeof img.sortOrder === 'number' && Number.isFinite(img.sortOrder) ? img.sortOrder : idx + 1;
+    return {
+      imageUrl: img.imageUrl,
+      altText: img.altText || fallbackTitle,
+      hidden: img.hidden !== undefined ? img.hidden : idx >= 5,
+      sortOrder: so,
+      _idx: idx,
+    };
+  });
+  mapped.sort((a, b) => (a.sortOrder - b.sortOrder) || (a._idx - b._idx));
+  return mapped.map((img, idx) => ({
+    imageUrl: img.imageUrl,
+    altText: img.altText,
+    hidden: img.hidden,
+    sortOrder: idx + 1,
+  }));
+}
+
 function mapPost(p: {
   id?: string;
   title: string;
   category?: string;
   coverImage?: string;
-  images: Array<{ imageUrl: string; altText?: string; hidden?: boolean } | string>;
+  images: RawImage[];
 }): GalleryPost {
-  const images = (p.images || []).map((img, imgIdx) => {
-    if (typeof img === 'string') {
-      return { imageUrl: img, altText: p.title, hidden: imgIdx >= 5 };
-    }
-    return {
-      imageUrl: img.imageUrl,
-      altText: img.altText || p.title,
-      hidden: img.hidden !== undefined ? img.hidden : imgIdx >= 5,
-    };
-  });
+  const images = normalizeImages(p.images || [], p.title);
 
   return {
     id: p.id || p.title,

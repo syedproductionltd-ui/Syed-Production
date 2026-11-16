@@ -46,6 +46,7 @@ export interface GalleryImageItem {
   imageUrl: string;
   altText: string;
   hidden: boolean;
+  sortOrder?: number;
 }
 
 export interface GalleryPost {

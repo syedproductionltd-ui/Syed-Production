@@ -72,18 +72,33 @@ export async function POST(req: NextRequest) {
     }
 
     const id = body.id || `post-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
-    const resolvedCover = coverImage || (typeof images[0] === 'string' ? images[0] : images[0]?.imageUrl);
 
-    const formattedImages = images.map((img: any) => {
-      if (typeof img === 'string') {
-        return { imageUrl: img, altText: title, hidden: false };
-      }
-      return {
+    const formattedImages = (images as any[])
+      .map((img: any, idx: number) => {
+        if (typeof img === 'string') {
+          return { imageUrl: img, altText: title, hidden: false, sortOrder: idx + 1, _idx: idx };
+        }
+        const so = typeof img.sortOrder === 'number' && Number.isFinite(img.sortOrder) ? img.sortOrder : idx + 1;
+        return {
+          imageUrl: img.imageUrl,
+          altText: img.altText || title,
+          hidden: Boolean(img.hidden),
+          sortOrder: so,
+          _idx: idx,
+        };
+      })
+      .sort((a, b) => (a.sortOrder - b.sortOrder) || (a._idx - b._idx))
+      .map((img, idx) => ({
         imageUrl: img.imageUrl,
-        altText: img.altText || title,
-        hidden: Boolean(img.hidden),
-      };
-    });
+        altText: img.altText,
+        hidden: img.hidden,
+        sortOrder: idx + 1,
+      }));
+
+    const resolvedCover =
+      coverImage && formattedImages.some((i) => i.imageUrl === coverImage)
+        ? coverImage
+        : formattedImages[0]?.imageUrl;
 
     const newPost = await GalleryPostModel.create({
       id,

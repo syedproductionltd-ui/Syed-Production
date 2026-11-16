@@ -21,6 +21,7 @@ const GalleryImageItemSchema = new Schema({
   imageUrl: { type: String, required: true },
   altText: { type: String, default: 'Syed Production shoot' },
   hidden: { type: Boolean, default: false },
+  sortOrder: { type: Number, default: 0 },
 });
 
 const GalleryPostSchema = new Schema(

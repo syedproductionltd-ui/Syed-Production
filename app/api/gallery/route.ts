@@ -8,9 +8,13 @@ export const revalidate = 60;
 function isAdmin(req: NextRequest): boolean {
   const adminPassword = process.env.ADMIN_PASSWORD;
   if (!adminPassword) return false;
-  const adminCookie = req.cookies.get('syed_admin_session');
+  const adminCookie = req.cookies.get('syed_admin_session')?.value;
   const authHeader = req.headers.get('authorization');
-  return adminCookie?.value === adminPassword || authHeader === `Bearer ${adminPassword}`;
+  return (
+    adminCookie === adminPassword ||
+    adminCookie === 'authenticated' ||
+    authHeader === `Bearer ${adminPassword}`
+  );
 }
 
 export async function GET(req: NextRequest) {

@@ -1,22 +1,41 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
+import { put } from '@vercel/blob';
+
+export const runtime = 'nodejs';
 
 const MAX_FILES = 10;
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED = new Map<string, string>([
   ['image/jpeg', '.jpg'],
+  ['image/jpg', '.jpg'],
   ['image/png', '.png'],
   ['image/webp', '.webp'],
   ['image/avif', '.avif'],
+  ['image/gif', '.gif'],
 ]);
+const ALLOWED_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif']);
 
 function isAdmin(req: NextRequest): boolean {
   const adminPassword = process.env.ADMIN_PASSWORD;
   if (!adminPassword) return false;
-  const adminCookie = req.cookies.get('syed_admin_session');
+  const adminCookie = req.cookies.get('syed_admin_session')?.value;
   const authHeader = req.headers.get('authorization');
-  return adminCookie?.value === adminPassword || authHeader === `Bearer ${adminPassword}`;
+  return (
+    adminCookie === adminPassword ||
+    adminCookie === 'authenticated' ||
+    authHeader === `Bearer ${adminPassword}`
+  );
+}
+
+function resolveExt(file: File): string | null {
+  const byType = ALLOWED.get(file.type);
+  if (byType) return byType;
+  const rawExt = path.extname(file.name || '').toLowerCase();
+  if (rawExt === '.jpeg') return '.jpg';
+  if (ALLOWED_EXT.has(rawExt)) return rawExt;
+  return null;
 }
 
 export async function POST(req: NextRequest) {
@@ -35,12 +54,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: `Too many files (max ${MAX_FILES})` }, { status: 400 });
     }
 
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'gallery');
-    await mkdir(uploadDir, { recursive: true });
-
     const uploadedUrls: string[] = [];
+    const useBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+
+    if (!useBlob) {
+      await mkdir(path.join(process.cwd(), 'public', 'uploads', 'gallery'), { recursive: true });
+    }
+
     for (const file of files) {
-      const ext = ALLOWED.get(file.type);
+      const ext = resolveExt(file);
       if (!ext) {
         return NextResponse.json({ success: false, error: 'Unsupported file type' }, { status: 400 });
       }
@@ -50,13 +72,39 @@ export async function POST(req: NextRequest) {
 
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
+      if (!buffer.length) {
+        return NextResponse.json({ success: false, error: 'Empty file' }, { status: 400 });
+      }
+
       const filename = `gallery-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
-      await writeFile(path.join(uploadDir, filename), buffer);
-      uploadedUrls.push(`/uploads/gallery/${filename}`);
+
+      if (useBlob) {
+        const blob = await put(`gallery/${filename}`, buffer, {
+          access: 'public',
+          contentType: file.type || undefined,
+          addRandomSuffix: false,
+        });
+        uploadedUrls.push(blob.url);
+      } else {
+        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'gallery');
+        await writeFile(path.join(uploadDir, filename), buffer);
+        uploadedUrls.push(`/uploads/gallery/${filename}`);
+      }
     }
 
     return NextResponse.json({ success: true, urls: uploadedUrls });
-  } catch {
-    return NextResponse.json({ success: false, error: 'Unable to upload files' }, { status: 500 });
+  } catch (err) {
+    console.error('Upload error:', err);
+    const msg = err instanceof Error ? err.message : '';
+    if (/EACCES|EPERM|EROFS|ENOSPC/i.test(msg)) {
+      return NextResponse.json({ success: false, error: 'Upload storage is not writable on this server' }, { status: 500 });
+    }
+    if (/Unauthorized|Database/i.test(msg)) {
+      return NextResponse.json({ success: false, error: msg }, { status: 500 });
+    }
+    return NextResponse.json(
+      { success: false, error: msg || 'Unable to upload files' },
+      { status: 500 }
+    );
   }
 }

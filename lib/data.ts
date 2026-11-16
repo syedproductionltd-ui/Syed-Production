@@ -228,6 +228,7 @@ function derivatives(rel: string): { url: string; w: number }[] {
  * take a srcset. Falls back to the original when no derivative exists.
  */
 export function thumbUrl(rel: string): string {
+  if (/^https?:\/\//i.test(rel)) return rel;
   const d = derivatives(rel);
   const largest = d[d.length - 1];
   return largest ? largest.url : encodePath(rel);
@@ -235,6 +236,7 @@ export function thumbUrl(rel: string): string {
 
 /** srcset for <img>, so phones download a smaller file than a 2x desktop. */
 export function thumbSrcSet(rel: string): string | undefined {
+  if (/^https?:\/\//i.test(rel)) return undefined;
   const d = derivatives(rel);
   return d.length ? d.map((x) => `${x.url} ${x.w}w`).join(', ') : undefined;
 }

@@ -1885,11 +1885,12 @@ input, select, textarea {
   gap: var(--space-3);
 }
 
-/* Collapsed grid: exactly three rows. The first tile spans two rows, so a
-   full three-row block holds 11 tiles at four columns. */
-.gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 12) {
+/* Collapsed grid: 15 posts at four columns. React also slices to this limit,
+   so this only guards against a stale collapsed state during hydration. */
+.gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 16) {
   display: none;
 }
+
 
 .gallery-item {
   /* placeholder tint shown until the <img> finishes loading */
@@ -3498,7 +3499,7 @@ input, select, textarea {
     grid-auto-rows: 150px;
   }
 
-  .gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 9) {
+  .gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 16) {
     display: none;
   }
 
@@ -3605,7 +3606,7 @@ input, select, textarea {
     grid-auto-rows: 120px;
   }
 
-  .gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 6) {
+  .gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 16) {
     display: none;
   }
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import type { GalleryPost } from '@/types';
 import { thumbUrl, thumbSrcSet, galleryPosts as staticGalleryPosts } from '@/lib/data';
 import Lightbox from './Lightbox';
@@ -43,10 +44,8 @@ function resolveInitial(posts?: GalleryPost[]): GalleryPost[] {
   return normalizePosts(posts);
 }
 
-/** Rows shown before the See More button expands the grid. */
-const COLLAPSED_ROWS = 3;
-/** Desktop column count, used until the grid has been measured. */
-const DEFAULT_COLUMNS = 4;
+/** Posts shown before the See More button expands the grid. */
+const COLLAPSED_LIMIT = 15;
 
 /**
  * Masonry-ish gallery grid with a lightbox.
@@ -58,55 +57,32 @@ const DEFAULT_COLUMNS = 4;
  * Initial paint always uses server/static posts so the section is never blank
  * while a background refresh runs.
  *
- * `collapsible` reproduces the home page's "See More": the grid starts at three
- * rows and reveals the remaining posts on demand.
+ * `collapsible` reproduces the home page's "See More": the grid starts with 15
+ * posts and reveals the remaining posts on demand.
  */
 export default function GalleryGrid({
   posts: initialPosts,
   collapsible = false,
+  collapsedLimit = COLLAPSED_LIMIT,
 }: {
   posts?: GalleryPost[];
   collapsible?: boolean;
+  collapsedLimit?: number;
 }) {
   const [posts, setPosts] = useState<GalleryPost[]>(() => resolveInitial(initialPosts));
   const [expanded, setExpanded] = useState(false);
-  const [visibleLimit, setVisibleLimit] = useState(
-    () => DEFAULT_COLUMNS * COLLAPSED_ROWS - 1
-  );
   const [openCoords, setOpenCoords] = useState<{ postIndex: number; imageIndex: number } | null>(null);
   const gridRef = useRef<HTMLDivElement | null>(null);
 
   // Render only the tiles that are actually shown while collapsed. Mounting
   // `display:none` tiles still queues their image requests.
   const shownPosts =
-    collapsible && !expanded ? posts.slice(0, visibleLimit) : posts;
+    collapsible && !expanded ? posts.slice(0, collapsedLimit) : posts;
 
   // Keep in sync when the server passes fresh props (e.g. after navigation).
   useEffect(() => {
     setPosts(normalizePosts(initialPosts));
   }, [initialPosts]);
-
-  /**
-   * Keep the collapsed grid at exactly three rows on every breakpoint. The
-   * first tile is double-height, so a three-row block holds one fewer tile
-   * than `columns * COLLAPSED_ROWS`.
-   */
-  useEffect(() => {
-    if (!collapsible) return;
-    const el = gridRef.current;
-    if (!el) return;
-
-    const measure = () => {
-      const columns = getComputedStyle(el).gridTemplateColumns
-        .split(' ')
-        .filter(Boolean).length;
-      setVisibleLimit(columns * COLLAPSED_ROWS - 1);
-    };
-
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, [collapsible]);
 
   // Server-provided posts are already fresh; only query the API when the page
   // mounted without any (static export / API-only usage) to avoid a second
@@ -148,7 +124,8 @@ export default function GalleryGrid({
   const tileCount = posts.filter(
     (post) => post.coverImage || post.images[0]?.imageUrl
   ).length;
-  const canExpand = collapsible && tileCount > visibleLimit;
+  const hasMore = tileCount > collapsedLimit;
+  const showToggle = collapsible && tileCount >= collapsedLimit;
 
   return (
     <>
@@ -210,26 +187,38 @@ export default function GalleryGrid({
         })}
       </div>
 
-      {collapsible && canExpand && (
+      {showToggle && (
         <div className="gallery-see-more">
-          <button
-            className="btn btn-outline gallery-toggle-btn"
-            id="gallerySeeMore"
-            onClick={toggle}
-            aria-expanded={expanded}
-          >
-            {expanded ? 'See Less' : 'See More'}
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-              <path
-                d={
-                  expanded
-                    ? 'M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z'
-                    : 'M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z'
-                }
-                fill="currentColor"
-              />
-            </svg>
-          </button>
+          {hasMore ? (
+            <button
+              className="btn btn-outline gallery-toggle-btn"
+              id="gallerySeeMore"
+              onClick={toggle}
+              aria-expanded={expanded}
+            >
+              {expanded ? 'See Less' : 'See More'}
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path
+                  d={
+                    expanded
+                      ? 'M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z'
+                      : 'M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z'
+                  }
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          ) : (
+            <Link className="btn btn-outline gallery-toggle-btn" id="gallerySeeMore" href="/portfolio">
+              See More
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path
+                  d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                  fill="currentColor"
+                />
+              </svg>
+            </Link>
+          )}
         </div>
       )}
 

@@ -4,6 +4,8 @@ export interface IGalleryImageItem {
   imageUrl: string;
   altText?: string;
   hidden?: boolean;
+  width?: number;
+  height?: number;
 }
 
 export interface IGalleryPostDocument extends Document {
@@ -23,6 +25,8 @@ const GalleryImageItemSchema = new Schema({
   altText: { type: String, default: 'Syed Production shoot' },
   hidden: { type: Boolean, default: false },
   sortOrder: { type: Number, default: 0 },
+  width: { type: Number },
+  height: { type: Number },
 });
 
 const GalleryPostSchema = new Schema(

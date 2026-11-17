@@ -52,6 +52,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
             altText: img.altText || titleForAlt,
             hidden: Boolean(img.hidden),
             sortOrder: so,
+            width: typeof img.width === 'number' && Number.isFinite(img.width) && img.width > 0 ? img.width : undefined,
+            height: typeof img.height === 'number' && Number.isFinite(img.height) && img.height > 0 ? img.height : undefined,
             _idx: idx,
           };
         })
@@ -61,6 +63,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
           altText: img.altText,
           hidden: img.hidden,
           sortOrder: idx + 1,
+          width: img.width,
+          height: img.height,
         })) as any;
     }
 

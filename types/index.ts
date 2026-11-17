@@ -40,6 +40,8 @@ export interface GalleryImage {
   /** Hidden tiles are only rendered once the grid is expanded. */
   hidden: boolean;
   sortOrder: number;
+  width?: number;
+  height?: number;
 }
 
 export interface GalleryImageItem {
@@ -47,6 +49,8 @@ export interface GalleryImageItem {
   altText: string;
   hidden: boolean;
   sortOrder?: number;
+  width?: number;
+  height?: number;
 }
 
 export interface GalleryPost {

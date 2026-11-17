@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import type { GalleryPost } from '@/types';
 import { thumbUrl, thumbSrcSet, galleryPosts as staticGalleryPosts } from '@/lib/data';
 import Lightbox from './Lightbox';
@@ -10,17 +10,29 @@ function sameImageUrl(a?: string, b?: string): boolean {
   return a.replace(/^\/+/, '') === b.replace(/^\/+/, '');
 }
 
+function intrinsicSize(url?: string): { width?: number; height?: number } {
+  if (url && /^\/?images\/gallery\//.test(url)) return { width: 1400, height: 2100 };
+  return {};
+}
+
 function normalizePost(p: any, idx = 0): GalleryPost {
   const images = [...(p.images || [])]
     .map((img: any, i: number) => {
       if (typeof img === 'string') {
-        return { imageUrl: img, altText: p.title, hidden: i >= 5, sortOrder: i + 1, _i: i };
+        return { imageUrl: img, altText: p.title, hidden: i >= 5, sortOrder: i + 1, ...intrinsicSize(img), _i: i };
       }
       const so = typeof img.sortOrder === 'number' && Number.isFinite(img.sortOrder) ? img.sortOrder : i + 1;
-      return { ...img, altText: img.altText || p.title, sortOrder: so, _i: i };
+      return { ...img, altText: img.altText || p.title, sortOrder: so, ...intrinsicSize(img.imageUrl), _i: i };
     })
     .sort((a: any, b: any) => (a.sortOrder - b.sortOrder) || (a._i - b._i))
-    .map((img: any, i: number) => ({ imageUrl: img.imageUrl, altText: img.altText, hidden: Boolean(img.hidden), sortOrder: i + 1 }));
+    .map((img: any, i: number) => ({
+      imageUrl: img.imageUrl,
+      altText: img.altText,
+      hidden: Boolean(img.hidden),
+      sortOrder: i + 1,
+      width: img.width,
+      height: img.height,
+    }));
   const sortOrder = typeof p.sortOrder === 'number' && Number.isFinite(p.sortOrder) ? p.sortOrder : idx + 1;
   return { id: p.id || p.title, title: p.title, category: p.category, coverImage: p.coverImage || images[0]?.imageUrl, images, sortOrder };
 }
@@ -46,6 +58,8 @@ interface GalleryTile {
   imageUrl: string;
   altText: string;
   hidden: boolean;
+  width?: number;
+  height?: number;
 }
 
 function buildTiles(posts: GalleryPost[]): GalleryTile[] {
@@ -54,20 +68,28 @@ function buildTiles(posts: GalleryPost[]): GalleryTile[] {
     const seen = new Set<string>();
     const images = post.images ?? [];
     const coverIndex = coverIndexForPost(post);
-    const add = (imageIndex: number, imageUrl: string, altText: string, hidden: boolean) => {
+    const add = (
+      imageIndex: number,
+      imageUrl: string,
+      altText: string,
+      hidden: boolean,
+      width?: number,
+      height?: number
+    ) => {
       const key = imageUrl.replace(/^\/+/, '');
       if (!imageUrl || seen.has(key)) return;
       seen.add(key);
-      tiles.push({ post, postIndex, imageIndex, imageUrl, altText: altText || post.title, hidden });
+      tiles.push({ post, postIndex, imageIndex, imageUrl, altText: altText || post.title, hidden, width, height });
     };
 
     if (images.length) {
       images.forEach((img, imageIndex) => {
         const isCover = imageIndex === coverIndex || sameImageUrl(img.imageUrl, post.coverImage);
-        add(imageIndex, img.imageUrl, img.altText, isCover ? false : Boolean(img.hidden));
+        add(imageIndex, img.imageUrl, img.altText, isCover ? false : Boolean(img.hidden), img.width, img.height);
       });
     } else if (post.coverImage) {
-      add(coverIndex, post.coverImage, post.title, false);
+      const size = intrinsicSize(post.coverImage);
+      add(coverIndex, post.coverImage, post.title, false, size.width, size.height);
     }
   });
   return tiles;
@@ -83,9 +105,9 @@ const COLLAPSED_LIMIT = 15;
 /**
  * Masonry-ish gallery grid with a lightbox.
  *
- * Covers are real <img> elements with native lazy loading and a srcset, so
- * tiles are visible before hydration and the browser can pick a phone-sized
- * thumbnail. Grid rows are a fixed 200px in CSS, so nothing shifts on load.
+ * Covers are real <img> elements with native lazy loading and a srcset. Each
+ * tile reserves space from its intrinsic ratio, then the image renders at
+ * width:100% / height:auto so its full proportions are visible without crop.
  *
  * Initial paint always uses server/static posts so the section is never blank
  * while a background refresh runs.
@@ -105,6 +127,8 @@ export default function GalleryGrid({
   const [posts, setPosts] = useState<GalleryPost[]>(() => resolveInitial(initialPosts));
   const [expanded, setExpanded] = useState(false);
   const [openCoords, setOpenCoords] = useState<{ postIndex: number; imageIndex: number } | null>(null);
+  const [gridMetrics, setGridMetrics] = useState({ columnWidth: 0, rowUnit: 4, rowGap: 16 });
+  const [loadedRatios, setLoadedRatios] = useState<Record<string, number>>({});
   const gridRef = useRef<HTMLDivElement | null>(null);
 
   const allTiles = useMemo(() => buildTiles(posts), [posts]);
@@ -140,6 +164,34 @@ export default function GalleryGrid({
     };
   }, [initialPosts]);
 
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      const style = getComputedStyle(el);
+      const columns = style.gridTemplateColumns.split(' ').filter(Boolean).length || 1;
+      const columnGap = parseFloat(style.columnGap) || 0;
+      const rowGap = parseFloat(style.rowGap) || columnGap;
+      const rowUnit = parseFloat(style.gridAutoRows) || 4;
+      const columnWidth = (el.clientWidth - columnGap * (columns - 1)) / columns;
+      setGridMetrics((prev) =>
+        prev.columnWidth === columnWidth && prev.rowUnit === rowUnit && prev.rowGap === rowGap
+          ? prev
+          : { columnWidth, rowUnit, rowGap }
+      );
+    };
+
+    measure();
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : null;
+    observer?.observe(el);
+    window.addEventListener('resize', measure);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
+
   // An image can finish downloading before React hydrates, so its onLoad never
   // fires. Mark those tiles loaded on mount to remove the skeleton overlay.
   useEffect(() => {
@@ -148,6 +200,11 @@ export default function GalleryGrid({
       const tile = img.parentElement;
       if (!img.complete || !tile) return;
       tile.classList.add(img.naturalWidth > 0 ? 'is-loaded' : 'is-failed');
+      const key = img.dataset.ratioKey;
+      if (key && img.naturalWidth > 0 && img.naturalHeight > 0) {
+        const ratio = img.naturalWidth / img.naturalHeight;
+        setLoadedRatios((prev) => (prev[key] === ratio ? prev : { ...prev, [key]: ratio }));
+      }
     });
   }, [shownTiles]);
 
@@ -166,13 +223,29 @@ export default function GalleryGrid({
         {shownTiles.map((tile, tileIndex) => {
           const coverSrc = thumbUrl(tile.imageUrl, 640);
           const coverSrcSet = thumbSrcSet(tile.imageUrl);
+          const ratioKey = tile.imageUrl.replace(/^\/+/, '');
+          const ratio = loadedRatios[ratioKey] ?? (tile.width && tile.height ? tile.width / tile.height : 2 / 3);
+          const imageHeight = gridMetrics.columnWidth ? gridMetrics.columnWidth / ratio : 0;
+          const rowSpan = imageHeight
+            ? Math.max(1, Math.ceil((imageHeight + gridMetrics.rowGap) / (gridMetrics.rowUnit + gridMetrics.rowGap)))
+            : undefined;
           const eager = tileIndex < 4;
           const open = () =>
             setOpenCoords({ postIndex: tile.postIndex, imageIndex: tile.imageIndex });
+          const markLoaded = (img: HTMLImageElement) => {
+            const el = img.parentElement;
+            el?.classList.add('is-loaded');
+            el?.classList.remove('is-failed');
+            if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+              const naturalRatio = img.naturalWidth / img.naturalHeight;
+              setLoadedRatios((prev) => (prev[ratioKey] === naturalRatio ? prev : { ...prev, [ratioKey]: naturalRatio }));
+            }
+          };
           return (
             <div
               key={`${tile.post.id}-${tile.imageIndex}-${coverSrc}`}
               className="gallery-item"
+              style={{ '--row-span': rowSpan } as CSSProperties}
               role="button"
               tabIndex={0}
               aria-label={`View photo from: ${tile.post.title}`}
@@ -190,14 +263,14 @@ export default function GalleryGrid({
                 srcSet={coverSrcSet}
                 sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 300px"
                 alt={tile.altText}
+                width={tile.width}
+                height={tile.height}
+                data-ratio-key={ratioKey}
+                style={{ aspectRatio: String(ratio) }}
                 loading={eager ? 'eager' : 'lazy'}
                 fetchPriority={tileIndex === 0 ? 'high' : 'auto'}
                 decoding="async"
-                onLoad={(e) => {
-                  const el = e.currentTarget.parentElement;
-                  el?.classList.add('is-loaded');
-                  el?.classList.remove('is-failed');
-                }}
+                onLoad={(e) => markLoaded(e.currentTarget)}
                 onError={(e) => {
                   e.currentTarget.parentElement?.classList.add('is-failed');
                 }}

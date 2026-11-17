@@ -9,6 +9,8 @@ interface GalleryImageItem {
   altText: string;
   hidden: boolean;
   sortOrder?: number;
+  width?: number;
+  height?: number;
   _cid?: string;
 }
 
@@ -55,6 +57,26 @@ function imageExtension(file: File): string {
 function isAllowedImage(file: File): boolean {
   if (ALLOWED_IMAGE_TYPES.has(file.type)) return true;
   return ALLOWED_EXTENSIONS.has(file.name.toLowerCase().match(/\.[^.]+$/)?.[0] ?? '');
+}
+
+function readImageDimensions(file: File): Promise<{ width?: number; height?: number }> {
+  return new Promise((resolve) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const dimensions =
+        img.naturalWidth > 0 && img.naturalHeight > 0
+          ? { width: img.naturalWidth, height: img.naturalHeight }
+          : {};
+      URL.revokeObjectURL(url);
+      resolve(dimensions);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve({});
+    };
+    img.src = url;
+  });
 }
 
 const reindex = <T extends { sortOrder?: number }>(list: T[]) =>
@@ -237,21 +259,24 @@ export default function AdminPage() {
     setFormStatus(null);
 
     try {
-      let urls: string[] = [];
+      const dimensions = await Promise.all(selected.map(readImageDimensions));
+      const uploaded: Array<{ url: string; width?: number; height?: number }> = [];
       const configRes = await fetch('/api/upload', { method: 'GET' });
       const config = configRes.ok ? await configRes.json().catch(() => ({})) : {};
 
       if (config.directUpload) {
-        urls = await Promise.all(
-          selected.map(async (file) => {
-            const pathname = `gallery/gallery-${Date.now()}-${Math.random().toString(36).slice(2, 8)}${imageExtension(file)}`;
-            const blob = await uploadBlob(pathname, file, {
-              access: 'public',
-              handleUploadUrl: '/api/upload/token',
-              contentType: file.type || undefined,
-            });
-            return blob.url;
-          })
+        uploaded.push(
+          ...(await Promise.all(
+            selected.map(async (file, i) => {
+              const pathname = `gallery/gallery-${Date.now()}-${Math.random().toString(36).slice(2, 8)}${imageExtension(file)}`;
+              const blob = await uploadBlob(pathname, file, {
+                access: 'public',
+                handleUploadUrl: '/api/upload/token',
+                contentType: file.type || undefined,
+              });
+              return { url: blob.url, ...dimensions[i] };
+            })
+          ))
         );
       } else {
         const formData = new FormData();
@@ -271,23 +296,25 @@ export default function AdminPage() {
         if (!res.ok || !data.success || !returned?.length) {
           throw new Error(data.error || `Upload failed (HTTP ${res.status})`);
         }
-        urls = returned;
+        returned.forEach((url, i) => uploaded.push({ url, ...dimensions[i] }));
       }
 
       setFormImages((prev) => {
         const start = prev.length;
-        const newItems: GalleryImageItem[] = urls.map((url, i) => ({
-          imageUrl: url,
+        const newItems: GalleryImageItem[] = uploaded.map((item, i) => ({
+          imageUrl: item.url,
           altText: formTitle || 'Syed Production shoot',
           hidden: false,
           sortOrder: start + i + 1,
+          width: item.width,
+          height: item.height,
           _cid: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${i}`,
         }));
         const next = [...prev, ...newItems];
-        if (!formCoverUrl && urls[0]) setFormCoverUrl(urls[0]);
+        if (!formCoverUrl && uploaded[0]) setFormCoverUrl(uploaded[0].url);
         return normalizeFormImages(next);
       });
-      const ok = `Successfully uploaded ${urls.length} image(s).`;
+      const ok = `Successfully uploaded ${uploaded.length} image(s).`;
       setUploadMessage(ok);
       setMessage(ok);
       setTimeout(() => {

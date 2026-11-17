@@ -1881,19 +1881,16 @@ input, select, textarea {
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 200px;
-  gap: var(--space-3);
+  grid-auto-rows: 4px;
+  column-gap: var(--space-3);
+  row-gap: var(--space-3);
+  align-items: start;
 }
-
-/* Collapsed grid: 15 posts at four columns. React also slices to this limit,
-   so this only guards against a stale collapsed state during hydration. */
-.gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 16) {
-  display: none;
-}
-
 
 .gallery-item {
   /* placeholder tint shown until the <img> finishes loading */
+  grid-row-end: span var(--row-span, 60);
+  align-self: start;
   background-color: var(--clr-gray-800, #1f2937);
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -1905,9 +1902,10 @@ input, select, textarea {
 .gallery-item-img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
 }
+
 
 .gallery-item.is-failed .gallery-item-img {
   display: none;
@@ -1986,10 +1984,6 @@ input, select, textarea {
   font-size: var(--fs-xs);
   color: var(--clr-gray-400);
   pointer-events: none;
-}
-
-.gallery-item:first-child {
-  grid-row: span 2;
 }
 
 .gallery-see-more {
@@ -3496,11 +3490,6 @@ input, select, textarea {
 
   .gallery-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 150px;
-  }
-
-  .gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 16) {
-    display: none;
   }
 
   .date-picker-group {
@@ -3603,11 +3592,6 @@ input, select, textarea {
 
   .gallery-grid {
     grid-template-columns: 1fr 1fr;
-    grid-auto-rows: 120px;
-  }
-
-  .gallery-grid[data-collapsed='true'] .gallery-item:nth-child(n + 16) {
-    display: none;
   }
 
   .trust-badges {

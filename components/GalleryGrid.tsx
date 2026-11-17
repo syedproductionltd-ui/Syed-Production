@@ -1,7 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { GalleryPost } from '@/types';
 import { thumbUrl, thumbSrcSet, galleryPosts as staticGalleryPosts } from '@/lib/data';
 import Lightbox from './Lightbox';
@@ -40,6 +39,40 @@ function coverIndexForPost(post: GalleryPost): number {
   return idx >= 0 ? idx : 0;
 }
 
+interface GalleryTile {
+  post: GalleryPost;
+  postIndex: number;
+  imageIndex: number;
+  imageUrl: string;
+  altText: string;
+  hidden: boolean;
+}
+
+function buildTiles(posts: GalleryPost[]): GalleryTile[] {
+  const tiles: GalleryTile[] = [];
+  posts.forEach((post, postIndex) => {
+    const seen = new Set<string>();
+    const images = post.images ?? [];
+    const coverIndex = coverIndexForPost(post);
+    const add = (imageIndex: number, imageUrl: string, altText: string, hidden: boolean) => {
+      const key = imageUrl.replace(/^\/+/, '');
+      if (!imageUrl || seen.has(key)) return;
+      seen.add(key);
+      tiles.push({ post, postIndex, imageIndex, imageUrl, altText: altText || post.title, hidden });
+    };
+
+    if (images.length) {
+      images.forEach((img, imageIndex) => {
+        const isCover = imageIndex === coverIndex || sameImageUrl(img.imageUrl, post.coverImage);
+        add(imageIndex, img.imageUrl, img.altText, isCover ? false : Boolean(img.hidden));
+      });
+    } else if (post.coverImage) {
+      add(coverIndex, post.coverImage, post.title, false);
+    }
+  });
+  return tiles;
+}
+
 function resolveInitial(posts?: GalleryPost[]): GalleryPost[] {
   return normalizePosts(posts);
 }
@@ -58,7 +91,7 @@ const COLLAPSED_LIMIT = 15;
  * while a background refresh runs.
  *
  * `collapsible` reproduces the home page's "See More": the grid starts with 15
- * posts and reveals the remaining posts on demand.
+ * images and reveals the remaining images (including hidden ones) on demand.
  */
 export default function GalleryGrid({
   posts: initialPosts,
@@ -74,10 +107,9 @@ export default function GalleryGrid({
   const [openCoords, setOpenCoords] = useState<{ postIndex: number; imageIndex: number } | null>(null);
   const gridRef = useRef<HTMLDivElement | null>(null);
 
-  // Render only the tiles that are actually shown while collapsed. Mounting
-  // `display:none` tiles still queues their image requests.
-  const shownPosts =
-    collapsible && !expanded ? posts.slice(0, collapsedLimit) : posts;
+  const allTiles = useMemo(() => buildTiles(posts), [posts]);
+  const visibleTiles = expanded ? allTiles : allTiles.filter((tile) => !tile.hidden);
+  const shownTiles = collapsible ? visibleTiles.slice(0, collapsedLimit) : visibleTiles;
 
   // Keep in sync when the server passes fresh props (e.g. after navigation).
   useEffect(() => {
@@ -117,15 +149,11 @@ export default function GalleryGrid({
       if (!img.complete || !tile) return;
       tile.classList.add(img.naturalWidth > 0 ? 'is-loaded' : 'is-failed');
     });
-  }, [shownPosts]);
+  }, [shownTiles]);
 
   const toggle = useCallback(() => setExpanded((prev) => !prev), []);
 
-  const tileCount = posts.filter(
-    (post) => post.coverImage || post.images[0]?.imageUrl
-  ).length;
-  const hasMore = tileCount > collapsedLimit;
-  const showToggle = collapsible && tileCount >= collapsedLimit;
+  const showToggle = collapsible && allTiles.length >= collapsedLimit;
 
   return (
     <>
@@ -135,25 +163,24 @@ export default function GalleryGrid({
         id="galleryGrid"
         data-collapsed={collapsible && !expanded ? 'true' : undefined}
       >
-        {shownPosts.map((post, postIndex) => {
-          const coverImageUrl = post.coverImage || post.images[0]?.imageUrl;
-          if (!coverImageUrl) return null;
-          const coverSrc = thumbUrl(coverImageUrl, 640);
-          const coverSrcSet = thumbSrcSet(coverImageUrl);
-          const initialImageIdx = coverIndexForPost(post);
-          const eager = postIndex < 4;
+        {shownTiles.map((tile, tileIndex) => {
+          const coverSrc = thumbUrl(tile.imageUrl, 640);
+          const coverSrcSet = thumbSrcSet(tile.imageUrl);
+          const eager = tileIndex < 4;
+          const open = () =>
+            setOpenCoords({ postIndex: tile.postIndex, imageIndex: tile.imageIndex });
           return (
             <div
-              key={`${post.id}-${coverSrc}`}
+              key={`${tile.post.id}-${tile.imageIndex}-${coverSrc}`}
               className="gallery-item"
               role="button"
               tabIndex={0}
-              aria-label={`View post: ${post.title}`}
-              onClick={() => setOpenCoords({ postIndex, imageIndex: initialImageIdx })}
+              aria-label={`View photo from: ${tile.post.title}`}
+              onClick={open}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
-                  setOpenCoords({ postIndex, imageIndex: initialImageIdx });
+                  open();
                 }
               }}
             >
@@ -162,21 +189,21 @@ export default function GalleryGrid({
                 src={coverSrc}
                 srcSet={coverSrcSet}
                 sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 300px"
-                alt={post.title}
+                alt={tile.altText}
                 loading={eager ? 'eager' : 'lazy'}
-                fetchPriority={postIndex === 0 ? 'high' : 'auto'}
+                fetchPriority={tileIndex === 0 ? 'high' : 'auto'}
                 decoding="async"
                 onLoad={(e) => {
-                  const tile = e.currentTarget.parentElement;
-                  tile?.classList.add('is-loaded');
-                  tile?.classList.remove('is-failed');
+                  const el = e.currentTarget.parentElement;
+                  el?.classList.add('is-loaded');
+                  el?.classList.remove('is-failed');
                 }}
                 onError={(e) => {
                   e.currentTarget.parentElement?.classList.add('is-failed');
                 }}
               />
-              {post.images.length > 1 && (
-                <div className="gallery-item-badge" aria-label={`${post.images.length} photos in post`}>
+              {tile.post.images.length > 1 && (
+                <div className="gallery-item-badge" aria-label={`${tile.post.images.length} photos in post`}>
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
                     <path d="M16 1H4C2.9 1 2 1.9 2 3v12h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
                   </svg>
@@ -189,36 +216,24 @@ export default function GalleryGrid({
 
       {showToggle && (
         <div className="gallery-see-more">
-          {hasMore ? (
-            <button
-              className="btn btn-outline gallery-toggle-btn"
-              id="gallerySeeMore"
-              onClick={toggle}
-              aria-expanded={expanded}
-            >
-              {expanded ? 'See Less' : 'See More'}
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                <path
-                  d={
-                    expanded
-                      ? 'M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z'
-                      : 'M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z'
-                  }
-                  fill="currentColor"
-                />
-              </svg>
-            </button>
-          ) : (
-            <Link className="btn btn-outline gallery-toggle-btn" id="gallerySeeMore" href="/portfolio">
-              See More
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                <path
-                  d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
-                  fill="currentColor"
-                />
-              </svg>
-            </Link>
-          )}
+          <button
+            className="btn btn-outline gallery-toggle-btn"
+            id="gallerySeeMore"
+            onClick={toggle}
+            aria-expanded={expanded}
+          >
+            {expanded ? 'See Less' : 'See More'}
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path
+                d={
+                  expanded
+                    ? 'M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z'
+                    : 'M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z'
+                }
+                fill="currentColor"
+              />
+            </svg>
+          </button>
         </div>
       )}
 

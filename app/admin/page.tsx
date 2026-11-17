@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useTransition, useRef } from 'react';
 import Link from 'next/link';
+import { upload as uploadBlob } from '@vercel/blob/client';
 
 interface GalleryImageItem {
   imageUrl: string;
@@ -21,6 +22,39 @@ interface GalleryPost {
   isPublished: boolean;
   sortOrder?: number;
   createdAt?: string;
+}
+
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+const MAX_IMAGES_PER_UPLOAD = 10;
+const ALLOWED_IMAGE_TYPES = new Set([
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+  'image/avif',
+  'image/gif',
+]);
+const IMAGE_EXTENSIONS: Record<string, string> = {
+  'image/jpeg': '.jpg',
+  'image/jpg': '.jpg',
+  'image/png': '.png',
+  'image/webp': '.webp',
+  'image/avif': '.avif',
+  'image/gif': '.gif',
+};
+const ALLOWED_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif']);
+
+function imageExtension(file: File): string {
+  const byType = IMAGE_EXTENSIONS[file.type];
+  if (byType) return byType;
+  const ext = file.name.toLowerCase().match(/\.[^.]+$/)?.[0] ?? '';
+  if (!ALLOWED_EXTENSIONS.has(ext)) return '.jpg';
+  return ext === '.jpeg' ? '.jpg' : ext;
+}
+
+function isAllowedImage(file: File): boolean {
+  if (ALLOWED_IMAGE_TYPES.has(file.type)) return true;
+  return ALLOWED_EXTENSIONS.has(file.name.toLowerCase().match(/\.[^.]+$/)?.[0] ?? '');
 }
 
 const reindex = <T extends { sortOrder?: number }>(list: T[]) =>
@@ -176,56 +210,90 @@ export default function AdminPage() {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
+    const selected = Array.from(files);
+    const fail = (text: string) => {
+      setUploadMessage(text);
+      setFormStatus({ type: 'error', text });
+      e.target.value = '';
+    };
+
+    if (selected.length > MAX_IMAGES_PER_UPLOAD) {
+      fail(`You can upload up to ${MAX_IMAGES_PER_UPLOAD} images at a time.`);
+      return;
+    }
+    const invalid = selected.find((file) => !isAllowedImage(file));
+    if (invalid) {
+      fail(`Unsupported file type: ${invalid.name}`);
+      return;
+    }
+    const tooLarge = selected.find((file) => file.size === 0 || file.size > MAX_IMAGE_BYTES);
+    if (tooLarge) {
+      fail(`"${tooLarge.name}" must be between 1 byte and 10 MB.`);
+      return;
+    }
+
     setUploading(true);
     setUploadMessage('');
     setFormStatus(null);
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      if (file) {
-        formData.append('files', file);
-      }
-    }
 
     try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      let data: { success?: boolean; urls?: string[]; files?: string[]; error?: string } = {};
-      try {
-        data = await res.json();
-      } catch {
-        throw new Error(`Upload failed (HTTP ${res.status}): response was not JSON`);
+      let urls: string[] = [];
+      const configRes = await fetch('/api/upload', { method: 'GET' });
+      const config = configRes.ok ? await configRes.json().catch(() => ({})) : {};
+
+      if (config.directUpload) {
+        urls = await Promise.all(
+          selected.map(async (file) => {
+            const pathname = `gallery/gallery-${Date.now()}-${Math.random().toString(36).slice(2, 8)}${imageExtension(file)}`;
+            const blob = await uploadBlob(pathname, file, {
+              access: 'public',
+              handleUploadUrl: '/api/upload/token',
+              contentType: file.type || undefined,
+            });
+            return blob.url;
+          })
+        );
+      } else {
+        const formData = new FormData();
+        selected.forEach((file) => formData.append('files', file));
+        const res = await fetch('/api/upload', { method: 'POST', body: formData });
+        const text = await res.text();
+        let data: { success?: boolean; urls?: string[]; files?: string[]; error?: string } = {};
+        try {
+          data = text ? JSON.parse(text) : {};
+        } catch {
+          if (res.status === 413) {
+            throw new Error('Upload too large for this server. Upload images one at a time or use files under 4 MB.');
+          }
+          throw new Error(`Upload failed (HTTP ${res.status}): ${text.slice(0, 120) || 'non-JSON response'}`);
+        }
+        const returned = data.urls || data.files;
+        if (!res.ok || !data.success || !returned?.length) {
+          throw new Error(data.error || `Upload failed (HTTP ${res.status})`);
+        }
+        urls = returned;
       }
 
-      const urls = data.urls || data.files;
-      if (res.ok && data.success && urls && urls.length > 0) {
-        setFormImages((prev) => {
-          const start = prev.length;
-          const newItems: GalleryImageItem[] = urls.map((url: string, i) => ({
-            imageUrl: url,
-            altText: formTitle || 'Syed Production shoot',
-            hidden: false,
-            sortOrder: start + i + 1,
-            _cid: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${i}`,
-          }));
-          const next = [...prev, ...newItems];
-          if (!formCoverUrl && urls[0]) setFormCoverUrl(urls[0]);
-          return normalizeFormImages(next);
-        });
-        const ok = `Successfully uploaded ${urls.length} image(s).`;
-        setUploadMessage(ok);
-        setMessage(ok);
-        setTimeout(() => {
-          setMessage('');
-          setUploadMessage('');
-        }, 4000);
-      } else {
-        const errText = data.error || `Upload failed (HTTP ${res.status})`;
-        setUploadMessage(errText);
-        setFormStatus({ type: 'error', text: errText });
-      }
+      setFormImages((prev) => {
+        const start = prev.length;
+        const newItems: GalleryImageItem[] = urls.map((url, i) => ({
+          imageUrl: url,
+          altText: formTitle || 'Syed Production shoot',
+          hidden: false,
+          sortOrder: start + i + 1,
+          _cid: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${i}`,
+        }));
+        const next = [...prev, ...newItems];
+        if (!formCoverUrl && urls[0]) setFormCoverUrl(urls[0]);
+        return normalizeFormImages(next);
+      });
+      const ok = `Successfully uploaded ${urls.length} image(s).`;
+      setUploadMessage(ok);
+      setMessage(ok);
+      setTimeout(() => {
+        setMessage('');
+        setUploadMessage('');
+      }, 4000);
     } catch (err) {
       const errText = err instanceof Error ? err.message : 'Error uploading images';
       setUploadMessage(errText);
@@ -659,13 +727,13 @@ export default function AdminPage() {
                     Photographs ({formImages.length} images in this post)
                   </label>
                   <p style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '12px' }}>
-                    Upload multiple photographs together. Drag images to reorder or set the Order number, then click &quot;Save Order&quot; to persist changes.
+                    Upload up to 10 photographs at a time, 10 MB each. Drag images to reorder or set the Order number, then click &quot;Save Order&quot; to persist changes.
                   </p>
 
                   <div style={{ marginBottom: '16px' }}>
                     <label style={{ display: 'inline-block', padding: '10px 20px', background: '#0077b6', color: '#fff', borderRadius: '6px', cursor: 'pointer', fontWeight: 600, fontSize: '14px' }}>
                       {uploading ? 'Uploading...' : '+ Upload Multiple Photographs'}
-                      <input type="file" multiple accept="image/*" onChange={handleFileUpload} disabled={uploading} style={{ display: 'none' }} />
+                      <input type="file" multiple accept="image/jpeg,image/png,image/webp,image/avif,image/gif" onChange={handleFileUpload} disabled={uploading} style={{ display: 'none' }} />
                     </label>
                     {uploadMessage && (
                       <p

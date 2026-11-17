@@ -38,6 +38,17 @@ function resolveExt(file: File): string | null {
   return null;
 }
 
+export async function GET(req: NextRequest) {
+  if (!isAdmin(req)) {
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+  }
+  return NextResponse.json({
+    directUpload: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+    maxFileSize: MAX_FILE_SIZE,
+    maxFiles: MAX_FILES,
+  });
+}
+
 export async function POST(req: NextRequest) {
   if (!isAdmin(req)) {
     return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });

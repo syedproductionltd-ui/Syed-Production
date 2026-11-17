@@ -100,7 +100,7 @@ function resolveInitial(posts?: GalleryPost[]): GalleryPost[] {
 }
 
 /** Posts shown before the See More button expands the grid. */
-const COLLAPSED_LIMIT = 15;
+const COLLAPSED_LIMIT = 16;
 
 /**
  * Masonry-ish gallery grid with a lightbox.
@@ -112,7 +112,7 @@ const COLLAPSED_LIMIT = 15;
  * Initial paint always uses server/static posts so the section is never blank
  * while a background refresh runs.
  *
- * `collapsible` reproduces the home page's "See More": the grid starts with 15
+ * `collapsible` reproduces the home page's "See More": the grid starts with 16
  * images and reveals the remaining images (including hidden ones) on demand.
  */
 export default function GalleryGrid({
@@ -210,7 +210,7 @@ export default function GalleryGrid({
 
   const toggle = useCallback(() => setExpanded((prev) => !prev), []);
 
-  const showToggle = collapsible && allTiles.length > collapsedLimit;
+  const showToggle = collapsible && allTiles.length >= collapsedLimit;
 
   return (
     <>

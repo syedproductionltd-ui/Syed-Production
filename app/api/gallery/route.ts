@@ -1,4 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { connectDB } from '@/lib/db';
 import { GalleryPostModel } from '@/models/GalleryPost';
 import { galleryPosts as staticGalleryPosts } from '@/lib/data';
@@ -139,6 +140,9 @@ export async function POST(req: NextRequest) {
       sortOrder: postSortOrder,
     });
 
+    revalidatePath('/');
+    revalidatePath('/gallery');
+    revalidatePath('/portfolio');
     return NextResponse.json({ success: true, post: newPost });
   } catch {
     return NextResponse.json({ success: false, error: 'Unable to create gallery post' }, { status: 500 });
@@ -185,6 +189,9 @@ export async function PUT(req: NextRequest) {
       matchedCount: writeResult.matchedCount,
       modifiedCount: writeResult.modifiedCount,
     });
+    revalidatePath('/');
+    revalidatePath('/gallery');
+    revalidatePath('/portfolio');
     return NextResponse.json({
       success: true,
       updated: ops.length,

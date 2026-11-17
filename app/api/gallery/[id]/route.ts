@@ -1,4 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { connectDB } from '@/lib/db';
 import { GalleryPostModel } from '@/models/GalleryPost';
 
@@ -71,6 +72,9 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     await post.save();
+    revalidatePath('/');
+    revalidatePath('/gallery');
+    revalidatePath('/portfolio');
     return NextResponse.json({ success: true, post });
   } catch {
     return NextResponse.json({ success: false, error: 'Unable to update gallery post' }, { status: 500 });
@@ -94,6 +98,9 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
       return NextResponse.json({ success: false, error: 'Gallery post not found' }, { status: 404 });
     }
 
+    revalidatePath('/');
+    revalidatePath('/gallery');
+    revalidatePath('/portfolio');
     return NextResponse.json({ success: true, message: 'Post deleted successfully' });
   } catch {
     return NextResponse.json({ success: false, error: 'Unable to delete gallery post' }, { status: 500 });

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { galleryPosts } from '@/lib/data';
 import { siteUrl } from '@/utils/whatsapp';
+import { getPublishedGalleryPosts } from '@/utils/gallery';
 import GalleryGrid from '@/components/GalleryGrid';
 import SiteFooter from '@/components/SiteFooter';
 import JsonLd from '@/components/JsonLd';
@@ -22,7 +22,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PortfolioPage() {
+export const revalidate = 60;
+
+export default async function PortfolioPage() {
+  const galleryPosts = await getPublishedGalleryPosts();
+
   return (
     <>
       <JsonLd data={pageBreadcrumb('Our Portfolio', '/portfolio')} />

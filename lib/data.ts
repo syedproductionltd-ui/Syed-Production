@@ -231,6 +231,8 @@ function optimizedUrl(src: string, width: number): string {
   return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=75`;
 }
 
+const OPTIMIZED_SRCSET_WIDTHS = [640, 750, 1080];
+
 /**
  * Largest pre-generated derivative, for the places that render an image large
  * (lightbox-adjacent modals, popups) or as a CSS background, which cannot
@@ -244,9 +246,22 @@ export function thumbUrl(rel: string, width = 1200): string {
   return largest ? largest.url : optimizedUrl(encodePath(rel), width);
 }
 
+/**
+ * Full-size source for the lightbox. Static seeds keep their original (already
+ * only 1400px wide); uploads and Blob images go through the optimiser so a
+ * 6000px camera file is not downloaded just to fill the screen.
+ */
+export function largeImageUrl(rel: string): string {
+  if (/^https?:\/\//i.test(rel)) return optimizedUrl(rel, 1920);
+  const d = derivatives(rel);
+  return d.length ? encodePath(rel) : optimizedUrl(encodePath(rel), 1920);
+}
+
 /** srcset for <img>, so phones download a smaller file than a 2x desktop. */
 export function thumbSrcSet(rel: string): string | undefined {
-  if (/^https?:\/\//i.test(rel)) return undefined;
-  const d = derivatives(rel);
-  return d.length ? d.map((x) => `${x.url} ${x.w}w`).join(', ') : undefined;
+  const isRemote = /^https?:\/\//i.test(rel);
+  const d = isRemote ? [] : derivatives(rel);
+  if (d.length) return d.map((x) => `${x.url} ${x.w}w`).join(', ');
+  const src = isRemote ? rel : encodePath(rel);
+  return OPTIMIZED_SRCSET_WIDTHS.map((w) => `${optimizedUrl(src, w)} ${w}w`).join(', ');
 }

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import type { GalleryPost } from '@/types';
-import { assetUrl } from '@/lib/data';
+import { largeImageUrl } from '@/lib/data';
 
 export default function Lightbox({
   posts,
@@ -49,7 +49,23 @@ export default function Lightbox({
   const currentPost = posts[postIndex] ?? posts[0];
   const currentImages = currentPost?.images ?? [];
   const currentImage = currentImages[imageIndex] ?? currentImages[0];
-  const currentSrc = currentImage ? assetUrl(currentImage.imageUrl) : '';
+  const currentSrc = currentImage ? largeImageUrl(currentImage.imageUrl) : '';
+
+  const sourceFor = useCallback(
+    (post: number, image: number) => {
+      const images = posts[post]?.images ?? [];
+      const item = images[image] ?? images[0];
+      return item ? largeImageUrl(item.imageUrl) : '';
+    },
+    [posts]
+  );
+
+  const nextSrc = currentImages.length > 1
+    ? sourceFor(postIndex, (imageIndex + 1) % currentImages.length)
+    : sourceFor((postIndex + 1) % posts.length, 0);
+  const prevSrc = currentImages.length > 1
+    ? sourceFor(postIndex, (imageIndex - 1 + currentImages.length) % currentImages.length)
+    : sourceFor((postIndex - 1 + posts.length) % posts.length, 0);
 
   // Outer navigation (different posts)
   const goPost = useCallback(
@@ -122,30 +138,17 @@ export default function Lightbox({
 
   useEffect(() => {
     if (!isOpen) return;
-    if (!currentSrc) {
-      setPhotoState('error');
-      return;
-    }
-    let cancelled = false;
-    setPhotoState('loading');
-    const probe = new Image();
-    probe.onload = () => {
-      probe.onload = null;
-      probe.onerror = null;
-      if (!cancelled) setPhotoState('ready');
-    };
-    probe.onerror = () => {
-      probe.onload = null;
-      probe.onerror = null;
-      if (!cancelled) setPhotoState('error');
-    };
-    probe.src = currentSrc;
-    return () => {
-      cancelled = true;
-      probe.onload = null;
-      probe.onerror = null;
-    };
+    setPhotoState(currentSrc ? 'loading' : 'error');
   }, [isOpen, currentSrc]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    for (const src of [nextSrc, prevSrc]) {
+      if (!src || src === currentSrc) continue;
+      const prefetch = new Image();
+      prefetch.src = src;
+    }
+  }, [isOpen, currentSrc, nextSrc, prevSrc]);
 
   return (
     <div
@@ -194,12 +197,16 @@ export default function Lightbox({
           </button>
         )}
 
-        {photoState === 'ready' && (
+        {currentSrc && photoState !== 'error' && (
           <img
-            className="lightbox-img"
+            key={currentSrc}
+            className={`lightbox-img${photoState === 'ready' ? ' ready' : ''}`}
             id="lightboxImg"
             src={currentSrc}
             alt={currentImage?.altText ?? ''}
+            decoding="async"
+            onLoad={() => setPhotoState('ready')}
+            onError={() => setPhotoState('error')}
           />
         )}
         {photoState === 'loading' && (

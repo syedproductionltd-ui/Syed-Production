@@ -57,6 +57,13 @@ export async function POST(req: NextRequest) {
     const uploadedUrls: string[] = [];
     const useBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 
+    if (!useBlob && (process.env.VERCEL || process.env.NODE_ENV === 'production')) {
+      return NextResponse.json(
+        { success: false, error: 'Image upload storage is not configured on this server' },
+        { status: 503 }
+      );
+    }
+
     if (!useBlob) {
       await mkdir(path.join(process.cwd(), 'public', 'uploads', 'gallery'), { recursive: true });
     }

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { GalleryPost } from '@/types';
-import { thumbUrl, galleryPosts as staticGalleryPosts } from '@/lib/data';
+import { thumbUrl, thumbSrcSet, galleryPosts as staticGalleryPosts } from '@/lib/data';
 import Lightbox from './Lightbox';
 
 function sameImageUrl(a?: string, b?: string): boolean {
@@ -51,10 +51,9 @@ const DEFAULT_COLUMNS = 4;
 /**
  * Masonry-ish gallery grid with a lightbox.
  *
- * Tiles paint their background-image only when near the viewport:
- * background-image cannot take loading="lazy", and painting all photos up
- * front makes scrolling stutter on low-power phones. Grid rows are a fixed
- * 200px in CSS, so nothing shifts height when a tile paints.
+ * Covers are real <img> elements with native lazy loading and a srcset, so
+ * tiles are visible before hydration and the browser can pick a phone-sized
+ * thumbnail. Grid rows are a fixed 200px in CSS, so nothing shifts on load.
  *
  * Initial paint always uses server/static posts so the section is never blank
  * while a background refresh runs.
@@ -65,12 +64,9 @@ const DEFAULT_COLUMNS = 4;
 export default function GalleryGrid({
   posts: initialPosts,
   collapsible = false,
-  reveal = false,
 }: {
   posts?: GalleryPost[];
   collapsible?: boolean;
-  /** Adds .reveal-up so the grid fades in on scroll, as on the home page. */
-  reveal?: boolean;
 }) {
   const [posts, setPosts] = useState<GalleryPost[]>(() => resolveInitial(initialPosts));
   const [expanded, setExpanded] = useState(false);
@@ -79,7 +75,11 @@ export default function GalleryGrid({
   );
   const [openCoords, setOpenCoords] = useState<{ postIndex: number; imageIndex: number } | null>(null);
   const gridRef = useRef<HTMLDivElement | null>(null);
-  const observer = useRef<IntersectionObserver | null>(null);
+
+  // Render only the tiles that are actually shown while collapsed. Mounting
+  // `display:none` tiles still queues their image requests.
+  const shownPosts =
+    collapsible && !expanded ? posts.slice(0, visibleLimit) : posts;
 
   // Keep in sync when the server passes fresh props (e.g. after navigation).
   useEffect(() => {
@@ -132,78 +132,16 @@ export default function GalleryGrid({
     };
   }, [initialPosts]);
 
-  /** Tiles still waiting for a background, scoped to this grid only. */
-  const pendingTiles = useCallback(
-    () =>
-      Array.from(
-        gridRef.current?.querySelectorAll<HTMLElement>('.gallery-item[data-bg-src]') ?? []
-      ),
-    []
-  );
-
-  /**
-   * Swaps the placeholder tint for the thumbnail only once the bytes arrive.
-   */
-  const paint = useCallback((el: HTMLElement) => {
-    const src = el.dataset.bgSrc;
-    if (!src) return;
-    delete el.dataset.bgSrc;
-    observer.current?.unobserve(el);
-    const probe = new Image();
-    probe.onload = () => {
-      probe.onload = null;
-      probe.onerror = null;
-      if (!el.isConnected) return;
-      el.style.backgroundImage = `url("${src}")`;
-      el.classList.add('is-loaded');
-      el.classList.remove('is-failed');
-    };
-    probe.onerror = () => {
-      probe.onload = null;
-      probe.onerror = null;
-      if (el.isConnected) el.classList.add('is-failed');
-    };
-    probe.src = src;
-  }, []);
-
+  // An image can finish downloading before React hydrates, so its onLoad never
+  // fires. Mark those tiles loaded on mount to remove the skeleton overlay.
   useEffect(() => {
-    const pending = pendingTiles();
-    if (!pending.length) return;
-
-    if (!('IntersectionObserver' in window)) {
-      pending.forEach(paint);
-      return;
-    }
-
-    observer.current?.disconnect();
-    observer.current = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) paint(entry.target as HTMLElement);
-        }
-      },
-      { rootMargin: '500px 0px' }
-    );
-    pending.forEach((el) => observer.current?.observe(el));
-
-    const raf = requestAnimationFrame(() => {
-      for (const el of pending) {
-        if (!el.isConnected || !el.dataset.bgSrc) continue;
-        const box = el.getBoundingClientRect();
-        // `display:none` tiles report a zero-size rect; painting them would
-        // download full-size images for content the user cannot see.
-        if (!box.width || !box.height) continue;
-        if (box.bottom > -500 && box.top < window.innerHeight + 500) paint(el);
-      }
+    const imgs = gridRef.current?.querySelectorAll<HTMLImageElement>('.gallery-item-img');
+    imgs?.forEach((img) => {
+      const tile = img.parentElement;
+      if (!img.complete || !tile) return;
+      tile.classList.add(img.naturalWidth > 0 ? 'is-loaded' : 'is-failed');
     });
-
-    return () => {
-      cancelAnimationFrame(raf);
-      observer.current?.disconnect();
-      observer.current = null;
-    };
-    // Re-run when posts change so new/remounted tiles (cover updates) get painted.
-  }, [expanded, visibleLimit, posts, paint, pendingTiles]);
+  }, [shownPosts]);
 
   const toggle = useCallback(() => setExpanded((prev) => !prev), []);
 
@@ -212,17 +150,11 @@ export default function GalleryGrid({
   ).length;
   const canExpand = collapsible && tileCount > visibleLimit;
 
-  // Render only the tiles that are actually shown while collapsed. Relying on
-  // `display:none` alone still mounted every tile (and its lazy observer), and
-  // the eager paint pass treated hidden zero-size rects as in-view.
-  const shownPosts =
-    collapsible && !expanded ? posts.slice(0, visibleLimit) : posts;
-
   return (
     <>
       <div
         ref={gridRef}
-        className={`gallery-grid${reveal ? ' reveal-up' : ''}`}
+        className="gallery-grid"
         id="galleryGrid"
         data-collapsed={collapsible && !expanded ? 'true' : undefined}
       >
@@ -230,12 +162,13 @@ export default function GalleryGrid({
           const coverImageUrl = post.coverImage || post.images[0]?.imageUrl;
           if (!coverImageUrl) return null;
           const coverSrc = thumbUrl(coverImageUrl, 640);
+          const coverSrcSet = thumbSrcSet(coverImageUrl);
           const initialImageIdx = coverIndexForPost(post);
+          const eager = postIndex < 4;
           return (
             <div
               key={`${post.id}-${coverSrc}`}
               className="gallery-item"
-              data-bg-src={coverSrc}
               role="button"
               tabIndex={0}
               aria-label={`View post: ${post.title}`}
@@ -247,6 +180,24 @@ export default function GalleryGrid({
                 }
               }}
             >
+              <img
+                className="gallery-item-img"
+                src={coverSrc}
+                srcSet={coverSrcSet}
+                sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 300px"
+                alt={post.title}
+                loading={eager ? 'eager' : 'lazy'}
+                fetchPriority={postIndex === 0 ? 'high' : 'auto'}
+                decoding="async"
+                onLoad={(e) => {
+                  const tile = e.currentTarget.parentElement;
+                  tile?.classList.add('is-loaded');
+                  tile?.classList.remove('is-failed');
+                }}
+                onError={(e) => {
+                  e.currentTarget.parentElement?.classList.add('is-failed');
+                }}
+              />
               {post.images.length > 1 && (
                 <div className="gallery-item-badge" aria-label={`${post.images.length} photos in post`}>
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
@@ -260,7 +211,7 @@ export default function GalleryGrid({
       </div>
 
       {collapsible && canExpand && (
-        <div className={`gallery-see-more${reveal ? ' reveal-up' : ''}`}>
+        <div className="gallery-see-more">
           <button
             className="btn btn-outline gallery-toggle-btn"
             id="gallerySeeMore"

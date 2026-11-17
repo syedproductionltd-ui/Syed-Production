@@ -1892,15 +1892,24 @@ input, select, textarea {
 }
 
 .gallery-item {
-  /* placeholder tint shown until the lazy background paints */
+  /* placeholder tint shown until the <img> finishes loading */
   background-color: var(--clr-gray-800, #1f2937);
-  background-size: cover;
-  background-position: center;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: transform var(--transition-base), box-shadow var(--transition-base);
   position: relative;
   overflow: hidden;
+}
+
+.gallery-item-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-item.is-failed .gallery-item-img {
+  display: none;
 }
 
 .gallery-item:not(.is-loaded):not(.is-failed)::before {
@@ -1955,14 +1964,13 @@ input, select, textarea {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  backdrop-filter: blur(4px);
   z-index: 2;
 }
 
 /* Terminal state for a thumbnail that failed to load. Without this the tile
    keeps the placeholder tint and is indistinguishable from one still loading. */
 .gallery-item.is-failed {
-  background-image: none !important;
+  background-color: var(--clr-surface);
 }
 
 .gallery-item.is-failed::before {
@@ -3050,11 +3058,17 @@ input, select, textarea {
   object-fit: contain;
   border-radius: var(--radius-sm);
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
-  transition: transform var(--transition-base);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform var(--transition-base);
+}
+
+.lightbox-img.ready {
+  opacity: 1;
 }
 
 .lightbox-loading,
 .lightbox-error {
+  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;

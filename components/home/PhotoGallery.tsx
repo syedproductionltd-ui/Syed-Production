@@ -10,7 +10,7 @@ export default function PhotoGallery({ posts }: { posts?: GalleryPost[] }) {
     <section className="photo-gallery section" id="gallery">
       <div className="container">
         <SectionHeader section="gallery" />
-        <GalleryGrid posts={galleryPosts} collapsible reveal />
+        <GalleryGrid posts={galleryPosts} collapsible />
       </div>
     </section>
   );

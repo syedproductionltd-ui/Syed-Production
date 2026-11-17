@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { settings } from '@/lib/data';
 
 const HERO_IMAGE = '/images/IMG_8245.webp';
@@ -8,10 +9,16 @@ export default function Hero() {
   return (
     <section className="hero" id="hero">
       <div className="hero-carousel" aria-hidden="true">
-        <div
-          className="hero-slide active"
-          style={{ backgroundImage: `url('${HERO_IMAGE}')` }}
-        />
+        <div className="hero-slide active">
+          <Image
+            src={HERO_IMAGE}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
       </div>
 
       <div className="hero-overlay" />

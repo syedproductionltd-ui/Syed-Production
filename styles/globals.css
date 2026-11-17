@@ -155,6 +155,18 @@ input, select, textarea {
   padding: var(--space-24) 0;
 }
 
+/* Skip rendering work for heavy sections until they approach the viewport.
+   `auto` keeps the last rendered height, so no scrollbar jump after first view. */
+.video-showcase,
+.featured-services,
+.services,
+.project-planner,
+.booking,
+.newsletter {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+
 /* --- Reveal Animations ---
    Fail-safe: content is visible by default. JS may opt into hide-until-reveal
    via `html.reveal-js`; if JS fails or React strips `.revealed`, content stays
@@ -281,16 +293,16 @@ input, select, textarea {
   align-items: center;
   justify-content: space-between;
   background: none;
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
   border: 1px solid rgba(15, 23, 42, 0.06);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
   transition: background var(--transition-base), box-shadow var(--transition-base);
 }
 
+/* Opaque pill once scrolled. The previous always-on backdrop-filter forced a
+   full-viewport re-blur on every scroll frame. */
 .navbar.scrolled .nav-container {
-  background: none;
+  background: rgba(255, 255, 255, 0.94);
   box-shadow: var(--shadow-md);
 }
 
@@ -450,11 +462,8 @@ input, select, textarea {
   opacity: 1;
 }
 
-/* Only enable parallax on devices that support it properly (not iOS) */
-@media (min-width: 1025px) and (hover: hover) and (pointer: fine) {
-  .hero-slide {
-    background-attachment: fixed;
-  }
+.hero-slide img {
+  object-fit: cover;
 }
 
 .hero-slide.active {
@@ -509,7 +518,6 @@ input, select, textarea {
 .hero-search {
   display: flex;
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
   border-radius: var(--radius-xl);
   padding: var(--space-2);
   gap: var(--space-1);
@@ -1653,6 +1661,18 @@ input, select, textarea {
   background: var(--clr-white);
 }
 
+/* Elfsight injects the widget after load. Reserve its height so the sections
+   below (services, planner, booking) do not jump when it mounts. */
+.reviews-widget {
+  min-height: 380px;
+}
+
+@media (max-width: 768px) {
+  .reviews-widget {
+    min-height: 320px;
+  }
+}
+
 .reviews-cta {
   margin-top: var(--space-8);
   text-align: center;
@@ -1893,15 +1913,17 @@ input, select, textarea {
     rgba(255, 255, 255, 0.08) 50%,
     transparent 100%
   );
-  background-size: 200% 100%;
+  transform: translateX(-100%);
   animation: gallery-skeleton 1.2s ease-in-out infinite;
   pointer-events: none;
   z-index: 1;
 }
 
+/* Transform-only shimmer so each tile animates on the compositor instead of
+   repainting its background on every frame. */
 @keyframes gallery-skeleton {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .gallery-item::after {

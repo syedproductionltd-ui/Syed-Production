@@ -223,15 +223,25 @@ function derivatives(rel: string): { url: string; w: number }[] {
 }
 
 /**
+ * On-demand Next image optimiser URL. Used for `/uploads/…` and Blob originals
+ * that have no pre-generated WebP siblings, so a 14 MB camera file is not sent
+ * as a 200 px thumbnail. Widths must match `images.deviceSizes` (Next defaults).
+ */
+function optimizedUrl(src: string, width: number): string {
+  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=75`;
+}
+
+/**
  * Largest pre-generated derivative, for the places that render an image large
  * (lightbox-adjacent modals, popups) or as a CSS background, which cannot
- * take a srcset. Falls back to the original when no derivative exists.
+ * take a srcset. Falls back to the Next optimiser for paths without a static
+ * derivative (uploaded files and Vercel Blob URLs).
  */
-export function thumbUrl(rel: string): string {
-  if (/^https?:\/\//i.test(rel)) return rel;
+export function thumbUrl(rel: string, width = 1200): string {
+  if (/^https?:\/\//i.test(rel)) return optimizedUrl(rel, width);
   const d = derivatives(rel);
   const largest = d[d.length - 1];
-  return largest ? largest.url : encodePath(rel);
+  return largest ? largest.url : optimizedUrl(encodePath(rel), width);
 }
 
 /** srcset for <img>, so phones download a smaller file than a 2x desktop. */

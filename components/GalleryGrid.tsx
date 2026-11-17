@@ -108,8 +108,11 @@ export default function GalleryGrid({
     return () => window.removeEventListener('resize', measure);
   }, [collapsible]);
 
-  // Soft refresh from the API; prefer server-provided posts when present.
+  // Server-provided posts are already fresh; only query the API when the page
+  // mounted without any (static export / API-only usage) to avoid a second
+  // fetch and a full grid re-render during the first scroll.
   useEffect(() => {
+    if (initialPosts?.length) return;
     let cancelled = false;
     fetch('/api/gallery', { cache: 'no-store' })
       .then((res) => res.json())
@@ -187,6 +190,9 @@ export default function GalleryGrid({
       for (const el of pending) {
         if (!el.isConnected || !el.dataset.bgSrc) continue;
         const box = el.getBoundingClientRect();
+        // `display:none` tiles report a zero-size rect; painting them would
+        // download full-size images for content the user cannot see.
+        if (!box.width || !box.height) continue;
         if (box.bottom > -500 && box.top < window.innerHeight + 500) paint(el);
       }
     });
@@ -197,7 +203,7 @@ export default function GalleryGrid({
       observer.current = null;
     };
     // Re-run when posts change so new/remounted tiles (cover updates) get painted.
-  }, [expanded, posts, paint, pendingTiles]);
+  }, [expanded, visibleLimit, posts, paint, pendingTiles]);
 
   const toggle = useCallback(() => setExpanded((prev) => !prev), []);
 
@@ -205,6 +211,12 @@ export default function GalleryGrid({
     (post) => post.coverImage || post.images[0]?.imageUrl
   ).length;
   const canExpand = collapsible && tileCount > visibleLimit;
+
+  // Render only the tiles that are actually shown while collapsed. Relying on
+  // `display:none` alone still mounted every tile (and its lazy observer), and
+  // the eager paint pass treated hidden zero-size rects as in-view.
+  const shownPosts =
+    collapsible && !expanded ? posts.slice(0, visibleLimit) : posts;
 
   return (
     <>
@@ -214,10 +226,10 @@ export default function GalleryGrid({
         id="galleryGrid"
         data-collapsed={collapsible && !expanded ? 'true' : undefined}
       >
-        {posts.map((post, postIndex) => {
+        {shownPosts.map((post, postIndex) => {
           const coverImageUrl = post.coverImage || post.images[0]?.imageUrl;
           if (!coverImageUrl) return null;
-          const coverSrc = thumbUrl(coverImageUrl);
+          const coverSrc = thumbUrl(coverImageUrl, 640);
           const initialImageIdx = coverIndexForPost(post);
           return (
             <div

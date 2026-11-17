@@ -49,6 +49,17 @@ export default function RevealObserver() {
       { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
     );
 
+    const observed = new WeakSet<Element>();
+    const register = (el: HTMLElement) => {
+      if (revealed.has(el) || el.classList.contains('revealed')) {
+        markRevealed(el);
+        return;
+      }
+      if (observed.has(el)) return;
+      observed.add(el);
+      observer.observe(el);
+    };
+
     // Mark in-view targets BEFORE enabling hide-until-reveal, so above-the-fold
     // content never flashes to opacity 0 for a frame.
     const vh = window.innerHeight || 0;
@@ -62,7 +73,7 @@ export default function RevealObserver() {
         markRevealed(el);
         return;
       }
-      observer.observe(el);
+      register(el);
     });
 
     root.classList.add('reveal-js');
@@ -85,14 +96,18 @@ export default function RevealObserver() {
       attributeFilter: ['class'],
     });
 
-    // Elements mounted after the first pass (rare) still get observed.
-    const moNodes = new MutationObserver(() => {
-      for (const el of retarget()) {
-        if (revealed.has(el) || el.classList.contains('revealed')) {
-          markRevealed(el);
-          continue;
+    // Inspect only inserted subtrees. The previous version ran a whole-document
+    // `querySelectorAll` on every childList mutation, and the Elfsight widget,
+    // gallery tiles and video cards mutate the DOM continuously while scrolling.
+    const moNodes = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        for (const node of m.addedNodes) {
+          if (!(node instanceof Element)) continue;
+          if (node.classList.contains('reveal-up')) {
+            register(node as HTMLElement);
+          }
+          node.querySelectorAll<HTMLElement>('.reveal-up').forEach(register);
         }
-        observer.observe(el);
       }
     });
     moNodes.observe(document.body, { childList: true, subtree: true });

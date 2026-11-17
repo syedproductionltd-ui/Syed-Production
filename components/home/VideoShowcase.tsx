@@ -155,6 +155,9 @@ export default function VideoShowcase() {
   );
 }
 
+/** Only one preview downloads/decodes at a time, even in the dense bento grid. */
+let activePreview: HTMLVideoElement | null = null;
+
 /** Autoplaying muted preview; playback only starts once the card is in view. */
 function VideoPreview({ src, title }: { src: string; title: string }) {
   const ref = useRef<HTMLVideoElement | null>(null);
@@ -162,22 +165,51 @@ function VideoPreview({ src, title }: { src: string; title: string }) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (!('IntersectionObserver' in window)) {
+    const reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    const play = () => {
+      if (reducedMotion) return;
+      if (activePreview && activePreview !== el) activePreview.pause();
+      activePreview = el;
       el.play().catch(() => {});
-      return;
+    };
+    const pause = () => {
+      el.pause();
+      if (activePreview === el) activePreview = null;
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      play();
+      return () => pause();
     }
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          if (e.isIntersecting) el.play().catch(() => {});
-          else el.pause();
+          if (e.isIntersecting) play();
+          else pause();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.5 }
     );
     io.observe(el);
-    return () => io.disconnect();
+    return () => {
+      io.disconnect();
+      pause();
+    };
   }, []);
 
-  return <video ref={ref} muted loop playsInline preload="none" src={src} title={title} />;
+  return (
+    <video
+      ref={ref}
+      muted
+      loop
+      playsInline
+      preload="none"
+      disablePictureInPicture
+      src={src}
+      title={title}
+    />
+  );
 }

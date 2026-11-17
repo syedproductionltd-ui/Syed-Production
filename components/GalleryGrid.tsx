@@ -133,7 +133,7 @@ export default function GalleryGrid({
 
   const allTiles = useMemo(() => buildTiles(posts), [posts]);
   const visibleTiles = expanded ? allTiles : allTiles.filter((tile) => !tile.hidden);
-  const shownTiles = collapsible ? visibleTiles.slice(0, collapsedLimit) : visibleTiles;
+  const shownTiles = collapsible && !expanded ? visibleTiles.slice(0, collapsedLimit) : visibleTiles;
 
   // Keep in sync when the server passes fresh props (e.g. after navigation).
   useEffect(() => {
@@ -210,7 +210,7 @@ export default function GalleryGrid({
 
   const toggle = useCallback(() => setExpanded((prev) => !prev), []);
 
-  const showToggle = collapsible && allTiles.length >= collapsedLimit;
+  const showToggle = collapsible && allTiles.length > collapsedLimit;
 
   return (
     <>

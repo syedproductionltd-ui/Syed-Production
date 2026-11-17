@@ -3,7 +3,9 @@ import { GalleryPostModel } from '@/models/GalleryPost';
 import { galleryPosts as staticGalleryPosts } from '@/lib/data';
 import type { GalleryPost } from '@/types';
 
-type RawImage = { imageUrl: string; altText?: string; hidden?: boolean; sortOrder?: number } | string;
+type RawImage =
+  | { imageUrl: string; altText?: string; hidden?: boolean; sortOrder?: number; width?: number; height?: number }
+  | string;
 
 function normalizeImages(images: RawImage[] = [], fallbackTitle = '') {
   const mapped = images.map((img, idx) => {
@@ -16,6 +18,8 @@ function normalizeImages(images: RawImage[] = [], fallbackTitle = '') {
       altText: img.altText || fallbackTitle,
       hidden: img.hidden !== undefined ? img.hidden : idx >= 5,
       sortOrder: so,
+      width: img.width,
+      height: img.height,
       _idx: idx,
     };
   });
@@ -25,6 +29,8 @@ function normalizeImages(images: RawImage[] = [], fallbackTitle = '') {
     altText: img.altText,
     hidden: img.hidden,
     sortOrder: idx + 1,
+    width: img.width,
+    height: img.height,
   }));
 }
 

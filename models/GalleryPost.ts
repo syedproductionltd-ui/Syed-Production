@@ -13,6 +13,7 @@ export interface IGalleryPostDocument extends Document {
   coverImage: string;
   images: string[] | IGalleryImageItem[];
   isPublished: boolean;
+  sortOrder: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -32,13 +33,14 @@ const GalleryPostSchema = new Schema(
     coverImage: { type: String, required: true },
     images: { type: [GalleryImageItemSchema], required: true },
     isPublished: { type: Boolean, default: true },
+    sortOrder: { type: Number, default: 0 },
   },
   {
     timestamps: true,
   }
 );
 
-GalleryPostSchema.index({ isPublished: 1, createdAt: -1 });
+GalleryPostSchema.index({ isPublished: 1, sortOrder: 1, createdAt: -1 });
 
 export const GalleryPostModel: Model<IGalleryPostDocument> =
   mongoose.models.GalleryPost || mongoose.model<IGalleryPostDocument>('GalleryPost', GalleryPostSchema);

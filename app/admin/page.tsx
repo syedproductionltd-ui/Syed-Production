@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect, useTransition, useRef } from 'react';
 import Link from 'next/link';
 
 interface GalleryImageItem {
@@ -8,6 +8,7 @@ interface GalleryImageItem {
   altText: string;
   hidden: boolean;
   sortOrder?: number;
+  _cid?: string;
 }
 
 interface GalleryPost {
@@ -18,8 +19,34 @@ interface GalleryPost {
   coverImage: string;
   images: GalleryImageItem[];
   isPublished: boolean;
+  sortOrder?: number;
   createdAt?: string;
 }
+
+const reindex = <T extends { sortOrder?: number }>(list: T[]) =>
+  list.map((item, index) => ({ ...item, sortOrder: index + 1 }));
+
+const moveById = <T,>(list: T[], getId: (item: T) => string, fromId: string, toId: string) => {
+  const from = list.findIndex((item) => getId(item) === fromId);
+  const to = list.findIndex((item) => getId(item) === toId);
+  if (from < 0 || to < 0 || from === to) return list;
+  const next = [...list];
+  const [moved] = next.splice(from, 1);
+  if (!moved) return list;
+  next.splice(to, 0, moved);
+  return next;
+};
+
+const moveToPosition = <T,>(list: T[], index: number, pos1based: number) => {
+  if (index < 0 || index >= list.length) return list;
+  const to = Math.min(Math.max(pos1based, 1), list.length) - 1;
+  if (index === to) return list;
+  const next = [...list];
+  const [moved] = next.splice(index, 1);
+  if (!moved) return list;
+  next.splice(to, 0, moved);
+  return next;
+};
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -62,7 +89,10 @@ export default function AdminPage() {
       const data = await res.json();
       if (data.success) {
         setIsAuthenticated(true);
-        setPosts(data.posts);
+        const loaded: GalleryPost[] = data.posts || [];
+        const ids = loaded.map((p) => p.id);
+        console.log('[POST] loaded', { count: loaded.length, uniqueIds: new Set(ids).size, ids });
+        setPosts(reindex(loaded));
       } else {
         setIsAuthenticated(false);
       }
@@ -109,12 +139,15 @@ export default function AdminPage() {
     setFormCoverUrl('');
     setUploadMessage('');
     setFormStatus(null);
-    setDragIndex(null);
+    dragIdRef.current = null;
+    setDragId(null);
     setIsEditing(true);
   };
 
-  const normalizeFormImages = (imgs: GalleryImageItem[]) =>
-    imgs.map((img, idx) => ({ ...img, sortOrder: idx + 1 }));
+  const ensureClientIds = (imgs: GalleryImageItem[]) =>
+    imgs.map((img, idx) => ({ ...img, _cid: img._cid || `${Date.now()}-${idx}-${Math.random().toString(36).slice(2, 8)}` }));
+
+  const normalizeFormImages = (imgs: GalleryImageItem[]) => reindex(imgs);
 
   const openEditModal = (post: GalleryPost) => {
     setCurrentPostId(post.id);
@@ -122,16 +155,22 @@ export default function AdminPage() {
     setFormCategory(post.category || 'Portfolio');
     setFormIsPublished(post.isPublished ?? true);
     const imgs = [...(post.images || [])].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
-    setFormImages(normalizeFormImages(imgs));
+    setFormImages(normalizeFormImages(ensureClientIds(imgs)));
     setFormCoverUrl(post.coverImage || imgs[0]?.imageUrl || '');
     setUploadMessage('');
     setFormStatus(null);
-    setDragIndex(null);
+    dragIdRef.current = null;
+    setDragId(null);
     setIsEditing(true);
   };
 
-  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const dragIdRef = useRef<string | null>(null);
   const [formStatus, setFormStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [postDragId, setPostDragId] = useState<string | null>(null);
+  const postDragIdRef = useRef<string | null>(null);
+  const [postsOrderStatus, setPostsOrderStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [savingPostsOrder, setSavingPostsOrder] = useState(false);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -169,6 +208,7 @@ export default function AdminPage() {
             altText: formTitle || 'Syed Production shoot',
             hidden: false,
             sortOrder: start + i + 1,
+            _cid: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${i}`,
           }));
           const next = [...prev, ...newItems];
           if (!formCoverUrl && urls[0]) setFormCoverUrl(urls[0]);
@@ -207,57 +247,54 @@ export default function AdminPage() {
     });
   };
 
-  const handleMoveImage = (index: number, direction: number) => {
-    const newIdx = index + direction;
-    if (newIdx < 0 || newIdx >= formImages.length) return;
-    setFormImages((prev) => {
-      const updated = [...prev];
-      const [item] = updated.splice(index, 1);
-      if (item) updated.splice(newIdx, 0, item);
-      return normalizeFormImages(updated);
-    });
+  const handleImageDragStart = (e: React.DragEvent, id: string) => {
+    console.log('[IMG] dragstart', { id });
+    dragIdRef.current = id;
+    e.dataTransfer.effectAllowed = 'move';
+    try { e.dataTransfer.setData('text/plain', id); } catch {}
+    requestAnimationFrame(() => setDragId(id));
   };
-
-  const moveImageTo = (index: number, target: 'first' | 'middle' | 'last') => {
-    setFormImages((prev) => {
-      if (index < 0 || index >= prev.length) return prev;
-      const updated = [...prev];
-      const [item] = updated.splice(index, 1);
-      if (!item) return prev;
-      let dest = 0;
-      if (target === 'last') dest = updated.length;
-      else if (target === 'middle') dest = Math.floor(updated.length / 2);
-      updated.splice(dest, 0, item);
-      return normalizeFormImages(updated);
-    });
-  };
-
-  const handleDragStart = (index: number) => setDragIndex(index);
-  const handleDragOver = (e: React.DragEvent, index: number) => {
+  const handleImageDragEnter = (e: React.DragEvent, targetId: string) => {
     e.preventDefault();
-    if (dragIndex === null || dragIndex === index) return;
-    setFormImages((prev) => {
-      const updated = [...prev];
-      const [item] = updated.splice(dragIndex, 1);
-      if (!item) return prev;
-      updated.splice(index, 0, item);
-      return normalizeFormImages(updated);
-    });
-    setDragIndex(index);
+    e.stopPropagation();
+    console.log('[IMG] dragenter', { from: dragIdRef.current, target: targetId });
   };
-  const handleDragEnd = () => setDragIndex(null);
+  const handleImageDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = 'move';
+  };
+  const handleImageDrop = (e: React.DragEvent, targetId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const fromId = dragIdRef.current || (() => { try { return e.dataTransfer.getData('text/plain'); } catch { return ''; } })();
+    console.log('[IMG] drop', { from: fromId, target: targetId });
+    if (!fromId || fromId === targetId) {
+      handleImageDragEnd();
+      return;
+    }
+    setFormImages((prev) => {
+      const before = prev.map((i) => i._cid || i.imageUrl);
+      const next = reindex(moveById(prev, (i) => i._cid || i.imageUrl, fromId, targetId));
+      console.log('[IMG] reorder', { fromId, targetId, before, after: next.map((i) => i._cid || i.imageUrl), changed: next !== prev });
+      return next;
+    });
+    handleImageDragEnd();
+  };
+  const handleImageDragEnd = () => {
+    console.log('[IMG] dragend', { id: dragIdRef.current });
+    dragIdRef.current = null;
+    setDragId(null);
+  };
 
   const handleOrderInput = (index: number, value: string) => {
     const n = parseInt(value, 10);
     if (Number.isNaN(n)) return;
-    const clamped = Math.max(1, Math.min(formImages.length, n));
-    if (clamped === index + 1) return;
     setFormImages((prev) => {
-      const updated = [...prev];
-      const [item] = updated.splice(index, 1);
-      if (!item) return prev;
-      updated.splice(clamped - 1, 0, item);
-      return normalizeFormImages(updated);
+      const before = prev.map((i) => i._cid || i.imageUrl);
+      const next = reindex(moveToPosition(prev, index, n));
+      console.log('[IMG] order-input', { index, to: n, before, after: next.map((i) => i._cid || i.imageUrl), changed: next !== prev });
+      return next;
     });
   };
 
@@ -335,6 +372,87 @@ export default function AdminPage() {
     });
   };
 
+  const handlePostDragStart = (e: React.DragEvent, id: string) => {
+    console.log('[POST] dragstart', { id });
+    postDragIdRef.current = id;
+    e.dataTransfer.effectAllowed = 'move';
+    try { e.dataTransfer.setData('text/plain', id); } catch {}
+    requestAnimationFrame(() => setPostDragId(id));
+  };
+  const handlePostDragEnter = (e: React.DragEvent, targetId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('[POST] dragenter', { from: postDragIdRef.current, target: targetId });
+  };
+  const handlePostDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = 'move';
+  };
+  const handlePostDrop = (e: React.DragEvent, targetId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const fromId = postDragIdRef.current || (() => { try { return e.dataTransfer.getData('text/plain'); } catch { return ''; } })();
+    console.log('[POST] drop', { from: fromId, target: targetId });
+    if (!fromId || fromId === targetId) {
+      handlePostDragEnd();
+      return;
+    }
+    setPosts((prev) => {
+      const before = prev.map((p) => p.id);
+      const next = reindex(moveById(prev, (p) => p.id, fromId, targetId));
+      console.log('[POST] reorder', { fromId, targetId, before, after: next.map((p) => p.id), changed: next !== prev, uniqueBefore: new Set(before).size, uniqueAfter: new Set(next.map((p) => p.id)).size });
+      return next;
+    });
+    handlePostDragEnd();
+  };
+  const handlePostDragEnd = () => {
+    console.log('[POST] dragend', { id: postDragIdRef.current });
+    postDragIdRef.current = null;
+    setPostDragId(null);
+  };
+
+  const handlePostOrderInput = (index: number, value: string) => {
+    const n = parseInt(value, 10);
+    if (Number.isNaN(n)) return;
+    setPosts((prev) => {
+      const before = prev.map((p) => p.id);
+      const next = reindex(moveToPosition(prev, index, n));
+      console.log('[POST] order-input', { index, to: n, before, after: next.map((p) => p.id), changed: next !== prev });
+      return next;
+    });
+  };
+
+  const handleSavePostsOrder = async () => {
+    if (posts.length === 0) return;
+    setSavingPostsOrder(true);
+    setPostsOrderStatus(null);
+    try {
+      const payload = posts.map((p, index) => ({ id: p.id, sortOrder: index + 1 }));
+      console.log('[POST] save-order payload', payload);
+      const res = await fetch('/api/gallery', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ postsOrder: payload }),
+      });
+      let data: { success?: boolean; error?: string; matched?: number; modified?: number } = {};
+      try { data = await res.json(); } catch { throw new Error(`Save failed (HTTP ${res.status})`); }
+      console.log('[POST] save-order response', { status: res.status, ...data });
+      if (res.ok && data.success) {
+        setPosts((prev) => reindex(prev));
+        setPostsOrderStatus({ type: 'success', text: 'Gallery posts order saved successfully.' });
+        setMessage('Gallery posts order saved.');
+        setTimeout(() => setMessage(''), 4000);
+      } else {
+        setPostsOrderStatus({ type: 'error', text: data.error || `Failed to save posts order (HTTP ${res.status})` });
+      }
+    } catch (err) {
+      setPostsOrderStatus({ type: 'error', text: err instanceof Error ? err.message : 'Error saving posts order' });
+    } finally {
+      setSavingPostsOrder(false);
+    }
+  };
+
   if (isAuthenticated === null) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0b1329', color: '#fff' }}>
@@ -404,15 +522,33 @@ export default function AdminPage() {
           </div>
         )}
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', gap: '12px', flexWrap: 'wrap' }}>
           <h2 style={{ fontSize: '20px', color: '#fff' }}>All Gallery Posts ({posts.length})</h2>
-          <button
-            onClick={openCreateModal}
-            style={{ padding: '10px 20px', background: '#0077b6', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
-          >
-            + Create New Post
-          </button>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <button
+              onClick={handleSavePostsOrder}
+              disabled={savingPostsOrder || posts.length === 0}
+              style={{ padding: '10px 16px', background: '#059669', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer' }}
+            >
+              {savingPostsOrder ? 'Saving Posts Order...' : 'Save Posts Order'}
+            </button>
+            <button
+              onClick={openCreateModal}
+              style={{ padding: '10px 20px', background: '#0077b6', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+            >
+              + Create New Post
+            </button>
+          </div>
         </div>
+        <p style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '12px' }}>Reorder gallery posts/sets with drag-and-drop or Order number, then click &quot;Save Posts Order&quot; to control website display order.</p>
+        <div style={{ marginBottom: '12px', padding: '6px 10px', background: '#111827', border: '1px dashed #374151', borderRadius: '6px', fontSize: '12px', color: '#93c5fd', fontFamily: 'monospace' }}>
+          DEV DnD: postDragId={String(postDragId ?? 'null')} | imageDragId={String(dragId ?? 'null')}
+        </div>
+        {postsOrderStatus && (
+          <div style={{ marginBottom: '16px', padding: '10px 14px', borderRadius: '6px', fontSize: '13px', background: postsOrderStatus.type === 'success' ? '#065f46' : 'rgba(239, 68, 68, 0.15)', color: postsOrderStatus.type === 'success' ? '#d1fae5' : '#fca5a5', border: postsOrderStatus.type === 'success' ? '1px solid #047857' : '1px solid rgba(239, 68, 68, 0.4)' }}>
+            {postsOrderStatus.text}
+          </div>
+        )}
 
         {loading ? (
           <p style={{ textAlign: 'center', color: '#9ca3af', padding: '40px' }}>Loading posts...</p>
@@ -425,9 +561,19 @@ export default function AdminPage() {
           </div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-            {posts.map((post) => (
-              <div key={post.id} style={{ background: '#111827', borderRadius: '8px', border: '1px solid #1f2937', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ height: '180px', background: '#1f2937', backgroundImage: `url(${post.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+            {posts.map((post, idx) => (
+              <div
+                key={post.id}
+                draggable={true}
+                onDragStart={(e) => handlePostDragStart(e, post.id)}
+                onDragEnter={(e) => handlePostDragEnter(e, post.id)}
+                onDragOver={handlePostDragOver}
+                onDrop={(e) => handlePostDrop(e, post.id)}
+                onDragEnd={handlePostDragEnd}
+                style={{ background: '#111827', borderRadius: '8px', border: postDragId === post.id ? '2px dashed #0077b6' : '1px solid #1f2937', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: postDragId === post.id ? 0.7 : 1, cursor: 'grab' }}
+                title="Drag to reorder gallery posts"
+              >
+                <div draggable={false} style={{ height: '180px', background: '#1f2937', backgroundImage: `url(${post.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', pointerEvents: 'none' }}>
                   <span style={{ position: 'absolute', top: '10px', left: '10px', background: 'rgba(0,0,0,0.7)', color: '#fff', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' }}>
                     {post.category || 'Portfolio'}
                   </span>
@@ -437,17 +583,43 @@ export default function AdminPage() {
                 </div>
                 <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div>
-                    <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#fff', marginBottom: '6px' }}>{post.title}</h3>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '8px' }}>
+                      <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#fff', margin: 0 }}>{post.title}</h3>
+                      <label style={{ fontSize: '11px', color: '#d1d5db', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        Order
+                        <input
+                          type="number"
+                          min={1}
+                          max={posts.length}
+                          defaultValue={idx + 1}
+                          key={`${post.id}-order-${idx}`}
+                          draggable={false}
+                          onDragStart={(e) => e.stopPropagation()}
+                          onMouseDown={(e) => e.stopPropagation()}
+                          onBlur={(e) => handlePostOrderInput(idx, e.target.value)}
+                          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handlePostOrderInput(idx, (e.target as HTMLInputElement).value); (e.target as HTMLInputElement).blur(); } }}
+                          style={{ width: '44px', padding: '2px 4px', background: '#111827', border: '1px solid #374151', borderRadius: '4px', color: '#fff', fontSize: '11px' }}
+                        />
+                      </label>
+                    </div>
                     <p style={{ fontSize: '13px', color: '#9ca3af' }}>{post.images?.length || 0} photo(s) in post</p>
                   </div>
                   <div style={{ display: 'flex', gap: '10px', marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #1f2937' }}>
                     <button
+                      type="button"
+                      draggable={false}
+                      onDragStart={(e) => e.stopPropagation()}
+                      onMouseDown={(e) => e.stopPropagation()}
                       onClick={() => openEditModal(post)}
                       style={{ flex: 1, padding: '8px', background: '#1f2937', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
                     >
                       Edit Post
                     </button>
                     <button
+                      type="button"
+                      draggable={false}
+                      onDragStart={(e) => e.stopPropagation()}
+                      onMouseDown={(e) => e.stopPropagation()}
                       onClick={() => handleDeletePost(post.id)}
                       style={{ padding: '8px 12px', background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '13px' }}
                     >
@@ -487,7 +659,7 @@ export default function AdminPage() {
                     Photographs ({formImages.length} images in this post)
                   </label>
                   <p style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '12px' }}>
-                    Upload multiple photographs together. Drag cards, set the Order number, or use First/Middle/Last to control display position. Click &quot;Save Order&quot; to persist changes.
+                    Upload multiple photographs together. Drag images to reorder or set the Order number, then click &quot;Save Order&quot; to persist changes.
                   </p>
 
                   <div style={{ marginBottom: '16px' }}>
@@ -510,26 +682,33 @@ export default function AdminPage() {
 
                   {formImages.length > 0 && (
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '12px', marginTop: '12px' }}>
-                      {formImages.map((img, idx) => (
+                      {formImages.map((img, idx) => {
+                        const cid = img._cid || img.imageUrl || `img-${idx}`;
+                        return (
                         <div
-                          key={img.imageUrl || idx}
-                          draggable
-                          onDragStart={() => handleDragStart(idx)}
-                          onDragOver={(e) => handleDragOver(e, idx)}
-                          onDragEnd={handleDragEnd}
+                          key={cid}
+                          draggable={true}
+                          onDragStart={(e) => handleImageDragStart(e, cid)}
+                          onDragEnter={(e) => handleImageDragEnter(e, cid)}
+                          onDragOver={handleImageDragOver}
+                          onDrop={(e) => handleImageDrop(e, cid)}
+                          onDragEnd={handleImageDragEnd}
                           style={{
                             background: '#1f2937',
                             borderRadius: '6px',
                             overflow: 'hidden',
-                            border: formCoverUrl === img.imageUrl ? '2px solid #0077b6' : '1px solid #374151',
+                            border: formCoverUrl === img.imageUrl ? '2px solid #0077b6' : dragId === cid ? '2px dashed #60a5fa' : '1px solid #374151',
                             position: 'relative',
-                            opacity: dragIndex === idx ? 0.6 : 1,
+                            opacity: dragId === cid ? 0.5 : 1,
                             cursor: 'grab',
                           }}
-                          title="Drag to reorder"
+                          title="Drag image to reorder"
                         >
-                          <div style={{ height: '100px', backgroundImage: `url(${img.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-                          <div style={{ padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                          <div
+                            draggable={false}
+                            style={{ height: '100px', backgroundImage: `url(${img.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', pointerEvents: 'none' }}
+                          />
+                          <div style={{ padding: '8px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
                               <label style={{ fontSize: '11px', color: '#d1d5db', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 Order
@@ -537,9 +716,20 @@ export default function AdminPage() {
                                   type="number"
                                   min={1}
                                   max={formImages.length}
-                                  value={idx + 1}
-                                  onChange={(e) => handleOrderInput(idx, e.target.value)}
-                                  style={{ width: '44px', padding: '2px 4px', background: '#111827', border: '1px solid #374151', borderRadius: '4px', color: '#fff', fontSize: '11px' }}
+                                  defaultValue={idx + 1}
+                                  key={`${cid}-order-${idx}`}
+                                  draggable={false}
+                                  onDragStart={(e) => e.stopPropagation()}
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                  onBlur={(e) => handleOrderInput(idx, e.target.value)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                      e.preventDefault();
+                                      handleOrderInput(idx, (e.target as HTMLInputElement).value);
+                                      (e.target as HTMLInputElement).blur();
+                                    }
+                                  }}
+                                  style={{ width: '46px', padding: '2px 4px', background: '#111827', border: '1px solid #374151', borderRadius: '4px', color: '#fff', fontSize: '11px' }}
                                 />
                               </label>
                               <label style={{ fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', color: '#fff' }}>
@@ -547,26 +737,29 @@ export default function AdminPage() {
                                   type="radio"
                                   name="coverImageChoice"
                                   checked={formCoverUrl === img.imageUrl}
+                                  draggable={false}
+                                  onDragStart={(e) => e.stopPropagation()}
+                                  onMouseDown={(e) => e.stopPropagation()}
                                   onChange={() => setFormCoverUrl(img.imageUrl)}
                                 />
                                 Cover
                               </label>
                             </div>
-                            <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                              <button type="button" onClick={() => moveImageTo(idx, 'first')} disabled={idx === 0} style={{ background: '#374151', color: '#fff', border: 'none', padding: '2px 6px', borderRadius: '3px', fontSize: '10px', cursor: 'pointer' }}>First</button>
-                              <button type="button" onClick={() => moveImageTo(idx, 'middle')} style={{ background: '#374151', color: '#fff', border: 'none', padding: '2px 6px', borderRadius: '3px', fontSize: '10px', cursor: 'pointer' }}>Middle</button>
-                              <button type="button" onClick={() => moveImageTo(idx, 'last')} disabled={idx === formImages.length - 1} style={{ background: '#374151', color: '#fff', border: 'none', padding: '2px 6px', borderRadius: '3px', fontSize: '10px', cursor: 'pointer' }}>Last</button>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                              <div style={{ display: 'flex', gap: '4px' }}>
-                                <button type="button" onClick={() => handleMoveImage(idx, -1)} disabled={idx === 0} style={{ background: '#374151', color: '#fff', border: 'none', padding: '2px 6px', borderRadius: '3px', fontSize: '11px', cursor: 'pointer' }}>↑</button>
-                                <button type="button" onClick={() => handleMoveImage(idx, 1)} disabled={idx === formImages.length - 1} style={{ background: '#374151', color: '#fff', border: 'none', padding: '2px 6px', borderRadius: '3px', fontSize: '11px', cursor: 'pointer' }}>↓</button>
-                              </div>
-                              <button type="button" onClick={() => handleRemoveImage(idx)} style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: 'none', padding: '2px 6px', borderRadius: '3px', fontSize: '11px', cursor: 'pointer' }}>Remove</button>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                              <button
+                                type="button"
+                                draggable={false}
+                                onDragStart={(e) => e.stopPropagation()}
+                                onMouseDown={(e) => e.stopPropagation()}
+                                onClick={() => handleRemoveImage(idx)}
+                                style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: 'none', padding: '4px 8px', borderRadius: '3px', fontSize: '11px', cursor: 'pointer' }}
+                              >
+                                Remove
+                              </button>
                             </div>
                           </div>
                         </div>
-                      ))}
+                      );})}
                     </div>
                   )}
                 </div>

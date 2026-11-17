@@ -28,14 +28,19 @@ function normalizeImages(images: RawImage[] = [], fallbackTitle = '') {
   }));
 }
 
-function mapPost(p: {
-  id?: string;
-  title: string;
-  category?: string;
-  coverImage?: string;
-  images: RawImage[];
-}): GalleryPost {
+function mapPost(
+  p: {
+    id?: string;
+    title: string;
+    category?: string;
+    coverImage?: string;
+    images: RawImage[];
+    sortOrder?: number;
+  },
+  idx = 0
+): GalleryPost {
   const images = normalizeImages(p.images || [], p.title);
+  const sortOrder = typeof p.sortOrder === 'number' && Number.isFinite(p.sortOrder) ? p.sortOrder : idx + 1;
 
   return {
     id: p.id || p.title,
@@ -43,6 +48,7 @@ function mapPost(p: {
     category: p.category,
     coverImage: p.coverImage || images[0]?.imageUrl,
     images,
+    sortOrder,
   };
 }
 
@@ -56,12 +62,12 @@ export async function getPublishedGalleryPosts(limit = 60): Promise<GalleryPost[
     if (!conn) return staticGalleryPosts;
 
     const posts = await GalleryPostModel.find({ isPublished: true })
-      .sort({ createdAt: -1 })
+      .sort({ sortOrder: 1, createdAt: -1 })
       .limit(limit)
       .lean();
 
     if (!posts.length) return staticGalleryPosts;
-    return posts.map((p) => mapPost(p as Parameters<typeof mapPost>[0]));
+    return posts.map((p, i) => mapPost(p as Parameters<typeof mapPost>[0], i));
   } catch {
     return staticGalleryPosts;
   }

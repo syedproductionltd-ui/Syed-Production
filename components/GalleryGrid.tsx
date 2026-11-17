@@ -10,6 +10,29 @@ function sameImageUrl(a?: string, b?: string): boolean {
   return a.replace(/^\/+/, '') === b.replace(/^\/+/, '');
 }
 
+function normalizePost(p: any, idx = 0): GalleryPost {
+  const images = [...(p.images || [])]
+    .map((img: any, i: number) => {
+      if (typeof img === 'string') {
+        return { imageUrl: img, altText: p.title, hidden: i >= 5, sortOrder: i + 1, _i: i };
+      }
+      const so = typeof img.sortOrder === 'number' && Number.isFinite(img.sortOrder) ? img.sortOrder : i + 1;
+      return { ...img, altText: img.altText || p.title, sortOrder: so, _i: i };
+    })
+    .sort((a: any, b: any) => (a.sortOrder - b.sortOrder) || (a._i - b._i))
+    .map((img: any, i: number) => ({ imageUrl: img.imageUrl, altText: img.altText, hidden: Boolean(img.hidden), sortOrder: i + 1 }));
+  const sortOrder = typeof p.sortOrder === 'number' && Number.isFinite(p.sortOrder) ? p.sortOrder : idx + 1;
+  return { id: p.id || p.title, title: p.title, category: p.category, coverImage: p.coverImage || images[0]?.imageUrl, images, sortOrder };
+}
+
+function normalizePosts(posts?: GalleryPost[]): GalleryPost[] {
+  const list = posts?.length ? posts : staticGalleryPosts;
+  return [...list]
+    .map((p, i) => normalizePost(p as any, i))
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+    .map((p, i) => ({ ...p, sortOrder: i + 1 }));
+}
+
 function coverIndexForPost(post: GalleryPost): number {
   if (!post.coverImage || !post.images?.length) return 0;
   const idx = post.images.findIndex((img) => sameImageUrl(img.imageUrl, post.coverImage));
@@ -17,7 +40,7 @@ function coverIndexForPost(post: GalleryPost): number {
 }
 
 function resolveInitial(posts?: GalleryPost[]): GalleryPost[] {
-  return posts?.length ? posts : staticGalleryPosts;
+  return normalizePosts(posts);
 }
 
 /** Rows shown before the See More button expands the grid. */
@@ -60,7 +83,7 @@ export default function GalleryGrid({
 
   // Keep in sync when the server passes fresh props (e.g. after navigation).
   useEffect(() => {
-    if (initialPosts?.length) setPosts(initialPosts);
+    setPosts(normalizePosts(initialPosts));
   }, [initialPosts]);
 
   /**
@@ -85,37 +108,21 @@ export default function GalleryGrid({
     return () => window.removeEventListener('resize', measure);
   }, [collapsible]);
 
-  // Soft refresh from the API; never clear existing tiles while waiting.
+  // Soft refresh from the API; prefer server-provided posts when present.
   useEffect(() => {
-    if (initialPosts?.length) return;
     let cancelled = false;
-    fetch('/api/gallery')
+    fetch('/api/gallery', { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => {
         if (cancelled) return;
         if (data.success && data.posts && data.posts.length > 0) {
-          const mapped: GalleryPost[] = data.posts.map((p: {
-            id: string;
-            title: string;
-            category?: string;
-            coverImage?: string;
-            images: Array<{ imageUrl: string; altText?: string; hidden?: boolean }>;
-          }) => ({
-            id: p.id,
-            title: p.title,
-            category: p.category,
-            coverImage: p.coverImage,
-            images: (p.images || []).map((img, imgIdx: number) => ({
-              imageUrl: img.imageUrl,
-              altText: img.altText || p.title,
-              hidden: img.hidden !== undefined ? img.hidden : imgIdx >= 5,
-            })),
-          }));
-          setPosts(mapped);
+          setPosts(normalizePosts(data.posts));
+        } else if (!initialPosts?.length) {
+          setPosts(normalizePosts(staticGalleryPosts));
         }
       })
       .catch(() => {
-        /* keep static/SSR fallback */
+        if (!initialPosts?.length) setPosts(normalizePosts(staticGalleryPosts));
       });
     return () => {
       cancelled = true;

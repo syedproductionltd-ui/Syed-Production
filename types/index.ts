@@ -55,6 +55,7 @@ export interface GalleryPost {
   category?: string;
   coverImage?: string;
   images: GalleryImageItem[];
+  sortOrder?: number;
 }
 
 export interface TeamMember {

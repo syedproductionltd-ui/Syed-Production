@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { galleryPosts } from '@/lib/data';
+import type { GalleryPost } from '@/types';
+import { galleryPosts as staticGalleryPosts } from '@/lib/data';
 import GalleryGrid from '@/components/GalleryGrid';
 import { VideoGrid } from '@/components/home/VideoShowcase';
 
@@ -10,8 +11,9 @@ const TABS = [
   { key: 'videos', label: 'Videos', id: 'tabVideos' },
 ] as const;
 
-export default function GalleryTabs() {
+export default function GalleryTabs({ posts }: { posts?: GalleryPost[] }) {
   const [active, setActive] = useState<(typeof TABS)[number]['key']>('photos');
+  const galleryPosts = posts?.length ? posts : staticGalleryPosts;
 
   return (
     <>

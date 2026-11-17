@@ -4,9 +4,10 @@ import GalleryTabs from '@/components/GalleryTabs';
 import SiteFooter from '@/components/SiteFooter';
 import JsonLd from '@/components/JsonLd';
 import { pageBreadcrumb } from '@/utils/seo';
+import { getPublishedGalleryPosts } from '@/utils/gallery';
 
 const description =
-  'Photo and video gallery from Syed Production — wedding films, travel cinematography, commercials and client stories from Lahore, Pakistan.';
+  'Photo and video gallery from Syed Production �?" wedding films, travel cinematography, commercials and client stories from Lahore, Pakistan.';
 
 export const metadata: Metadata = {
   title: 'Gallery',
@@ -21,7 +22,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function GalleryPage() {
+export const revalidate = 60;
+
+export default async function GalleryPage() {
+  const galleryPosts = await getPublishedGalleryPosts();
+
   return (
     <>
       <JsonLd data={pageBreadcrumb('Gallery', '/gallery')} />
@@ -34,7 +39,7 @@ export default function GalleryPage() {
 
       <div className="section">
         <div className="container">
-          <GalleryTabs />
+          <GalleryTabs posts={galleryPosts} />
         </div>
       </div>
 

@@ -3,6 +3,7 @@ import Hero from '@/components/home/Hero';
 import PhotoGallery from '@/components/home/PhotoGallery';
 import VideoShowcase from '@/components/home/VideoShowcase';
 import ReviewsSection from '@/components/home/ReviewsSection';
+import PartnersMarquee from '@/components/PartnersMarquee';
 import ServicesExplorer from '@/components/home/ServicesExplorer';
 import ProjectPlanner from '@/components/home/ProjectPlanner';
 import BookingWizard from '@/components/home/BookingWizard';
@@ -23,6 +24,7 @@ export default function HomeSections({ galleryPosts }: { galleryPosts: GalleryPo
       <PhotoGallery posts={galleryPosts} />
       <VideoShowcase />
       <ReviewsSection />
+      <PartnersMarquee />
       <ServicesExplorer />
       <ProjectPlanner />
       <BookingWizard reveal />

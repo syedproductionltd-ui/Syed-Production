@@ -1,0 +1,1742 @@
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_1946f8dc-f071-4287-a762-5730c21dfc64__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_ce722a8a-8a84-4d93-a566-d81d4c53a79e__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_222d080e-9388-4e6c-9acf-373e2cea4bf8__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_97bbe802-79c4-4154-85c7-cf3f322855f5__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] Uncaught ReferenceError: postDragIndex is not defined
+    at eval (app/admin/page.tsx:558:78)
+    at Array.map (<anonymous>)
+    at AdminPage (app/admin/page.tsx:550:20)
+  556 |                 onDrop={(e) => e.preventDefault()}
+  557 |                 onDragEnd={handlePostDragEnd}
+> 558 |                 style={{ background: '#111827', borderRadius: '8px', border: postDragIndex === idx ? '2px dashed #0077b6' : '1px solid #1f2937', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: postDragIndex...
+      |                                                                              ^
+  559 |                 title="Drag to reorder gallery posts"
+  560 |               >
+  561 |                 <div style={{ height: '180px', background: '#1f2937', backgroundImage: `url(${post.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] Uncaught ReferenceError: postDragIndex is not defined
+    at <unknown> (app/admin/page.tsx:566:78)
+    at Array.map (<anonymous>)
+    at AdminPage (app/admin/page.tsx:558:20)
+  564 |                 onDrop={(e) => e.preventDefault()}
+  565 |                 onDragEnd={handlePostDragEnd}
+> 566 |                 style={{ background: '#111827', borderRadius: '8px', border: postDragIndex === idx ? '2px dashed #0077b6' : '1px solid #1f2937', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: postDragIndex...
+      |                                                                              ^
+  567 |                 title="Drag to reorder gallery posts"
+  568 |               >
+  569 |                 <div style={{ height: '180px', background: '#1f2937', backgroundImage: `url(${post.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_12e2ac0e-a7eb-4e2b-b276-10b44d78ef5f__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] Uncaught ReferenceError: postDragIndex is not defined
+    at <unknown> (app/admin/page.tsx:566:78)
+    at Array.map (<anonymous>)
+    at AdminPage (app/admin/page.tsx:558:20)
+  564 |                 onDrop={(e) => e.preventDefault()}
+  565 |                 onDragEnd={handlePostDragEnd}
+> 566 |                 style={{ background: '#111827', borderRadius: '8px', border: postDragIndex === idx ? '2px dashed #0077b6' : '1px solid #1f2937', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: postDragIndex...
+      |                                                                              ^
+  567 |                 title="Drag to reorder gallery posts"
+  568 |               >
+  569 |                 <div style={{ height: '180px', background: '#1f2937', backgroundImage: `url(${post.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_cb1f7c3b-24e1-417b-850d-3d063a63f18f__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] Uncaught ReferenceError: postDragIndex is not defined
+    at <unknown> (app/admin/page.tsx:559:78)
+    at Array.map (<anonymous>)
+    at AdminPage (app/admin/page.tsx:551:20)
+  557 |                 onDrop={(e) => e.preventDefault()}
+  558 |                 onDragEnd={handlePostDragEnd}
+> 559 |                 style={{ background: '#111827', borderRadius: '8px', border: postDragIndex === idx ? '2px dashed #0077b6' : '1px solid #1f2937', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: postDragIndex...
+      |                                                                              ^
+  560 |                 title="Drag to reorder gallery posts"
+  561 |               >
+  562 |                 <div style={{ height: '180px', background: '#1f2937', backgroundImage: `url(${post.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                          <body
+-                           __processed_f618d3fe-e6e0-4b00-9ec9-b8669d554981__="true"
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] Uncaught ReferenceError: postDragIndex is not defined
+    at <unknown> (app/admin/page.tsx:562:78)
+    at Array.map (<anonymous>)
+    at AdminPage (app/admin/page.tsx:554:20)
+  560 |                 onDrop={(e) => e.preventDefault()}
+  561 |                 onDragEnd={handlePostDragEnd}
+> 562 |                 style={{ background: '#111827', borderRadius: '8px', border: postDragIndex === idx ? '2px dashed #0077b6' : '1px solid #1f2937', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: postDragIndex...
+      |                                                                              ^
+  563 |                 title="Drag to reorder gallery posts"
+  564 |               >
+  565 |                 <div style={{ height: '180px', background: '#1f2937', backgroundImage: `url(${post.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                          <body
+-                           __processed_3d175c34-312b-46f0-bbb4-e4d2e0631112__="true"
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] Uncaught ReferenceError: postDragIndex is not defined
+    at <unknown> (app/admin/page.tsx:562:78)
+    at Array.map (<anonymous>)
+    at AdminPage (app/admin/page.tsx:554:20)
+  560 |                 onDrop={(e) => e.preventDefault()}
+  561 |                 onDragEnd={handlePostDragEnd}
+> 562 |                 style={{ background: '#111827', borderRadius: '8px', border: postDragIndex === idx ? '2px dashed #0077b6' : '1px solid #1f2937', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: postDragIndex...
+      |                                                                              ^
+  563 |                 title="Drag to reorder gallery posts"
+  564 |               >
+  565 |                 <div style={{ height: '180px', background: '#1f2937', backgroundImage: `url(${post.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' }}>
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-config={"{\"config\":{\"properties\":{\"M_TYPE\":\"VIDEO_XHR_CANDIDATE\",\"M_ID\..."}
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-config={"{\"config\":{\"loadManagement\":{\"101\":false,\"102\":false,\"103\":fa..."}
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_1693ba05-6e33-4212-a9a0-49e98a4fbc32__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_b2359ffa-cd37-4240-b0ad-b7ffa39210cf__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_b2108761-4cf8-4905-b46b-f341280daeec__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_3ae78359-db8d-4029-b7ea-16d1f1587bd9__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_c093a4b6-d79d-4f30-888f-17d4483bd9c8__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                            <script>
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"
+                              >
+                            <JsonLd>
+                              <script
++                               type="application/ld+json"
+-                               type="text/javascript"
+                                dangerouslySetInnerHTML={{
++                                 __html: "{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Syed ..."
+-                                 __html: ""
+                                }}
+-                               bis_use="true"
+-                               charset="utf-8"
+-                               nonce=""
+-                               data-dynamic-id="64c58be6-8356-412c-9846-2a6da9faffc6"
+-                               src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"
+                              >
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_cd3d8c17-5957-4b15-b4b5-9d49de5714e2__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                          <body
+-                           __processed_10b6a5ae-da06-4374-9d57-1f961968a382__="true"
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+                          >
+                            <SiteNav>
+                              <nav className="navbar" id="navbar" aria-label="Main navig...">
+                                <div
+                                  className="nav-container"
+-                                 bis_skin_checked="1"
+                                >
+                                  <LinkComponent>
+                                  <button>
+                                  <ul className="nav-links" role="list">
+                                    <li>
+                                    <li>
+                                      <LinkComponent href="/profile" className="nav-link" aria-current={undefined} ...>
+                                        <a
+                                          className="nav-link"
+                                          aria-current={undefined}
+                                          ref={function}
+                                          onClick={function onClick}
+                                          onMouseEnter={function onMouseEnter}
+                                          onTouchStart={function onTouchStart}
+                                          href="/profile"
+-                                         bis_skin_checked="1"
+                                        >
++                                         Profile
+                                    <li>
+                                      <LinkComponent href="/gallery" className="nav-link" aria-current={undefined} ...>
+                                        <a
+                                          className="nav-link"
+                                          aria-current={undefined}
+                                          ref={function}
+                                          onClick={function onClick}
+                                          onMouseEnter={function onMouseEnter}
+                                          onTouchStart={function onTouchStart}
+                                          href="/gallery"
+-                                         bis_skin_checked="1"
+                                        >
++                                         Gallery
+                                    <li>
+                                      <LinkComponent href="/booking" className="nav-link" aria-current={undefined} ...>
+                                        <a
+                                          className="nav-link"
+                                          aria-current={undefined}
+                                          ref={function}
+                                          onClick={function onClick}
+                                          onMouseEnter={function onMouseEnter}
+                                          onTouchStart={function onTouchStart}
+                                          href="/booking"
+-                                         bis_skin_checked="1"
+                                        >
++                                         Book Now
+                                    <li>
+                                      <LinkComponent href="/reviews" className="nav-link" aria-current={undefined} ...>
+                                        <a
+                                          className="nav-link"
+                                          aria-current={undefined}
+                                          ref={function}
+                                          onClick={function onClick}
+                                          onMouseEnter={function onMouseEnter}
+                                          onTouchStart={function onTouchStart}
+                                          href="/reviews"
+-                                         bis_skin_checked="1"
+                                        >
++                                         Reviews
+                                    <li>
+                                      <LinkComponent href="/contact" className="nav-link n..." aria-current={undefined} ...>
+                                        <a
+                                          className="nav-link nav-link--cta"
+                                          aria-current={undefined}
+                                          ref={function}
+                                          onClick={function onClick}
+                                          onMouseEnter={function onMouseEnter}
+                                          onTouchStart={function onTouchStart}
+                                          href="/contact"
+-                                         bis_skin_checked="1"
+                                        >
++                                         Contact Us
+                                ...
+                            ...
+                              <HomePage>
+                                <link>
+                                <RevealObserver>
+                                <script>
+                                <HomeSections galleryPosts={[...]}>
+                                  <Hero>
+                                    <section className="hero" id="hero">
+                                      <div
+                                        className="hero-carousel"
+                                        aria-hidden="true"
+-                                       bis_skin_checked="1"
+                                      >
+                                        <div
+                                          className="hero-slide active"
+                                          style={{backgroundImage:"url('/imag..."}}
+-                                         bis_skin_checked="1"
+                                        >
+                                      ...
+                                  <PhotoGallery>
+                                  <VideoShowcase>
+                                  ...
+                                    <div className="reviews-ct...">
+                                      <LinkComponent href="/reviews" className="btn btn-ou...">
+                                        <a
+                                          className="btn btn-outline"
+                                          ref={function}
+                                          onClick={function onClick}
+                                          onMouseEnter={function onMouseEnter}
+                                          onTouchStart={function onTouchStart}
+                                          href="/reviews"
+-                                         bis_skin_checked="1"
+                                        >
++                                         Read Genuine Client Reviews
+                                  <FeaturedServices>
+                                  <ServicesGrid>
+                                  <ProjectPlanner>
+                                  <BookingWizard>
+                                  ...
+                                    <div className="container">
+                                      <div className="newsletter...">
+                                        <h2>
+                                        <p>
+                                        <div className="newsletter..." style={{display:"flex", ...}}>
+                                          <a
+                                            href="https://wa.me/923555551555?text=Hello!%20I%20would%20like%20to%20dis..."
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="social-link btn btn-primary"
+                                            aria-label="WhatsApp"
+                                            style={{width:"auto",height:"auto",padding:"0.85rem 2rem",borderRadius:"var(--radi...", ...}}
+-                                           bis_skin_checked="1"
+                                          >
++                                           Chat on WhatsApp
+                                          <a
+                                            href="/booking"
+                                            className="btn btn-outline"
+                                            style={{padding:"0.85rem 2rem"}}
+-                                           bis_skin_checked="1"
+                                          >
++                                           Start Booking
+                                  ...
+                                ...
+                                  <div className="footer-grid">
+                                    <div className="footer-brand">
+                                      <LinkComponent>
+                                        <LinkComponent href="#hero" className="nav-logo">
+                                          <a
+                                            className="nav-logo"
+                                            ref={function}
+                                            onClick={function onClick}
+                                            onMouseEnter={function onMouseEnter}
+                                            onTouchStart={function onTouchStart}
+                                            href="#hero"
+-                                           bis_skin_checked="1"
+                                          >
+                                      <p>
+                                      <SocialLinks>
+                                        <div className="social-links">
+                                          <a
+                                            href="https://www.facebook.com/people/Syed-Productions/100083864331843/"
+                                            className="social-link"
+                                            aria-label="Facebook"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+-                                           bis_skin_checked="1"
+                                          >
+                                          <a
+                                            href="https://www.instagram.com/syed_.production/"
+                                            className="social-link"
+                                            aria-label="Instagram"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+-                                           bis_skin_checked="1"
+                                          >
+                                          <a
+                                            href="https://wa.me/923555551555"
+                                            className="social-link"
+                                            aria-label="WhatsApp"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+-                                           bis_skin_checked="1"
+                                          >
+                                    <div className="footer-links">
+                                      <h4>
+                                      <ul>
+                                        <li>
+                                          <LinkComponent>
+                                            <LinkComponent href="#featured-...">
+                                              <a
+                                                ref={function}
+                                                onClick={function onClick}
+                                                onMouseEnter={function onMouseEnter}
+                                                onTouchStart={function onTouchStart}
+                                                href="#featured-services"
+-                                               bis_skin_checked="1"
+                                              >
++                                               Wedding Films
+                                        <li>
+                                          <LinkComponent>
+                                            <LinkComponent href="#featured-...">
+                                              <a
+                                                ref={function}
+                                                onClick={function onClick}
+                                                onMouseEnter={function onMouseEnter}
+                                                onTouchStart={function onTouchStart}
+                                                href="#featured-services"
+-                                               bis_skin_checked="1"
+                                              >
++                                               Corporate Videos
+                                        <li>
+                                          <LinkComponent>
+                                            <LinkComponent href="#featured-...">
+                                              <a
+                                                ref={function}
+                                                onClick={function onClick}
+                                                onMouseEnter={function onMouseEnter}
+                                                onTouchStart={function onTouchStart}
+                                                href="#featured-services"
+-                                               bis_skin_checked="1"
+                                              >
++                                               Event Coverage
+                                        <li>
+                                          <LinkComponent>
+                                            <LinkComponent href="#featured-...">
+                                              <a
+                                                ref={function}
+                                                onClick={function onClick}
+                                                onMouseEnter={function onMouseEnter}
+                                                onTouchStart={function onTouchStart}
+                                                href="#featured-services"
+-                                               bis_skin_checked="1"
+                                              >
++                                               Photography
+                                        <li>
+                                          <LinkComponent>
+                                            <LinkComponent href="#services">
+                                              <a
+                                                ref={function}
+                                                onClick={function onClick}
+                                                onMouseEnter={function onMouseEnter}
+                                                onTouchStart={function onTouchStart}
+                                                href="#services"
+-                                               bis_skin_checked="1"
+                                              >
++                                               All Services
+                                    <div className="footer-links">
+                                      <h4>
+                                      <ul>
+                                        <li>
+                                        <li>
+                                          <LinkComponent>
+                                            <LinkComponent href="/profile#team">
+                                              <a
+                                                ref={function}
+                                                onClick={function onClick}
+                                                onMouseEnter={function onMouseEnter}
+                                                onTouchStart={function onTouchStart}
+                                                href="/profile#team"
+-                                               bis_skin_checked="1"
+                                              >
++                                               Our Team
+                                        <li>
+                                          <LinkComponent>
+                                            <LinkComponent href="/reviews">
+                                              <a
+                                                ref={function}
+                                                onClick={function onClick}
+                                                onMouseEnter={function onMouseEnter}
+                                                onTouchStart={function onTouchStart}
+                                                href="/reviews"
+-                                               bis_skin_checked="1"
+                                              >
++                                               Client Reviews
+                                        ...
+                                    ...
+                                      <li>
+                                        <LinkComponent>
+                                          <LinkComponent href="/reviews#r...">
+                                            <a
+                                              ref={function}
+                                              onClick={function onClick}
+                                              onMouseEnter={function onMouseEnter}
+                                              onTouchStart={function onTouchStart}
+                                              href="/reviews#reviews-faq"
+-                                             bis_skin_checked="1"
+                                            >
++                                             FAQ
+                            ...
+                  ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/admin" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head headCacheNode={{rsc:{...}, ...}}>
+                    <__next_viewport_boundary__>
+                    <MetadataWrapper>
+                      <div
+                        hidden={true}
+-                       bis_skin_checked="1"
+                      >
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                          <body
+-                           bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWll..."
+-                           __processed_78bfab13-89e1-4ad1-8703-c9ff5e863d89__="true"
+                          >
+                            <SiteNav>
+                            ...
+                              <SegmentViewNode type="page" pagePath="admin/page...">
+                                <SegmentTrieNode>
+                                <ClientPageRoot Component={function AdminPage} serverProvidedParams={{...}}>
+                                  <AdminPage params={Promise} searchParams={Promise}>
+                                    <div
+                                      style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"...", ...}}
+-                                     bis_skin_checked="1"
+                                    >
+                            ...
+                  ...
+ 
+⨯ upstream image response timed out for https://cf0vjjj013mjlma4.public.blob.vercel-storage.com/gallery/gallery-1794870070753-93401471.jpg
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" suppressHydrationWarning={true}>
+                          <head>
+                          <body
+-                           __processed_e2ffda2a-a928-48a3-b415-5f44722ff34a__="true"
+                          >
+                  ...
+ 
+⨯ upstream image response timed out for https://cf0vjjj013mjlma4.public.blob.vercel-storage.com/gallery/gallery-1794870070753-93401471.jpg
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior

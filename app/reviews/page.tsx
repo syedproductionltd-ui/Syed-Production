@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { siteUrl } from '@/utils/whatsapp';
 import { settings } from '@/lib/data';
 import ReviewsPageBody from '@/components/ReviewsPageBody';
+import PartnersMarquee from '@/components/PartnersMarquee';
 import SiteFooter from '@/components/SiteFooter';
 import JsonLd from '@/components/JsonLd';
 import {
@@ -77,6 +78,8 @@ export default function ReviewsPage() {
           </p>
         </div>
       </section>
+
+      <PartnersMarquee />
 
       <div className="section">
         <div className="container">

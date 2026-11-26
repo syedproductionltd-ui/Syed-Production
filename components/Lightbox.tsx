@@ -34,6 +34,8 @@ export default function Lightbox({
 
   const [mounted, setMounted] = useState(false);
   const [fadingIn, setFadingIn] = useState(false);
+  const [photoState, setPhotoState] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [lightboxFallback, setLightboxFallback] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (isOpen) {
@@ -49,7 +51,13 @@ export default function Lightbox({
   const currentPost = posts[postIndex] ?? posts[0];
   const currentImages = currentPost?.images ?? [];
   const currentImage = currentImages[imageIndex] ?? currentImages[0];
-  const currentSrc = currentImage ? largeImageUrl(currentImage.imageUrl) : '';
+  const currentOriginalSrc = currentImage?.imageUrl ?? '';
+  const currentOptimizedSrc = currentImage ? largeImageUrl(currentImage.imageUrl) : '';
+  const currentSrc = currentImage
+    ? lightboxFallback[currentOriginalSrc]
+      ? currentOriginalSrc
+      : currentOptimizedSrc
+    : '';
 
   const sourceFor = useCallback(
     (post: number, image: number) => {
@@ -134,21 +142,20 @@ export default function Lightbox({
     }
   };
 
-  const [photoState, setPhotoState] = useState<'loading' | 'ready' | 'error'>('loading');
+  useEffect(() => {
+    if (!isOpen) return;
+    setPhotoState(currentImage ? 'loading' : 'error');
+  }, [isOpen, currentImage?.imageUrl, postIndex, imageIndex]);
 
   useEffect(() => {
     if (!isOpen) return;
-    setPhotoState(currentSrc ? 'loading' : 'error');
-  }, [isOpen, currentSrc]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    for (const src of [nextSrc, prevSrc]) {
-      if (!src || src === currentSrc) continue;
+    const preload = [currentImage?.imageUrl, nextSrc, prevSrc];
+    for (const src of preload) {
+      if (!src) continue;
       const prefetch = new Image();
       prefetch.src = src;
     }
-  }, [isOpen, currentSrc, nextSrc, prevSrc]);
+  }, [isOpen, currentImage?.imageUrl, nextSrc, prevSrc]);
 
   return (
     <div
@@ -205,8 +212,15 @@ export default function Lightbox({
             src={currentSrc}
             alt={currentImage?.altText ?? ''}
             decoding="async"
+            fetchPriority="high"
             onLoad={() => setPhotoState('ready')}
-            onError={() => setPhotoState('error')}
+            onError={() => {
+              if (currentOriginalSrc && !lightboxFallback[currentOriginalSrc] && currentSrc !== currentOriginalSrc) {
+                setLightboxFallback((prev) => ({ ...prev, [currentOriginalSrc]: true }));
+                return;
+              }
+              setPhotoState('error');
+            }}
           />
         )}
         {photoState === 'loading' && (

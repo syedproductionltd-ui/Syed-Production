@@ -119,6 +119,7 @@ export default function GalleryGrid({
   const [openCoords, setOpenCoords] = useState<{ postIndex: number; imageIndex: number } | null>(null);
   const [gridMetrics, setGridMetrics] = useState({ columnWidth: 0, rowUnit: 4, rowGap: 16 });
   const [loadedRatios, setLoadedRatios] = useState<Record<string, number>>({});
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const gridRef = useRef<HTMLDivElement | null>(null);
 
   const allTiles = useMemo(() => buildTiles(posts), [posts]);
@@ -211,15 +212,16 @@ export default function GalleryGrid({
         data-collapsed={collapsible && !expanded ? 'true' : undefined}
       >
         {shownTiles.map((tile, tileIndex) => {
-          const coverSrc = thumbUrl(tile.imageUrl, 640);
-          const coverSrcSet = thumbSrcSet(tile.imageUrl);
           const ratioKey = tile.imageUrl.replace(/^\/+/, '');
+          const useOriginal = Boolean(failedImages[ratioKey]);
+          const coverSrc = useOriginal ? tile.imageUrl : thumbUrl(tile.imageUrl, 640);
+          const coverSrcSet = useOriginal ? undefined : thumbSrcSet(tile.imageUrl);
           const ratio = loadedRatios[ratioKey] ?? (tile.width && tile.height ? tile.width / tile.height : 2 / 3);
           const imageHeight = gridMetrics.columnWidth ? gridMetrics.columnWidth / ratio : 0;
           const rowSpan = imageHeight
             ? Math.max(1, Math.ceil((imageHeight + gridMetrics.rowGap) / (gridMetrics.rowUnit + gridMetrics.rowGap)))
             : undefined;
-          const eager = tileIndex < 4;
+          const eager = tileIndex < 8;
           const open = () =>
             setOpenCoords({ postIndex: tile.postIndex, imageIndex: tile.imageIndex });
           const markLoaded = (img: HTMLImageElement) => {
@@ -258,19 +260,11 @@ export default function GalleryGrid({
                 data-ratio-key={ratioKey}
                 style={{ aspectRatio: String(ratio) }}
                 loading={eager ? 'eager' : 'lazy'}
-                fetchPriority={tileIndex === 0 ? 'high' : 'auto'}
+                fetchPriority={tileIndex < 4 ? 'high' : 'auto'}
                 decoding="async"
                 onLoad={(e) => markLoaded(e.currentTarget)}
-                onError={(e) => {
-                  const img = e.currentTarget;
-                  const el = img.parentElement;
-                  if (img.dataset.fallback !== '1' && img.src !== tile.imageUrl) {
-                    img.dataset.fallback = '1';
-                    img.removeAttribute('srcset');
-                    img.src = tile.imageUrl;
-                    return;
-                  }
-                  el?.classList.add('is-failed');
+                onError={() => {
+                  setFailedImages((prev) => (prev[ratioKey] ? prev : { ...prev, [ratioKey]: true }));
                 }}
               />
               {tile.post.images.length > 1 && (

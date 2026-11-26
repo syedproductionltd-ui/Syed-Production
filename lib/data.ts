@@ -236,9 +236,7 @@ const OPTIMIZED_SRCSET_WIDTHS = [640, 750, 1080];
 /**
  * Largest pre-generated derivative, for the places that render an image large
  * (lightbox-adjacent modals, popups) or as a CSS background, which cannot
- * take a srcset. Falls back to the Next optimiser for paths without a static
- * derivative. Remote URLs (Vercel Blob/CDN) are returned as-is to avoid
- * optimizer timeouts.
+ * take a srcset. Remote URLs are returned directly to avoid optimizer timeouts.
  */
 export function thumbUrl(rel: string, width = 1200): string {
   if (/^https?:\/\//i.test(rel)) return rel;
@@ -248,14 +246,13 @@ export function thumbUrl(rel: string, width = 1200): string {
 }
 
 /**
- * Full-size source for the lightbox. Static seeds keep their original (already
- * only 1400px wide); local uploads go through the optimiser so a 6000px camera
- * file is not downloaded just to fill the screen. Remote URLs are returned as-is.
+ * Full-size source for the lightbox. Static seeds keep their original; remote
+ * URLs are returned directly to avoid optimizer timeouts on large uploads.
  */
 export function largeImageUrl(rel: string): string {
   if (/^https?:\/\//i.test(rel)) return rel;
   const d = derivatives(rel);
-  return d.length ? encodePath(rel) : optimizedUrl(encodePath(rel), 1920);
+  return d.length ? encodePath(rel) : optimizedUrl(encodePath(rel), 1600);
 }
 
 /** srcset for <img>, so phones download a smaller file than a 2x desktop. */

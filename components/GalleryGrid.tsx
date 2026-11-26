@@ -140,17 +140,15 @@ export default function GalleryGrid({
     setPosts(normalizePosts(initialPosts));
   }, [initialPosts]);
 
-  // Server-provided posts are already fresh; only query the API when the page
-  // mounted without any (static export / API-only usage) to avoid a second
-  // fetch and a full grid re-render during the first scroll.
+  // Always refresh from the API so newly uploaded/published admin posts appear
+  // without waiting for ISR revalidation or a hard refresh.
   useEffect(() => {
-    if (initialPosts?.length) return;
     let cancelled = false;
     fetch('/api/gallery', { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => {
         if (cancelled) return;
-        if (data.success && data.posts && data.posts.length > 0) {
+        if (data.success && Array.isArray(data.posts) && data.posts.length > 0) {
           setPosts(normalizePosts(data.posts));
         } else if (!initialPosts?.length) {
           setPosts(normalizePosts(staticGalleryPosts));

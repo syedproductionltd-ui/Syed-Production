@@ -4502,43 +4502,51 @@ select:focus-visible {
 }
 
 .partners {
-  background: var(--clr-gray-50);
+  background: linear-gradient(180deg, var(--clr-white) 0%, var(--clr-gray-50) 100%);
   overflow: hidden;
+  padding-top: var(--space-20);
+  padding-bottom: var(--space-20);
 }
 
 .partners .section-header {
-  margin-bottom: var(--space-10);
+  margin-bottom: var(--space-12);
+}
+
+.partners .section-description {
+  max-width: 560px;
 }
 
 .marquee-row + .marquee-row {
-  margin-top: var(--space-6);
+  margin-top: var(--space-8);
 }
 
 .marquee {
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
 }
 
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee-right 34s linear infinite;
+  animation: marquee-right 70s linear infinite;
+  will-change: transform;
 }
 
 .marquee-row--reverse .marquee-track {
   animation-name: marquee-left;
 }
 
-.marquee:hover .marquee-track {
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
   animation-play-state: paused;
 }
 
 .marquee-group {
   display: flex;
   align-items: center;
-  gap: var(--space-12);
-  padding-right: var(--space-12);
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+  padding-right: clamp(2.5rem, 5vw, 4.5rem);
 }
 
 .marquee-logo {
@@ -4546,10 +4554,9 @@ select:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 190px;
-  height: 110px;
-  padding: var(--space-3);
-  border: 1px solid transparent;
+  width: clamp(180px, 18vw, 240px);
+  height: 130px;
+  padding: var(--space-2);
   border-radius: var(--radius-lg);
   background: transparent;
   user-select: none;
@@ -4565,7 +4572,7 @@ select:focus-visible {
 }
 
 .marquee-logo:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.03);
 }
 
 @keyframes marquee-right {
@@ -4583,5 +4590,26 @@ select:focus-visible {
   }
   to {
     transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .partners {
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-16);
+  }
+
+  .marquee-logo {
+    height: 96px;
+  }
+
+  .marquee-track {
+    animation-duration: 55s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
   }
 }

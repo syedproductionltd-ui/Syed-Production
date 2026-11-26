@@ -4549,12 +4549,11 @@ select:focus-visible {
   width: 190px;
   height: 110px;
   padding: var(--space-3);
-  border: 1px solid var(--clr-gray-200);
+  border: 1px solid transparent;
   border-radius: var(--radius-lg);
-  background: var(--clr-white);
-  box-shadow: var(--shadow-sm);
+  background: transparent;
   user-select: none;
-  transition: border-color var(--transition-base), transform var(--transition-base);
+  transition: transform var(--transition-base);
 }
 
 .marquee-logo img {
@@ -4566,7 +4565,6 @@ select:focus-visible {
 }
 
 .marquee-logo:hover {
-  border-color: var(--clr-primary-light);
   transform: translateY(-2px);
 }
 

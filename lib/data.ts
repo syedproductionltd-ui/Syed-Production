@@ -237,10 +237,11 @@ const OPTIMIZED_SRCSET_WIDTHS = [640, 750, 1080];
  * Largest pre-generated derivative, for the places that render an image large
  * (lightbox-adjacent modals, popups) or as a CSS background, which cannot
  * take a srcset. Falls back to the Next optimiser for paths without a static
- * derivative (uploaded files and Vercel Blob URLs).
+ * derivative. Remote URLs (Vercel Blob/CDN) are returned as-is to avoid
+ * optimizer timeouts.
  */
 export function thumbUrl(rel: string, width = 1200): string {
-  if (/^https?:\/\//i.test(rel)) return optimizedUrl(rel, width);
+  if (/^https?:\/\//i.test(rel)) return rel;
   const d = derivatives(rel);
   const largest = d[d.length - 1];
   return largest ? largest.url : optimizedUrl(encodePath(rel), width);
@@ -248,20 +249,20 @@ export function thumbUrl(rel: string, width = 1200): string {
 
 /**
  * Full-size source for the lightbox. Static seeds keep their original (already
- * only 1400px wide); uploads and Blob images go through the optimiser so a
- * 6000px camera file is not downloaded just to fill the screen.
+ * only 1400px wide); local uploads go through the optimiser so a 6000px camera
+ * file is not downloaded just to fill the screen. Remote URLs are returned as-is.
  */
 export function largeImageUrl(rel: string): string {
-  if (/^https?:\/\//i.test(rel)) return optimizedUrl(rel, 1920);
+  if (/^https?:\/\//i.test(rel)) return rel;
   const d = derivatives(rel);
   return d.length ? encodePath(rel) : optimizedUrl(encodePath(rel), 1920);
 }
 
 /** srcset for <img>, so phones download a smaller file than a 2x desktop. */
 export function thumbSrcSet(rel: string): string | undefined {
-  const isRemote = /^https?:\/\//i.test(rel);
-  const d = isRemote ? [] : derivatives(rel);
+  if (/^https?:\/\//i.test(rel)) return undefined;
+  const d = derivatives(rel);
   if (d.length) return d.map((x) => `${x.url} ${x.w}w`).join(', ');
-  const src = isRemote ? rel : encodePath(rel);
+  const src = encodePath(rel);
   return OPTIMIZED_SRCSET_WIDTHS.map((w) => `${optimizedUrl(src, w)} ${w}w`).join(', ');
 }

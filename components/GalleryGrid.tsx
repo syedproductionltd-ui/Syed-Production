@@ -65,32 +65,22 @@ interface GalleryTile {
 function buildTiles(posts: GalleryPost[]): GalleryTile[] {
   const tiles: GalleryTile[] = [];
   posts.forEach((post, postIndex) => {
-    const seen = new Set<string>();
     const images = post.images ?? [];
     const coverIndex = coverIndexForPost(post);
-    const add = (
-      imageIndex: number,
-      imageUrl: string,
-      altText: string,
-      hidden: boolean,
-      width?: number,
-      height?: number
-    ) => {
-      const key = imageUrl.replace(/^\/+/, '');
-      if (!imageUrl || seen.has(key)) return;
-      seen.add(key);
-      tiles.push({ post, postIndex, imageIndex, imageUrl, altText: altText || post.title, hidden, width, height });
-    };
-
-    if (images.length) {
-      images.forEach((img, imageIndex) => {
-        const isCover = imageIndex === coverIndex || sameImageUrl(img.imageUrl, post.coverImage);
-        add(imageIndex, img.imageUrl, img.altText, isCover ? false : Boolean(img.hidden), img.width, img.height);
-      });
-    } else if (post.coverImage) {
-      const size = intrinsicSize(post.coverImage);
-      add(coverIndex, post.coverImage, post.title, false, size.width, size.height);
-    }
+    const cover = images[coverIndex] || images[0];
+    const imageUrl = cover?.imageUrl || post.coverImage;
+    if (!imageUrl) return;
+    const size = intrinsicSize(imageUrl);
+    tiles.push({
+      post,
+      postIndex,
+      imageIndex: cover ? coverIndex : 0,
+      imageUrl,
+      altText: cover?.altText || post.title,
+      hidden: false,
+      width: cover?.width ?? size.width,
+      height: cover?.height ?? size.height,
+    });
   });
   return tiles;
 }
@@ -197,11 +187,13 @@ export default function GalleryGrid({
     imgs?.forEach((img) => {
       const tile = img.parentElement;
       if (!img.complete || !tile) return;
-      tile.classList.add(img.naturalWidth > 0 ? 'is-loaded' : 'is-failed');
-      const key = img.dataset.ratioKey;
-      if (key && img.naturalWidth > 0 && img.naturalHeight > 0) {
-        const ratio = img.naturalWidth / img.naturalHeight;
-        setLoadedRatios((prev) => (prev[key] === ratio ? prev : { ...prev, [key]: ratio }));
+      if (img.naturalWidth > 0) {
+        tile.classList.add('is-loaded');
+        const key = img.dataset.ratioKey;
+        if (key && img.naturalHeight > 0) {
+          const ratio = img.naturalWidth / img.naturalHeight;
+          setLoadedRatios((prev) => (prev[key] === ratio ? prev : { ...prev, [key]: ratio }));
+        }
       }
     });
   }, [shownTiles]);
@@ -270,7 +262,15 @@ export default function GalleryGrid({
                 decoding="async"
                 onLoad={(e) => markLoaded(e.currentTarget)}
                 onError={(e) => {
-                  e.currentTarget.parentElement?.classList.add('is-failed');
+                  const img = e.currentTarget;
+                  const el = img.parentElement;
+                  if (img.dataset.fallback !== '1' && img.src !== tile.imageUrl) {
+                    img.dataset.fallback = '1';
+                    img.removeAttribute('srcset');
+                    img.src = tile.imageUrl;
+                    return;
+                  }
+                  el?.classList.add('is-failed');
                 }}
               />
               {tile.post.images.length > 1 && (
